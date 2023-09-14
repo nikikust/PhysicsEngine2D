@@ -39,6 +39,9 @@ add_executable(${PROJECT_NAME}
     Sources/DataOperations/DataEditor.cpp
     Sources/DataOperations/DataLoader.cpp
     Sources/DataOperations/DataStorage.cpp
+    Sources/DataOperations/Shapes/Shape.cpp
+    Sources/DataOperations/Shapes/RectangleShape.cpp
+    Sources/DataOperations/Shapes/CircleShape.cpp
 
     Sources/Modules/Interface.cpp
     Sources/Modules/Painter.cpp
