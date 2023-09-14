@@ -1,0 +1,14 @@
+# VS project directory
+.vs
+x64
+*.user
+*.vcxproj
+*.filters
+
+# CMake
+out
+.build
+
+# Data
+*.rr
+Data/screenshots
