@@ -3,18 +3,15 @@
 
 RectangleShape::RectangleShape(const sf::Vector2f& size, const sf::Vector2f& position, float angle,
 	                           const sf::Vector2f& linear_speed, float angular_speed, 
-	                           float mass, bool is_static)
-	: Shape(position, angle, linear_speed,angular_speed, mass, is_static), size_(size)
+	                           float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
+	: Shape(position, angle, linear_speed,angular_speed, mass, fixed_x, fixed_y, fixed_angle), size_(size)
 {
+	update_moment_of_inertia();
 }
 
 // --- //
 
-sf::Vector2f RectangleShape::get_center_of_mass()
+void RectangleShape::update_moment_of_inertia()
 {
-	return position_;
-}
-float RectangleShape::get_moment_of_inertia()
-{
-	return (mass_ * size_.x * size_.x * size_.y * size_.y) / 12.f;
+	moment_of_inertia_ = (mass_ * size_.x * size_.x * size_.y * size_.y) / 12.f;
 }

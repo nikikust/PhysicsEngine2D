@@ -15,7 +15,7 @@ Interface::~Interface()
 
 void Interface::update()
 {
-    check_autosave     ();
+    check_autosave();
 
     if (data_storage_.status.make_screenshot && data_storage_.settings.disable_interface_on_screenshot)
         return;
@@ -23,7 +23,7 @@ void Interface::update()
 
     show_cursor_message();
 
-    show_exit_popup    ();
+    show_exit_popup();
 }
 
 

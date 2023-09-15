@@ -3,18 +3,15 @@
 
 CircleShape::CircleShape(float radius, const sf::Vector2f& position, float angle,
 	                     const sf::Vector2f& linear_speed, float angular_speed, 
-	                     float mass, bool is_static)
-	: Shape(position, angle, linear_speed, angular_speed, mass, is_static), radius_(radius)
+	                     float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
+	: Shape(position, angle, linear_speed, angular_speed, mass, fixed_x, fixed_y, fixed_angle), radius_(radius)
 {
+	update_moment_of_inertia();
 }
 
 // --- //
 
-sf::Vector2f CircleShape::get_center_of_mass()
+void CircleShape::update_moment_of_inertia()
 {
-	return position_;
-}
-float CircleShape::get_moment_of_inertia()
-{
-	return (float)PI2 * powf(radius_, 4);
+	moment_of_inertia_ = (float)PI2 * powf(radius_, 4);
 }

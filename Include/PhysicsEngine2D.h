@@ -18,6 +18,8 @@
 #include "../Include/DataOperations/DataLoader.h"
 #include "../Include/DataOperations/DataEditor.h"
 
+#include "../Include/Modules/Engine/Engine.h"
+
 #include "../Include/Modules/Interface.h"
 #include "../Include/Modules/Renderer.h"
 #include "../Include/Modules/Window.h"
