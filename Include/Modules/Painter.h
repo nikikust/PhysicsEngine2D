@@ -1,5 +1,7 @@
 #pragma once
 #include "../../Include/DataOperations/DataStorage.h"
+#include "../../Include/DataOperations/Shapes/RectangleShape.h"
+#include "../../Include/DataOperations/Shapes/CircleShape.h"
 
 #include "Window.h"
 
@@ -15,8 +17,8 @@ public:
 
     // --- //
 
-    void draw_point(sf::Vector2i position, float rad);
-    void draw_line(sf::Vector2i A, sf::Vector2i B, float width = 1.f);
+    void draw_rectangle (std::shared_ptr<RectangleShape> rectangle);
+    void draw_circle    (std::shared_ptr<CircleShape>    circle   );
 
     void set_color(sf::Color color);
 
@@ -24,8 +26,8 @@ private:
     DataStorage& data_storage_;
     Window&      window_;
 
-    sf::CircleShape    point_brush;
-    sf::RectangleShape line_brush;
+    sf::CircleShape    circle_brush;
+    sf::RectangleShape rectangle_brush;
 
     sf::Color brush_color {255, 255, 255, 255};
 };

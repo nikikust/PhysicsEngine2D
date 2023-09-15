@@ -62,6 +62,13 @@ namespace utils
         return (abs(delta.x) >= abs(delta.y));
     }
 
+    sf::Vector2f rotate_point(const sf::Vector2f& point, float angle)
+    {
+        return {
+            point.x * cosf(angle) - point.y * sinf(angle),
+            point.x * sinf(angle) + point.y * cosf(angle)
+        };
+    }
 
     bool file_exists(const std::string& path)
     {

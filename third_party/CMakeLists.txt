@@ -19,11 +19,11 @@ FetchContent_Declare(
     GIT_TAG        de565ac8f2b795dedc0307b60830cb006afd2ecd
 )
 
-FetchContent_Declare(
-    nlohmann-json
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG        bc889afb4c5bf1c0d8ee29ef35eaaf4c8bef8a5d
-)
+# FetchContent_Declare(
+#     nlohmann-json
+#     GIT_REPOSITORY https://github.com/nlohmann/json.git
+#     GIT_TAG        bc889afb4c5bf1c0d8ee29ef35eaaf4c8bef8a5d
+# )
 
 message("Installing imgui")
 FetchContent_MakeAvailable(imgui)
@@ -47,6 +47,6 @@ FetchContent_MakeAvailable(imgui-sfml)
 message("imgui-sfml installed")
 
 
-message("Installing nlohmann-json")
-FetchContent_MakeAvailable(nlohmann-json)
-message("nlohmann-json installed")
+# message("Installing nlohmann-json")
+# FetchContent_MakeAvailable(nlohmann-json)
+# message("nlohmann-json installed")

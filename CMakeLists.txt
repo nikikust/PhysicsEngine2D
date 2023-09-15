@@ -20,7 +20,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/_deps/imgui-src/misc/cpp/
     ${CMAKE_BINARY_DIR}/_deps/imgui-sfml-src/
     ${CMAKE_BINARY_DIR}/_deps/sfml-src/include/
-    ${CMAKE_BINARY_DIR}/_deps/nlohmann-json-src/include/
+    # ${CMAKE_BINARY_DIR}/_deps/nlohmann-json-src/include/
 )
 
 

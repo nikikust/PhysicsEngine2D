@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Include/Utils/Functions.h"
+#include "../../Include/DataOperations/Shapes/Shape.h"
 
 #include <thread>
 
@@ -87,5 +88,9 @@ struct DataStorage
 
     // --- Renderer
 
+    struct SceneObjects
+    {
+        std::vector<std::shared_ptr<Shape>> shapes{};
+    } scene_objects;
 
 };

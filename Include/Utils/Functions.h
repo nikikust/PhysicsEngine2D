@@ -51,6 +51,8 @@ namespace utils
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B);
     bool is_horizontal_move(const sf::Vector2i& delta);
 
+    sf::Vector2f rotate_point(const sf::Vector2f& point, float angle);
+
 
     bool file_exists(const std::string& path);
     std::string get_time_string();

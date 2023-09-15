@@ -22,5 +22,15 @@ void Renderer::update()
 
 void Renderer::draw()
 {
-    
+    auto& shapes = data_storage_.scene_objects.shapes;
+
+    for (auto& shape : shapes)
+    {
+        switch (shape->get_shape())
+        {
+        case ShapeType::Rectangle: painter_.draw_rectangle(std::static_pointer_cast<RectangleShape>(shape)); break;
+        case ShapeType::Circle:    painter_.draw_circle   (std::static_pointer_cast<CircleShape>   (shape)); break;
+        default: break;
+        }
+    }
 }

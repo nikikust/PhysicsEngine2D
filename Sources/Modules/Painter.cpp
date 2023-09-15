@@ -5,7 +5,6 @@ Painter::Painter(DataStorage& data_storage, Window& window)
     : data_storage_(data_storage),
       window_      (window)
 {
-    point_brush.setPointCount(8);
 }
 Painter::~Painter()
 {
@@ -13,37 +12,34 @@ Painter::~Painter()
 }
 
 
-void Painter::draw_point(sf::Vector2i position, float rad)
+void Painter::draw_rectangle(std::shared_ptr<RectangleShape> rectangle)
 {
-    point_brush.setPosition((float)position.x, (float)position.y);
-    point_brush.setRadius(rad);
-    point_brush.setOrigin(rad, rad);
+    rectangle_brush.setSize  (rectangle->get_size());
+    rectangle_brush.setOrigin(rectangle->get_size() / 2.f);
 
-    point_brush.setFillColor(brush_color);
-    point_brush.setOutlineColor(sf::Color::White);
-    point_brush.setOutlineThickness(1);
+    rectangle_brush.setPosition(rectangle->get_position());
+    rectangle_brush.setRotation(rectangle->get_angle());
 
-    window_.get_render_area().draw(point_brush);
+    window_.get_render_area().draw(rectangle_brush);
 }
-void Painter::draw_line(sf::Vector2i A, sf::Vector2i B, float width)
+void Painter::draw_circle(std::shared_ptr<CircleShape> circle)
 {
-    auto  diff = B - A;
-    float lens = utils::pif(diff);
-    float ang  = atan2((float)diff.y, (float)diff.x);
+    float radius = circle->get_radius();
 
-    A.x += lround(width / 2 * sin(ang));
-    A.y -= lround(width / 2 * cos(ang));
+    circle_brush.setRadius(radius);
+    circle_brush.setOrigin(radius, radius);
+    circle_brush.setPosition(circle->get_position());
 
-    line_brush.setSize(sf::Vector2f(lens, width));
-    line_brush.setPosition(sf::Vector2f((float)A.x, (float)A.y));
-    line_brush.setRotation(float(ang / PI * 180.f));
-
-    line_brush.setFillColor(brush_color);
-
-    window_.get_render_area().draw(line_brush);
+    window_.get_render_area().draw(circle_brush);
 }
 
 void Painter::set_color(sf::Color color)
 {
     brush_color = color;
+
+    rectangle_brush.setFillColor(brush_color);
+
+    circle_brush.setFillColor(brush_color);
+    circle_brush.setOutlineColor(brush_color);
+    circle_brush.setOutlineThickness(1);
 }
