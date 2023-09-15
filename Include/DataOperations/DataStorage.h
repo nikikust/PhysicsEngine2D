@@ -2,11 +2,7 @@
 #include "../../Include/Utils/Functions.h"
 #include "../../Include/DataOperations/Shapes/Shape.h"
 
-#include <thread>
-
-
-#define SPRITES_AMOUNT_HORIZONTAL 10
-#define SPRITES_AMOUNT_VERTICAL   10
+#include <unordered_map>
 
 
 struct DataStorage
@@ -90,7 +86,7 @@ struct DataStorage
 
     struct SceneObjects
     {
-        std::vector<std::shared_ptr<Shape>> shapes{};
+        std::unordered_map<int32_t, std::shared_ptr<Shape>> shapes{};
     } scene_objects;
 
 };

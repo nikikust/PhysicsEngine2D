@@ -35,7 +35,9 @@ public:
     sf::Vector2f get_linear_speed  () const;
     float        get_angular_speed () const;
     float        get_mass          () const;
-    ShapeType    get_shape         () const;
+
+    ShapeType    get_shape () const;
+    int32_t      get_id    () const;
 
     void move   (const sf::Vector2f& delta);
     void rotate (float angle);
@@ -58,6 +60,9 @@ protected:
     bool         fixed_y_;
     bool         fixed_angle_;
 
-    // --- Shape
+    // --- Shape info
     ShapeType shape_type_;
+    int32_t   id_;
+
+    static int32_t max_object_id;
 };

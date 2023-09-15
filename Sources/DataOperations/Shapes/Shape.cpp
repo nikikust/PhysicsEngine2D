@@ -1,6 +1,8 @@
 #include "../../../Include/DataOperations/Shapes/Shape.h"
 
 
+int32_t Shape::max_object_id = 0;
+
 Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle,
              const sf::Vector2f& linear_speed, float angular_speed,
              float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
@@ -8,7 +10,9 @@ Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle,
       linear_speed_(linear_speed), angular_speed_(angular_speed), 
       mass_(mass), fixed_x_(fixed_x), fixed_y_(fixed_y), fixed_angle_(fixed_angle), shape_type_(shape_type)
 {
-    moment_of_inertia_ = 0 ;
+    moment_of_inertia_ = 0;
+
+    id_ = ++max_object_id;
 }
 
 
@@ -62,9 +66,14 @@ float Shape::get_mass() const
 {
     return mass_;
 }
+
 ShapeType Shape::get_shape() const
 {
     return shape_type_;
+}
+int32_t Shape::get_id() const
+{
+    return id_;
 }
 
 void Shape::move(const sf::Vector2f& delta)

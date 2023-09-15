@@ -24,8 +24,10 @@ void Renderer::draw()
 {
     auto& shapes = data_storage_.scene_objects.shapes;
 
-    for (auto& shape : shapes)
+    for (auto& shape_pair : shapes)
     {
+        auto& shape = shape_pair.second;
+
         switch (shape->get_shape())
         {
         case ShapeType::Rectangle: painter_.draw_rectangle(std::static_pointer_cast<RectangleShape>(shape)); break;

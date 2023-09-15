@@ -18,8 +18,8 @@ DataLoader::DataLoader(DataStorage& data_storage)
         {400, 200}  // Position
     };
 
-    shapes.push_back(std::make_shared<RectangleShape>(rectangle_1));
-    shapes.push_back(std::make_shared<CircleShape>   (circle_1));
+    shapes.insert({ rectangle_1.get_id(), std::make_shared<RectangleShape>(rectangle_1) });
+    shapes.insert({ circle_1   .get_id(), std::make_shared<CircleShape>   (circle_1)    });
 }
 DataLoader::~DataLoader()
 {
