@@ -13,27 +13,33 @@ Painter::~Painter()
 }
 
 
-void Painter::draw_rectangle(std::shared_ptr<RectangleShape> rectangle)
+void Painter::draw_rectangle(std::shared_ptr<PolygonShape> polygon)
 {
     auto& materials = data_storage_.scene_data.materials;
     auto  color     = sf::Color::White;
+    auto  position  = polygon->get_position();
 
-    if (materials.contains(rectangle->get_material_id()))
-        color = materials.at(rectangle->get_material_id())->get_color();
+    if (materials.contains(polygon->get_material_id()))
+        color = materials.at(polygon->get_material_id())->get_color();
     
     // --- //
 
-    rectangle_brush.setSize  (rectangle->get_size());
-    rectangle_brush.setOrigin(rectangle->get_size() / 2.f);
+    polygon_brush.setPointCount(polygon->get_vertices().size());
 
-    rectangle_brush.setPosition(rectangle->get_position());
-    rectangle_brush.setRotation(rectangle->get_angle());
+    int32_t cnt = 0;
+    for (auto& vertex : polygon->get_vertices())
+        polygon_brush.setPoint(cnt++, vertex + position);
 
-    rectangle_brush.setFillColor(color);
+    polygon_brush.setOrigin(position);
 
-    window_.get_render_area().draw(rectangle_brush);
+    polygon_brush.setPosition(position);
+    polygon_brush.setRotation(polygon->get_angle() * 180.f / (float)PI);
 
-    rectangle->set_material_id(1);
+    polygon_brush.setFillColor(color);
+
+    window_.get_render_area().draw(polygon_brush);
+
+    polygon->set_material_id(1);
 }
 void Painter::draw_circle(std::shared_ptr<CircleShape> circle)
 {

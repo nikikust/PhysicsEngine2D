@@ -41,7 +41,7 @@ add_executable(${PROJECT_NAME}
     Sources/DataOperations/DataStorage.cpp
 
     Sources/DataOperations/Shapes/Shape.cpp
-    Sources/DataOperations/Shapes/RectangleShape.cpp
+    Sources/DataOperations/Shapes/PolygonShape.cpp
     Sources/DataOperations/Shapes/CircleShape.cpp
 
     Sources/Modules/Interface.cpp

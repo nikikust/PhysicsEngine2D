@@ -30,16 +30,30 @@ std::optional<CollisionInfo> circles_collision(std::shared_ptr<Shape> circle_A_r
     else
         return std::nullopt;
 }
-std::optional<CollisionInfo> rectangles_collision(std::shared_ptr<Shape> rectangle_A_raw, std::shared_ptr<Shape> rectangle_B_raw)
+std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw)
 {
+    // Convert pointers
+    auto polygon_A = std::dynamic_pointer_cast<PolygonShape>(polygon_A_raw);
+    auto polygon_B = std::dynamic_pointer_cast<PolygonShape>(polygon_B_raw);
+
+    // Prepare rotated coordinates
+    PolygonShape rectangle_rotated = *polygon_B;
+    
+    rectangle_rotated.move  (-polygon_A->get_position());
+    rectangle_rotated.rotate(polygon_A->get_angle());
+    
+    rectangle_rotated.set_position(utils::rotate_point(rectangle_rotated.get_position(), -polygon_A->get_angle()));
+
+    // 
 
 
     return std::nullopt;
 }
 std::optional<CollisionInfo> rectangle_circle_collision(std::shared_ptr<Shape> rectangle_raw, std::shared_ptr<Shape> circle_raw)
 {
+    /*
     // Convert pointers
-    auto rectangle = std::dynamic_pointer_cast<RectangleShape>(rectangle_raw);
+    auto rectangle = std::dynamic_pointer_cast<PolygonShape>(rectangle_raw);
     auto circle    = std::dynamic_pointer_cast<CircleShape>   (circle_raw);
 
     // Prepare rotated coordinates
@@ -48,7 +62,7 @@ std::optional<CollisionInfo> rectangle_circle_collision(std::shared_ptr<Shape> r
     circle_rotated.move  (-rectangle->get_position());
     circle_rotated.rotate( rectangle->get_angle   ());
 
-    circle_rotated.set_position(utils::rotate_point(circle_rotated.get_position(), rectangle->get_angle()));
+    circle_rotated.set_position(utils::rotate_point(circle_rotated.get_position(), -rectangle->get_angle()));
 
     // Find closest point
     auto circle_position      = circle_rotated.get_position();
@@ -75,7 +89,7 @@ std::optional<CollisionInfo> rectangle_circle_collision(std::shared_ptr<Shape> r
 
     if (distance < circle->get_radius())
     {
-        closest_point = utils::rotate_point(closest_point, -rectangle->get_angle()) + rectangle->get_position();
+        closest_point = utils::rotate_point(closest_point, rectangle->get_angle()) + rectangle->get_position();
         
         auto normal = circle->get_position() - closest_point;
 
@@ -87,6 +101,15 @@ std::optional<CollisionInfo> rectangle_circle_collision(std::shared_ptr<Shape> r
             depth
         }};
     }
-    else
+    else*/
         return std::nullopt;
+}
+std::optional<CollisionInfo> circle_rectangle_collision(std::shared_ptr<Shape> circle_raw, std::shared_ptr<Shape> rectangle_raw)
+{
+    auto result = rectangle_circle_collision(rectangle_raw, circle_raw);
+
+    if (result)
+        result->collision_normal = -result->collision_normal;
+
+    return result;
 }

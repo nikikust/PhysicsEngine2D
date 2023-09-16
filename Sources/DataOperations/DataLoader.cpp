@@ -1,5 +1,5 @@
 #include "../../Include/DataOperations/DataLoader.h"
-#include "../../Include/DataOperations/Shapes/RectangleShape.h"
+#include "../../Include/DataOperations/Shapes/PolygonShape.h"
 #include "../../Include/DataOperations/Shapes/CircleShape.h"
 
 
@@ -26,9 +26,10 @@ DataLoader::DataLoader(DataStorage& data_storage)
     materials.insert({ material_2.get_id(), std::make_shared<Material>(material_2) });
 
     // --- Shapes
-    RectangleShape rectangle_1{
-        {100, 100}, // Size
-        {200, 200}  // Position
+    PolygonShape polygon_1{
+        { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
+        {200, 200}, // Position
+        (float)PI4  // Rotation
     };
 
     CircleShape circle_1{
@@ -41,13 +42,20 @@ DataLoader::DataLoader(DataStorage& data_storage)
         {600, 200}  // Position
     };
 
-    rectangle_1.set_material_id(material_1.get_id());
+    PolygonShape polygon_2{
+        { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
+        {800, 200}  // Position
+    };
+
+    polygon_1.set_material_id(material_1.get_id());
     circle_1   .set_material_id(material_1.get_id());
     circle_2   .set_material_id(material_1.get_id());
+    polygon_2.set_material_id(material_1.get_id());
 
-    shapes.insert({ rectangle_1.get_id(), std::make_shared<RectangleShape>(rectangle_1) });
-    shapes.insert({ circle_1   .get_id(), std::make_shared<CircleShape>   (circle_1)    });
-    shapes.insert({ circle_2   .get_id(), std::make_shared<CircleShape>   (circle_2)    });
+    shapes.insert({ polygon_1.get_id(), std::make_shared<PolygonShape>(polygon_1) });
+    shapes.insert({ circle_1 .get_id(), std::make_shared<CircleShape> (circle_1)  });
+    shapes.insert({ circle_2 .get_id(), std::make_shared<CircleShape> (circle_2)  });
+    shapes.insert({ polygon_2.get_id(), std::make_shared<PolygonShape>(polygon_2) });
 }
 DataLoader::~DataLoader()
 {
