@@ -1,7 +1,12 @@
 #include "../../../Include/Modules/Engine/CollisionSolver.h"
 
 
-std::optional<CollisionInfo> circles_collision(std::shared_ptr<Shape> circle_A_raw, std::shared_ptr<Shape> circle_B_raw)
+CollisionSolver::CollisionSolver(DataStorage& data_storage)
+    : data_storage_(data_storage)
+{
+}
+
+std::optional<CollisionInfo> CollisionSolver::circles_collision(std::shared_ptr<Shape> circle_A_raw, std::shared_ptr<Shape> circle_B_raw)
 {
     // Convert pointers
     auto circle_A = std::dynamic_pointer_cast<CircleShape>(circle_A_raw);
@@ -20,17 +25,17 @@ std::optional<CollisionInfo> circles_collision(std::shared_ptr<Shape> circle_A_r
     {
         auto normal = position_B - position_A;
 
-        return {{
+        return { {
             sf::Vector2f{ (position_A.x * radius_B + position_B.x * radius_A) / (radius_A + radius_B),
                           (position_A.y * radius_B + position_B.y * radius_A) / (radius_A + radius_B) },
             utils::normalize(normal),
             radius_A + radius_B - distance
-        }};
+        } };
     }
     else
         return std::nullopt;
 }
-std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw)
+std::optional<CollisionInfo> CollisionSolver::polygons_collision(std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw)
 {
     // Convert pointers
     auto polygon_A = std::dynamic_pointer_cast<PolygonShape>(polygon_A_raw);
@@ -47,7 +52,7 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
 
     for (int32_t i = 0; i < vertices_A.size(); ++i)
     {
-        auto point_A = utils::rotate_point(vertices_A.at(i),                           polygon_A->get_angle());
+        auto point_A = utils::rotate_point(vertices_A.at(i), polygon_A->get_angle());
         auto point_B = utils::rotate_point(vertices_A.at((i + 1) % vertices_A.size()), polygon_A->get_angle());
 
         auto edge = point_B - point_A;
@@ -58,7 +63,7 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
 
         if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
             return std::nullopt;
-        
+
         float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
 
         if (min_depth < total_min_depth)
@@ -74,7 +79,7 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
 
     for (int32_t i = 0; i < vertices_B.size(); ++i)
     {
-        auto point_A = utils::rotate_point(vertices_B.at(i),                           polygon_B->get_angle());
+        auto point_A = utils::rotate_point(vertices_B.at(i), polygon_B->get_angle());
         auto point_B = utils::rotate_point(vertices_B.at((i + 1) % vertices_B.size()), polygon_B->get_angle());
 
         auto edge = point_B - point_A;
@@ -101,11 +106,11 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
 
     return { { polygon_A->get_position(), normal, total_min_depth} };
 }
-std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> polygon_raw, std::shared_ptr<Shape> circle_raw)
+std::optional<CollisionInfo> CollisionSolver::polygon_circle_collision(std::shared_ptr<Shape> polygon_raw, std::shared_ptr<Shape> circle_raw)
 {
     // Convert pointers
     auto polygon = std::dynamic_pointer_cast<PolygonShape>(polygon_raw);
-    auto circle  = std::dynamic_pointer_cast<CircleShape> (circle_raw);
+    auto circle = std::dynamic_pointer_cast<CircleShape> (circle_raw);
 
     // --- //
 
@@ -124,7 +129,7 @@ std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> pol
         auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
 
         auto [projections_A_min, projections_A_max] = polygon_projection(polygon, axis);
-        auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis);
+        auto [projections_B_min, projections_B_max] = circle_projection(circle, axis);
 
         if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
             return std::nullopt;
@@ -147,7 +152,7 @@ std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> pol
     auto axis = utils::normalize(closest_point - circle->get_position());
 
     auto [projections_A_min, projections_A_max] = polygon_projection(polygon, axis);
-    auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis);
+    auto [projections_B_min, projections_B_max] = circle_projection(circle, axis);
 
     if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
         return std::nullopt;
@@ -166,7 +171,7 @@ std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> pol
 
     return { { polygon->get_position(), normal, total_min_depth} };
 }
-std::optional<CollisionInfo> circle_polygon_collision(std::shared_ptr<Shape> circle_raw, std::shared_ptr<Shape> polygon_raw)
+std::optional<CollisionInfo> CollisionSolver::circle_polygon_collision(std::shared_ptr<Shape> circle_raw, std::shared_ptr<Shape> polygon_raw)
 {
     auto result = polygon_circle_collision(polygon_raw, circle_raw);
 
@@ -176,7 +181,7 @@ std::optional<CollisionInfo> circle_polygon_collision(std::shared_ptr<Shape> cir
     return result;
 }
 
-std::pair<float, float> polygon_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis)
+std::pair<float, float> CollisionSolver::polygon_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis)
 {
     float min_projection = std::numeric_limits<float>::max();
     float max_projection = std::numeric_limits<float>::lowest();
@@ -194,7 +199,7 @@ std::pair<float, float> polygon_projection(std::shared_ptr<PolygonShape> polygon
 
     return { min_projection, max_projection };
 }
-std::pair<float, float> circle_projection(std::shared_ptr<CircleShape> circle, const sf::Vector2f& axis)
+std::pair<float, float> CollisionSolver::circle_projection(std::shared_ptr<CircleShape> circle, const sf::Vector2f& axis)
 {
     float central = utils::dot(circle->get_position(), axis);
 
@@ -204,13 +209,13 @@ std::pair<float, float> circle_projection(std::shared_ptr<CircleShape> circle, c
     return { min_projection, max_projection };
 }
 
-sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle)
+sf::Vector2f CollisionSolver::circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle)
 {
     sf::Vector2f closest_point{};
     float min_distance = std::numeric_limits<float>::max();
 
     auto polygon_position = polygon->get_position();
-    auto circle_position  = circle ->get_position();
+    auto circle_position = circle->get_position();
 
     for (auto& vertex : polygon->get_vertices())
     {
@@ -228,11 +233,30 @@ sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon,
     return closest_point;
 }
 
-void resolve_collision(const CollisionInfo& collision, std::shared_ptr<Shape> shape_A, std::shared_ptr<Shape> shape_B)
+void CollisionSolver::resolve_collision_simple(const CollisionInfo& collision, std::shared_ptr<Shape> shape_A, std::shared_ptr<Shape> shape_B)
 {
     shape_A->move(-collision.collision_normal * collision.depth / 2.f);
     shape_B->move( collision.collision_normal * collision.depth / 2.f);
+}
+void CollisionSolver::resolve_collision(const CollisionInfo& collision, std::shared_ptr<Shape> shape_A, std::shared_ptr<Shape> shape_B)
+{
+    resolve_collision_simple(collision, shape_A, shape_B);
 
-    shape_A->set_material_id(2);
-    shape_B->set_material_id(2);
+    auto  speed_A = shape_A->get_linear_speed();
+    auto  speed_B = shape_B->get_linear_speed();
+
+    auto  relative_speed = speed_B - speed_A;
+
+    auto& material_A = data_storage_.scene_data.materials.at(shape_A->get_material_id());
+    auto& material_B = data_storage_.scene_data.materials.at(shape_B->get_material_id());
+
+    float e = fminf(material_A->get_elasticity(), material_B->get_elasticity());
+
+    float I = -(1 + e) * utils::dot(relative_speed, collision.collision_normal) / (1 / shape_A->get_mass() + 1 / shape_B->get_mass());
+
+    speed_A -= I / shape_A->get_mass() * collision.collision_normal;
+    speed_B += I / shape_A->get_mass() * collision.collision_normal;
+
+    shape_A->set_linear_speed(speed_A);
+    shape_B->set_linear_speed(speed_B);
 }

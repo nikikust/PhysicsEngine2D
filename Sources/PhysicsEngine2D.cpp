@@ -19,7 +19,7 @@
 
 PhysicsEngine2D::PhysicsEngine2D(const std::string& app_title)
     : window_      (data_storage_, app_title),
-      data_loader_ (data_storage_),
+      data_loader_ (data_storage_, window_),
       data_editor_ (data_storage_, window_),
       engine_      (data_storage_, window_),
       renderer_    (data_storage_, data_loader_, window_),
@@ -45,6 +45,11 @@ int PhysicsEngine2D::run()
 
 int PhysicsEngine2D::load_data()
 {
+    std::cout << "Init data loader ... ";
+    if (data_loader_.init() != 0)
+        return 1;
+    std::cout << "Done" << std::endl;
+
     return 0;
 }
 int PhysicsEngine2D::main_loop()
@@ -108,6 +113,12 @@ void PhysicsEngine2D::poll_events()
             break;
         }
     }
+
+    // Time between frames
+    long long now_time = utils::get_time_millisec();
+    data_storage_.status.delta_time = now_time - data_storage_.status.last_time;
+    data_storage_.status.last_time = now_time;
+
 }
 void PhysicsEngine2D::process_inputs()
 {
@@ -245,22 +256,22 @@ void PhysicsEngine2D::process_inputs()
     if (utils::key_down(sf::Keyboard::W))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.f, -0.01f });
+            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.f, -0.5f });
     }
     if (utils::key_down(sf::Keyboard::A))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ -0.01f, 0.f });
+            data_storage_.scene_data.shapes.at(1)->accelerate({ -0.5f, 0.f });
     }
     if (utils::key_down(sf::Keyboard::S))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.f, 0.01f });
+            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.f, 0.5f });
     }
     if (utils::key_down(sf::Keyboard::D))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.01f, 0.f });
+            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.5f, 0.f });
     }
 
     // --- //

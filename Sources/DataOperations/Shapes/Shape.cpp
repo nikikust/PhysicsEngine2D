@@ -132,11 +132,11 @@ void Shape::spin(float angle)
     angular_speed_ += angle;
 }
 
-void Shape::update()
+void Shape::update(float delta_time)
 {
     linear_acceleration_ = force_ / mass_;
-    linear_speed_       += linear_acceleration_;
-    position_           += linear_speed_;
+    linear_speed_       += linear_acceleration_ * delta_time;
+    position_           += linear_speed_        * delta_time;
 
     force_ = { 0,0 };
 }

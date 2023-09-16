@@ -22,4 +22,6 @@ public:
 private:
     DataStorage& data_storage_;
     Window&      window_;
+
+    CollisionSolver collision_solver_;
 };

@@ -55,6 +55,7 @@ struct DataStorage
     struct Status
     {
         time_t start_time_for_autosave = time(0);
+        long long last_time, delta_time;
 
         bool mouse_captured    = false;
         bool keyboard_captured = false;

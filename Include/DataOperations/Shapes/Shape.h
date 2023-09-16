@@ -53,7 +53,7 @@ public:
     void rotate (float angle);
     void spin   (float angle);
 
-    void update();
+    void update(float delta_time);
     void teleport(const sf::Vector2u& window_size);
 
 protected:

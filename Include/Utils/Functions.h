@@ -60,6 +60,7 @@ namespace utils
 
     bool file_exists(const std::string& path);
     std::string get_time_string();
+    long long get_time_millisec();
 
     // --- ImGui
 

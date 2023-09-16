@@ -38,8 +38,6 @@ void Painter::draw_rectangle(std::shared_ptr<PolygonShape> polygon)
     polygon_brush.setFillColor(color);
 
     window_.get_render_area().draw(polygon_brush);
-
-    polygon->set_material_id(1);
 }
 void Painter::draw_circle(std::shared_ptr<CircleShape> circle)
 {
@@ -61,6 +59,4 @@ void Painter::draw_circle(std::shared_ptr<CircleShape> circle)
     circle_brush.setOutlineColor(color);
 
     window_.get_render_area().draw(circle_brush);
-
-    circle->set_material_id(1);
 }

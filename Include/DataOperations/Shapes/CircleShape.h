@@ -15,6 +15,8 @@ public:
 
     float get_radius() const;
 
+    static CircleShape generate_circle(const sf::Vector2u& window_size);
+
 private:
     void update_moment_of_inertia();
 

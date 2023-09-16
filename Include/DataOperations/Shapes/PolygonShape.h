@@ -15,6 +15,8 @@ public:
 
     const std::vector<sf::Vector2f>& get_vertices() const;
 
+    static PolygonShape generate_rectangle(const sf::Vector2u& window_size);
+
 private:
     void update_moment_of_inertia();
 
