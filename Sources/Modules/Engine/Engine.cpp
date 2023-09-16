@@ -18,8 +18,8 @@ void Engine::update()
 
     rectangle_1->set_position(sf::Vector2f{ window_.get_cursor_position() });
 
-    rectangle_1->rotate( (float)PI / 1000);
-    rectangle_2->rotate(-(float)PI / 2000);
+    // rectangle_1->rotate( (float)PI / 1000);
+    // rectangle_2->rotate(-(float)PI / 2000);
 
     // --- //
 

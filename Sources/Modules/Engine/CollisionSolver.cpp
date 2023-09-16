@@ -53,8 +53,8 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
         auto edge = point_B - point_A;
         auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
 
-        auto [projections_A_min, projections_A_max] = min_max_projection(polygon_A, axis);
-        auto [projections_B_min, projections_B_max] = min_max_projection(polygon_B, axis);
+        auto [projections_A_min, projections_A_max] = polygon_projection(polygon_A, axis);
+        auto [projections_B_min, projections_B_max] = polygon_projection(polygon_B, axis);
 
         if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
             return std::nullopt;
@@ -80,8 +80,8 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
         auto edge = point_B - point_A;
         auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
 
-        auto [projections_A_min, projections_A_max] = min_max_projection(polygon_A, axis);
-        auto [projections_B_min, projections_B_max] = min_max_projection(polygon_B, axis);
+        auto [projections_A_min, projections_A_max] = polygon_projection(polygon_A, axis);
+        auto [projections_B_min, projections_B_max] = polygon_projection(polygon_B, axis);
 
         if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
             return std::nullopt;
@@ -101,64 +101,74 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
 
     return { { polygon_A->get_position(), normal, total_min_depth} };
 }
-std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> rectangle_raw, std::shared_ptr<Shape> circle_raw)
+std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> polygon_raw, std::shared_ptr<Shape> circle_raw)
 {
-    /*
     // Convert pointers
-    auto rectangle = std::dynamic_pointer_cast<PolygonShape>(rectangle_raw);
-    auto circle    = std::dynamic_pointer_cast<CircleShape>   (circle_raw);
+    auto polygon = std::dynamic_pointer_cast<PolygonShape>(polygon_raw);
+    auto circle  = std::dynamic_pointer_cast<CircleShape> (circle_raw);
 
-    // Prepare rotated coordinates
-    CircleShape circle_rotated = *circle;
+    // --- //
 
-    circle_rotated.move  (-rectangle->get_position());
-    circle_rotated.rotate( rectangle->get_angle   ());
+    auto& vertices = polygon->get_vertices();
 
-    circle_rotated.set_position(utils::rotate_point(circle_rotated.get_position(), -rectangle->get_angle()));
+    float total_min_depth = std::numeric_limits<float>::max();
+    sf::Vector2f normal{};
 
-    // Find closest point
-    auto circle_position      = circle_rotated.get_position();
-    auto rectangle_half_size  = rectangle    ->get_size() / 2.f;
 
-    sf::Vector2f closest_point{};
-
-    if (circle_position.x <= -rectangle_half_size.x)
-        closest_point.x = -rectangle_half_size.x;
-    else if (circle_position.x >= rectangle_half_size.x)
-        closest_point.x = rectangle_half_size.x;
-    else
-        closest_point.x = circle_position.x;
-
-    if (circle_position.y <= -rectangle_half_size.y)
-        closest_point.y = -rectangle_half_size.y;
-    else if (circle_position.y >= rectangle_half_size.y)
-        closest_point.y = rectangle_half_size.y;
-    else
-        closest_point.y = circle_position.y;
-
-    // Determine collision
-    float distance = utils::pif(circle_position - closest_point);
-
-    if (distance < circle->get_radius())
+    for (int32_t i = 0; i < vertices.size(); ++i)
     {
-        closest_point = utils::rotate_point(closest_point, rectangle->get_angle()) + rectangle->get_position();
-        
-        auto normal = circle->get_position() - closest_point;
+        auto point_A = utils::rotate_point(vertices.at(i), polygon->get_angle());
+        auto point_B = utils::rotate_point(vertices.at((i + 1) % vertices.size()), polygon->get_angle());
 
-        float depth = circle->get_radius() - utils::pif(circle->get_position() - closest_point);
+        auto edge = point_B - point_A;
+        auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
 
-        return {{
-            closest_point,
-            utils::normalize(normal),
-            depth
-        }};
+        auto [projections_A_min, projections_A_max] = polygon_projection(polygon, axis);
+        auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis);
+
+        if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
+            return std::nullopt;
+
+        float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
+
+        if (min_depth < total_min_depth)
+        {
+            total_min_depth = min_depth;
+
+            if (utils::dot(circle->get_position() - polygon->get_position(), axis) < 0.f)
+                normal = -axis;
+            else
+                normal = axis;
+        }
     }
-    else*/
+
+    auto closest_point = circle_polygon_closest_point(polygon, circle);
+
+    auto axis = utils::normalize(closest_point - circle->get_position());
+
+    auto [projections_A_min, projections_A_max] = polygon_projection(polygon, axis);
+    auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis);
+
+    if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
         return std::nullopt;
+
+    float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
+
+    if (min_depth < total_min_depth)
+    {
+        total_min_depth = min_depth;
+
+        if (utils::dot(circle->get_position() - polygon->get_position(), axis) < 0.f)
+            normal = -axis;
+        else
+            normal = axis;
+    }
+
+    return { { polygon->get_position(), normal, total_min_depth} };
 }
-std::optional<CollisionInfo> circle_polygon_collision(std::shared_ptr<Shape> circle_raw, std::shared_ptr<Shape> rectangle_raw)
+std::optional<CollisionInfo> circle_polygon_collision(std::shared_ptr<Shape> circle_raw, std::shared_ptr<Shape> polygon_raw)
 {
-    auto result = polygon_circle_collision(rectangle_raw, circle_raw);
+    auto result = polygon_circle_collision(polygon_raw, circle_raw);
 
     if (result)
         result->collision_normal = -result->collision_normal;
@@ -166,10 +176,10 @@ std::optional<CollisionInfo> circle_polygon_collision(std::shared_ptr<Shape> cir
     return result;
 }
 
-std::pair<float, float> min_max_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis)
+std::pair<float, float> polygon_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis)
 {
     float min_projection = std::numeric_limits<float>::max();
-    float max_projection = std::numeric_limits<float>::min();
+    float max_projection = std::numeric_limits<float>::lowest();
 
     auto& vertices = polygon->get_vertices();
     auto  position = polygon->get_position();
@@ -183,4 +193,37 @@ std::pair<float, float> min_max_projection(std::shared_ptr<PolygonShape> polygon
     }
 
     return { min_projection, max_projection };
+}
+std::pair<float, float> circle_projection(std::shared_ptr<CircleShape> circle, const sf::Vector2f& axis)
+{
+    float central = utils::dot(circle->get_position(), axis);
+
+    float min_projection = central - circle->get_radius();
+    float max_projection = central + circle->get_radius();
+
+    return { min_projection, max_projection };
+}
+
+sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle)
+{
+    sf::Vector2f closest_point{};
+    float min_distance = std::numeric_limits<float>::max();
+
+    auto polygon_position = polygon->get_position();
+    auto circle_position  = circle ->get_position();
+
+    for (auto& vertex : polygon->get_vertices())
+    {
+        auto rotated_vertex = utils::rotate_point(vertex, polygon->get_angle());
+
+        auto distance = utils::pif(rotated_vertex + polygon_position - circle_position);
+
+        if (distance < min_distance)
+        {
+            closest_point = rotated_vertex + polygon_position;
+            min_distance = distance;
+        }
+    }
+
+    return closest_point;
 }
