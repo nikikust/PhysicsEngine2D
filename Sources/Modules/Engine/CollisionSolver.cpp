@@ -41,6 +41,10 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
     auto& vertices_A = polygon_A->get_vertices();
     auto& vertices_B = polygon_B->get_vertices();
 
+    float total_min_depth = std::numeric_limits<float>::max();
+    sf::Vector2f normal{};
+
+
     for (int32_t i = 0; i < vertices_A.size(); ++i)
     {
         auto point_A = utils::rotate_point(vertices_A.at(i),                           polygon_A->get_angle());
@@ -54,6 +58,18 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
 
         if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
             return std::nullopt;
+        
+        float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
+
+        if (min_depth < total_min_depth)
+        {
+            total_min_depth = min_depth;
+
+            if (utils::dot(polygon_B->get_position() - polygon_A->get_position(), axis) < 0.f)
+                normal = -axis;
+            else
+                normal = axis;
+        }
     }
 
     for (int32_t i = 0; i < vertices_B.size(); ++i)
@@ -69,9 +85,21 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
 
         if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
             return std::nullopt;
+
+        float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
+
+        if (min_depth < total_min_depth)
+        {
+            total_min_depth = min_depth;
+
+            if (utils::dot(polygon_B->get_position() - polygon_A->get_position(), axis) < 0.f)
+                normal = -axis;
+            else
+                normal = axis;
+        }
     }
 
-    return { { polygon_A->get_position(), { 0,0 } , 0.f} };
+    return { { polygon_A->get_position(), normal, total_min_depth} };
 }
 std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> rectangle_raw, std::shared_ptr<Shape> circle_raw)
 {

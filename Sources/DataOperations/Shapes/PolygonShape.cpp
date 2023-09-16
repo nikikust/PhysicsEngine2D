@@ -2,8 +2,8 @@
 
 
 PolygonShape::PolygonShape(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& position, float angle,
-                               const sf::Vector2f& linear_speed, float angular_speed, 
-                               float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
+                           const sf::Vector2f& linear_speed, float angular_speed, 
+                           float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
     : Shape(ShapeType::Rectangle, position, angle, linear_speed,angular_speed, mass, fixed_x, fixed_y, fixed_angle),
       vertices_(vertices)
 {
