@@ -3,6 +3,7 @@
 
 int32_t Shape::max_object_id = 0;
 
+
 Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle,
              const sf::Vector2f& linear_speed, float angular_speed,
              float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
@@ -13,6 +14,8 @@ Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle,
     moment_of_inertia_ = 0;
 
     id_ = ++max_object_id;
+
+    material_id_ = 1;
 }
 
 
@@ -45,6 +48,10 @@ void Shape::set_mass(float mass)
 {
     mass_ = mass;
 }
+void Shape::set_material_id(int32_t material_id)
+{
+    material_id_ = material_id;
+}
 
 sf::Vector2f Shape::get_position() const
 {
@@ -66,6 +73,10 @@ float Shape::get_mass() const
 {
     return mass_;
 }
+int32_t Shape::get_material_id() const
+{
+    return material_id_;
+}
 
 ShapeType Shape::get_shape() const
 {
@@ -75,6 +86,7 @@ int32_t Shape::get_id() const
 {
     return id_;
 }
+
 
 void Shape::move(const sf::Vector2f& delta)
 {

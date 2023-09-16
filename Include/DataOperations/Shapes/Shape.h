@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../Include/Utils/Functions.h"
+#include "../../../Include/Modules/Engine/Material.h"
 
 
 enum ShapeType
@@ -7,6 +8,7 @@ enum ShapeType
     Rectangle = 0,
     Circle    = 1
 };
+
 
 class Shape
 {
@@ -29,12 +31,14 @@ public:
     void set_linear_speed  (const sf::Vector2f& linear_speed);
     void set_angular_speed (float angular_speed);
     void set_mass          (float mass);
+    void set_material_id   (int32_t material_id);
 
     sf::Vector2f get_position      () const;
     float        get_angle         () const;
     sf::Vector2f get_linear_speed  () const;
     float        get_angular_speed () const;
     float        get_mass          () const;
+    int32_t      get_material_id   () const;
 
     ShapeType    get_shape () const;
     int32_t      get_id    () const;
@@ -63,6 +67,7 @@ protected:
     // --- Shape info
     ShapeType shape_type_;
     int32_t   id_;
+    int32_t   material_id_;
 
     static int32_t max_object_id;
 };

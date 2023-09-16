@@ -22,7 +22,7 @@ void Renderer::update()
 
 void Renderer::draw()
 {
-    auto& shapes = data_storage_.scene_objects.shapes;
+    auto& shapes = data_storage_.scene_data.shapes;
 
     for (auto& shape_pair : shapes)
     {

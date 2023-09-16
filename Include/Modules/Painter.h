@@ -20,14 +20,10 @@ public:
     void draw_rectangle (std::shared_ptr<RectangleShape> rectangle);
     void draw_circle    (std::shared_ptr<CircleShape>    circle   );
 
-    void set_color(sf::Color color);
-
 private:
     DataStorage& data_storage_;
     Window&      window_;
 
     sf::CircleShape    circle_brush;
     sf::RectangleShape rectangle_brush;
-
-    sf::Color brush_color {255, 255, 255, 255};
 };

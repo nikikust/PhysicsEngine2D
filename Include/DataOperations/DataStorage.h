@@ -84,9 +84,10 @@ struct DataStorage
 
     // --- Renderer
 
-    struct SceneObjects
+    struct SceneData
     {
-        std::unordered_map<int32_t, std::shared_ptr<Shape>> shapes{};
-    } scene_objects;
+        std::unordered_map<int32_t, std::shared_ptr<Shape>>    shapes{};
+        std::unordered_map<int32_t, std::shared_ptr<Material>> materials{};
+    } scene_data;
 
 };

@@ -39,6 +39,7 @@ add_executable(${PROJECT_NAME}
     Sources/DataOperations/DataEditor.cpp
     Sources/DataOperations/DataLoader.cpp
     Sources/DataOperations/DataStorage.cpp
+
     Sources/DataOperations/Shapes/Shape.cpp
     Sources/DataOperations/Shapes/RectangleShape.cpp
     Sources/DataOperations/Shapes/CircleShape.cpp
@@ -47,7 +48,9 @@ add_executable(${PROJECT_NAME}
     Sources/Modules/Painter.cpp
     Sources/Modules/Renderer.cpp
     Sources/Modules/Window.cpp
+    
     Sources/Modules/Engine/Engine.cpp
+    Sources/Modules/Engine/Material.cpp
     Sources/Modules/Engine/CollisionSolver.cpp
 )
 target_link_libraries(${PROJECT_NAME}

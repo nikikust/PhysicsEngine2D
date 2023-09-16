@@ -5,6 +5,14 @@
 #include "../../../Include/DataOperations/Shapes/CircleShape.h"
 
 
-std::optional<sf::Vector2f> circles_collision(const CircleShape& circle_A, const CircleShape& circle_B);
-std::optional<sf::Vector2f> rectangles_collision(const RectangleShape& rectangle_A, const RectangleShape& rectangle_B);
-std::optional<sf::Vector2f> rectangle_circle_collision(const RectangleShape& rectangle, const CircleShape& circle);
+struct CollisionInfo
+{
+	sf::Vector2f collision_point;
+	sf::Vector2f collision_normal;
+
+	float depth;
+};
+
+std::optional<CollisionInfo> circles_collision          (std::shared_ptr<Shape> circle_A_raw,    std::shared_ptr<Shape> circle_B_raw);
+std::optional<CollisionInfo> rectangles_collision       (std::shared_ptr<Shape> rectangle_A_raw, std::shared_ptr<Shape> rectangle_B_raw);
+std::optional<CollisionInfo> rectangle_circle_collision (std::shared_ptr<Shape> rectangle_raw,   std::shared_ptr<Shape> circle_raw);
