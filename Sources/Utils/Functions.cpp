@@ -39,11 +39,11 @@ namespace utils
     { 
         return sqrt(a * a + b * b); 
     }
-    float  pif(sf::Vector2i x)
+    float  pif(const sf::Vector2i& x)
     {
         return sqrt((float)x.x * x.x + (float)x.y * x.y);
     }
-    float  pif(sf::Vector2f x)
+    float  pif(const sf::Vector2f& x)
     {
         return sqrt(x.x * x.x + x.y * x.y);
     }
@@ -51,6 +51,16 @@ namespace utils
     { 
         return abs((long long)(P2.y - P1.y) * X.x - (long long)(P2.x - P1.x) * X.y + (long long)P2.x * P1.y - (long long)P2.y * P1.x) 
                    / pif((float)P2.x - P1.x, (float)P2.y - P1.y);
+    }
+
+    float dot(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return A.x * B.x + A.y * B.y;
+    }
+
+    sf::Vector2f normalize(const sf::Vector2f& vector)
+    {
+        return vector / utils::pif(vector);
     }
 
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B)

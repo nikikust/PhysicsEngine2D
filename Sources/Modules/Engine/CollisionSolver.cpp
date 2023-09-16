@@ -23,7 +23,7 @@ std::optional<CollisionInfo> circles_collision(std::shared_ptr<Shape> circle_A_r
         return {{
             sf::Vector2f{ (position_A.x * radius_B + position_B.x * radius_A) / (radius_A + radius_B),
                           (position_A.y * radius_B + position_B.y * radius_A) / (radius_A + radius_B) },
-            normal / utils::pif(normal),
+            utils::normalize(normal),
             radius_A + radius_B - distance
         }};
     }
@@ -36,20 +36,44 @@ std::optional<CollisionInfo> polygons_collision(std::shared_ptr<Shape> polygon_A
     auto polygon_A = std::dynamic_pointer_cast<PolygonShape>(polygon_A_raw);
     auto polygon_B = std::dynamic_pointer_cast<PolygonShape>(polygon_B_raw);
 
-    // Prepare rotated coordinates
-    PolygonShape rectangle_rotated = *polygon_B;
-    
-    rectangle_rotated.move  (-polygon_A->get_position());
-    rectangle_rotated.rotate(polygon_A->get_angle());
-    
-    rectangle_rotated.set_position(utils::rotate_point(rectangle_rotated.get_position(), -polygon_A->get_angle()));
+    // --- //
 
-    // 
+    auto& vertices_A = polygon_A->get_vertices();
+    auto& vertices_B = polygon_B->get_vertices();
 
+    for (int32_t i = 0; i < vertices_A.size(); ++i)
+    {
+        auto point_A = utils::rotate_point(vertices_A.at(i),                           polygon_A->get_angle());
+        auto point_B = utils::rotate_point(vertices_A.at((i + 1) % vertices_A.size()), polygon_A->get_angle());
 
-    return std::nullopt;
+        auto edge = point_B - point_A;
+        auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
+
+        auto [projections_A_min, projections_A_max] = min_max_projection(polygon_A, axis);
+        auto [projections_B_min, projections_B_max] = min_max_projection(polygon_B, axis);
+
+        if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
+            return std::nullopt;
+    }
+
+    for (int32_t i = 0; i < vertices_B.size(); ++i)
+    {
+        auto point_A = utils::rotate_point(vertices_B.at(i),                           polygon_B->get_angle());
+        auto point_B = utils::rotate_point(vertices_B.at((i + 1) % vertices_B.size()), polygon_B->get_angle());
+
+        auto edge = point_B - point_A;
+        auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
+
+        auto [projections_A_min, projections_A_max] = min_max_projection(polygon_A, axis);
+        auto [projections_B_min, projections_B_max] = min_max_projection(polygon_B, axis);
+
+        if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
+            return std::nullopt;
+    }
+
+    return { { polygon_A->get_position(), { 0,0 } , 0.f} };
 }
-std::optional<CollisionInfo> rectangle_circle_collision(std::shared_ptr<Shape> rectangle_raw, std::shared_ptr<Shape> circle_raw)
+std::optional<CollisionInfo> polygon_circle_collision(std::shared_ptr<Shape> rectangle_raw, std::shared_ptr<Shape> circle_raw)
 {
     /*
     // Convert pointers
@@ -97,19 +121,38 @@ std::optional<CollisionInfo> rectangle_circle_collision(std::shared_ptr<Shape> r
 
         return {{
             closest_point,
-            normal / utils::pif(normal),
+            utils::normalize(normal),
             depth
         }};
     }
     else*/
         return std::nullopt;
 }
-std::optional<CollisionInfo> circle_rectangle_collision(std::shared_ptr<Shape> circle_raw, std::shared_ptr<Shape> rectangle_raw)
+std::optional<CollisionInfo> circle_polygon_collision(std::shared_ptr<Shape> circle_raw, std::shared_ptr<Shape> rectangle_raw)
 {
-    auto result = rectangle_circle_collision(rectangle_raw, circle_raw);
+    auto result = polygon_circle_collision(rectangle_raw, circle_raw);
 
     if (result)
         result->collision_normal = -result->collision_normal;
 
     return result;
+}
+
+std::pair<float, float> min_max_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis)
+{
+    float min_projection = std::numeric_limits<float>::max();
+    float max_projection = std::numeric_limits<float>::min();
+
+    auto& vertices = polygon->get_vertices();
+    auto  position = polygon->get_position();
+
+    for (auto& vertex : vertices)
+    {
+        float projection = utils::dot(utils::rotate_point(vertex, polygon->get_angle()) + position, axis);
+
+        min_projection = std::min(min_projection, projection);
+        max_projection = std::max(max_projection, projection);
+    }
+
+    return { min_projection, max_projection };
 }

@@ -44,9 +44,13 @@ namespace utils
     float  mod_f(float X, float Y);             // modulus for float numbers
     double randf(double start, double end, int amount); // returns random float inside (start / end) with the number of values specified in amount
     float  pif(float a, float b);               // Pythagorean theorem: a, b -> c
-    float  pif(sf::Vector2i x);
-    float  pif(sf::Vector2f x);
+    float  pif(const sf::Vector2i& x);
+    float  pif(const sf::Vector2f& x);
     float  distance(const sf::Vector2i& A, const sf::Vector2i& B, const sf::Vector2i& C);
+
+    float  dot(const sf::Vector2f& A, const sf::Vector2f& B);
+
+    sf::Vector2f normalize(const sf::Vector2f& vector);
 
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B);
     bool is_horizontal_move(const sf::Vector2i& delta);

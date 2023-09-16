@@ -231,5 +231,14 @@ void PhysicsEngine2D::process_inputs()
             }
         }
     }
+
+    if (utils::key_down(sf::Keyboard::A))
+        if (data_editor_.keyboard_io_is_released())
+            data_storage_.scene_data.shapes.at(1)->rotate(-(float)PI / 1000.f);
+
+    if (utils::key_down(sf::Keyboard::D))
+        if (data_editor_.keyboard_io_is_released())
+            data_storage_.scene_data.shapes.at(1)->rotate((float)PI / 1000.f);
+
     // --- //
 }

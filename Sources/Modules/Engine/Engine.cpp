@@ -39,13 +39,13 @@ void Engine::update()
             switch (shape_A->get_shape()) {
             case ShapeType::Rectangle:
                 switch (shape_B->get_shape()) {
-                case ShapeType::Rectangle: collision = polygons_collision         (shape_A, shape_B); break;
-                case ShapeType::Circle:    collision = rectangle_circle_collision (shape_A, shape_B); break;
+                case ShapeType::Rectangle: collision = polygons_collision       (shape_A, shape_B); break;
+                case ShapeType::Circle:    collision = polygon_circle_collision (shape_A, shape_B); break;
                 default: break; } break;
             case ShapeType::Circle:
                 switch (shape_B->get_shape()) {
-                case ShapeType::Rectangle: collision = circle_rectangle_collision (shape_A, shape_B); break;
-                case ShapeType::Circle:    collision = circles_collision          (shape_A, shape_B); break;
+                case ShapeType::Rectangle: collision = circle_polygon_collision (shape_A, shape_B); break;
+                case ShapeType::Circle:    collision = circles_collision        (shape_A, shape_B); break;
                 default: break; } break;
             default: break; }
 
