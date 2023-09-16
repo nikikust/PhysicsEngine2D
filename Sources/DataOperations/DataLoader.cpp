@@ -27,29 +27,36 @@ DataLoader::DataLoader(DataStorage& data_storage)
 
     // --- Shapes
     PolygonShape polygon_1{
-        { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
+        { {-150, 0}, {-100, -50}, {100, -50}, {150, 0}, {100, 50}, {-100, 50} }, // Vertices
         {200, 200}, // Position
-        (float)PI4  // Rotation
+        0.f,        // Rotation
+        1500.f      // Mass
     };
 
     CircleShape circle_1{
         50,         // Radius
-        {400, 200}  // Position
+        {400, 200}, // Position
+        0.f,        // Rotation
+        400.f       // Mass
     };
 
     CircleShape circle_2{
         50,         // Radius
-        {600, 200}  // Position
+        {600, 200}, // Position
+        0.f,        // Rotation
+        400.f       // Mass
     };
 
     PolygonShape polygon_2{
         { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
-        {800, 200}  // Position
+        {800, 200}, // Position
+        0.f,        // Rotation
+        500.f       // Mass
     };
 
     polygon_1.set_material_id(material_1.get_id());
-    circle_1   .set_material_id(material_1.get_id());
-    circle_2   .set_material_id(material_1.get_id());
+    circle_1 .set_material_id(material_1.get_id());
+    circle_2 .set_material_id(material_1.get_id());
     polygon_2.set_material_id(material_1.get_id());
 
     shapes.insert({ polygon_1.get_id(), std::make_shared<PolygonShape>(polygon_1) });

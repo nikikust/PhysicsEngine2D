@@ -16,10 +16,7 @@ void Engine::update()
     auto circle_2    = std::static_pointer_cast<CircleShape> (data_storage_.scene_data.shapes.at(3));
     auto rectangle_2 = std::static_pointer_cast<PolygonShape>(data_storage_.scene_data.shapes.at(4));
 
-    rectangle_1->set_position(sf::Vector2f{ window_.get_cursor_position() });
-
-    // rectangle_1->rotate( (float)PI / 1000);
-    // rectangle_2->rotate(-(float)PI / 2000);
+    rectangle_1->set_force((sf::Vector2f(window_.get_cursor_position()) - rectangle_1->get_position()) / 100.f);
 
     // --- //
 
@@ -59,5 +56,9 @@ void Engine::update()
                 shape_B->set_material_id(2);
             }
         }
+
+        shape_A->set_linear_acceleration(shape_A->get_force() / shape_A->get_mass());
+        shape_A->accelerate(shape_A->get_linear_acceleration());
+        shape_A->move(shape_A->get_linear_speed());
     }
 }

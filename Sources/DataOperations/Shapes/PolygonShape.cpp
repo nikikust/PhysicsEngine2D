@@ -1,10 +1,13 @@
 #include "../../../Include/DataOperations/Shapes/PolygonShape.h"
 
 
-PolygonShape::PolygonShape(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& position, float angle,
-                           const sf::Vector2f& linear_speed, float angular_speed, 
-                           float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
-    : Shape(ShapeType::Rectangle, position, angle, linear_speed,angular_speed, mass, fixed_x, fixed_y, fixed_angle),
+PolygonShape::PolygonShape(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& position, float angle, float mass,
+                           const sf::Vector2f& linear_speed, float angular_speed,
+                           const sf::Vector2f& linear_acceleration, const sf::Vector2f& angular_acceleration,
+                           const sf::Vector2f& force,
+                           bool fixed_x, bool fixed_y, bool fixed_angle)
+    : Shape(ShapeType::Rectangle, position, angle, mass, linear_speed, angular_speed,
+            linear_acceleration, angular_acceleration, force, fixed_x, fixed_y, fixed_angle),
       vertices_(vertices)
 {
     update_moment_of_inertia();

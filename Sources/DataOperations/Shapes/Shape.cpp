@@ -4,11 +4,13 @@
 int32_t Shape::max_object_id = 0;
 
 
-Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle,
+Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle, float mass,
              const sf::Vector2f& linear_speed, float angular_speed,
-             float mass, bool fixed_x, bool fixed_y, bool fixed_angle)
+             const sf::Vector2f& linear_acceleration, const sf::Vector2f& angular_acceleration, const sf::Vector2f& force,
+             bool fixed_x, bool fixed_y, bool fixed_angle)
     : position_(position), angle_(angle),
       linear_speed_(linear_speed), angular_speed_(angular_speed), 
+      linear_acceleration_(linear_acceleration), angular_acceleration_(angular_acceleration), force_(force),
       mass_(mass), fixed_x_(fixed_x), fixed_y_(fixed_y), fixed_angle_(fixed_angle), shape_type_(shape_type)
 {
     moment_of_inertia_ = 0;
@@ -36,6 +38,10 @@ void Shape::set_angle(float angle)
 {
     angle_ = angle;
 }
+void Shape::set_mass(float mass)
+{
+    mass_ = mass;
+}
 void Shape::set_linear_speed(const sf::Vector2f& linear_speed)
 {
     linear_speed_ = linear_speed;
@@ -44,10 +50,19 @@ void Shape::set_angular_speed(float angular_speed)
 {
     angular_speed_ = angular_speed;
 }
-void Shape::set_mass(float mass)
+void Shape::set_linear_acceleration(const sf::Vector2f& linear_acceleration)
 {
-    mass_ = mass;
+    linear_acceleration_ = linear_acceleration;
 }
+void Shape::set_angular_acceleration(const sf::Vector2f& angular_acceleration)
+{
+    angular_acceleration_ = angular_acceleration;
+}
+void Shape::set_force(const sf::Vector2f& force)
+{
+    force_ = force;
+}
+
 void Shape::set_material_id(int32_t material_id)
 {
     material_id_ = material_id;
@@ -61,6 +76,10 @@ float Shape::get_angle() const
 {
     return angle_;
 }
+float Shape::get_mass() const
+{
+    return mass_;
+}
 sf::Vector2f Shape::get_linear_speed() const
 {
     return linear_speed_;
@@ -69,9 +88,17 @@ float Shape::get_angular_speed() const
 {
     return angular_speed_;
 }
-float Shape::get_mass() const
+sf::Vector2f Shape::get_linear_acceleration() const
 {
-    return mass_;
+    return linear_acceleration_;
+}
+sf::Vector2f Shape::get_angular_acceleration() const
+{
+    return angular_acceleration_;
+}
+sf::Vector2f Shape::get_force() const
+{
+    return force_;
 }
 int32_t Shape::get_material_id() const
 {
@@ -92,7 +119,15 @@ void Shape::move(const sf::Vector2f& delta)
 {
     position_ += delta;
 }
+void Shape::accelerate(const sf::Vector2f& delta)
+{
+    linear_speed_ += delta;
+}
 void Shape::rotate(float angle)
 {
     angle_ += angle;
+}
+void Shape::spin(float angle)
+{
+    angular_speed_ += angle;
 }
