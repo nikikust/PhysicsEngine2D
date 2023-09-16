@@ -131,3 +131,34 @@ void Shape::spin(float angle)
 {
     angular_speed_ += angle;
 }
+
+void Shape::update()
+{
+    linear_acceleration_ = force_ / mass_;
+    linear_speed_       += linear_acceleration_;
+    position_           += linear_speed_;
+
+    force_ = { 0,0 };
+}
+void Shape::teleport(const sf::Vector2u& window_size)
+{
+    sf::Vector2f pos{
+        position_.x / (float)window_size.x,
+        position_.y / (float)window_size.y
+    };
+
+    if (pos.x < 0)
+        pos.x = 1.f - fmodf(fabsf(pos.x), 1.f);
+    else if (pos.x > 1)
+        pos.x = fmodf(pos.x, 1.f);
+
+    if (pos.y < 0)
+        pos.y = 1.f - fmodf(fabsf(pos.y), 1.f);
+    else if (pos.y > 1)
+        pos.y = fmodf(pos.y, 1.f);
+
+    pos.x *= (float)window_size.x;
+    pos.y *= (float)window_size.y;
+
+    position_ = pos;
+}

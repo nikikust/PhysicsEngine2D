@@ -227,3 +227,12 @@ sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon,
 
     return closest_point;
 }
+
+void resolve_collision(const CollisionInfo& collision, std::shared_ptr<Shape> shape_A, std::shared_ptr<Shape> shape_B)
+{
+    shape_A->move(-collision.collision_normal * collision.depth / 2.f);
+    shape_B->move( collision.collision_normal * collision.depth / 2.f);
+
+    shape_A->set_material_id(2);
+    shape_B->set_material_id(2);
+}

@@ -53,6 +53,9 @@ public:
     void rotate (float angle);
     void spin   (float angle);
 
+    void update();
+    void teleport(const sf::Vector2u& window_size);
+
 protected:
     // --- Data
     sf::Vector2f position_;

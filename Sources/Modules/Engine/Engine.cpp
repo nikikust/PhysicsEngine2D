@@ -16,7 +16,12 @@ void Engine::update()
     auto circle_2    = std::static_pointer_cast<CircleShape> (data_storage_.scene_data.shapes.at(3));
     auto rectangle_2 = std::static_pointer_cast<PolygonShape>(data_storage_.scene_data.shapes.at(4));
 
-    rectangle_1->set_force((sf::Vector2f(window_.get_cursor_position()) - rectangle_1->get_position()) / 100.f);
+
+    // auto diff  = sf::Vector2f(window_.get_cursor_position()) - rectangle_1->get_position();
+    // auto force = utils::pif(diff) / 1000.f;
+    // rectangle_1->set_force(utils::normalize(diff) * 10.f);
+
+    // rectangle_1->set_position(sf::Vector2f(window_.get_cursor_position()));
 
     // --- //
 
@@ -49,16 +54,12 @@ void Engine::update()
 
             if (collision)
             {
-                shape_A->move(-collision->collision_normal * collision->depth / 2.f);
-                shape_B->move( collision->collision_normal * collision->depth / 2.f);
-
-                shape_A->set_material_id(2);
-                shape_B->set_material_id(2);
+                resolve_collision(*collision, shape_A, shape_B);
             }
         }
 
-        shape_A->set_linear_acceleration(shape_A->get_force() / shape_A->get_mass());
-        shape_A->accelerate(shape_A->get_linear_acceleration());
-        shape_A->move(shape_A->get_linear_speed());
+        shape_A->update();
+
+        shape_A->teleport(window_.get_render_area().getSize()); // to keep object inside screen
     }
 }

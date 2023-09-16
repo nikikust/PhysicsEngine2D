@@ -22,3 +22,5 @@ std::pair<float, float> polygon_projection(std::shared_ptr<PolygonShape> polygon
 std::pair<float, float> circle_projection (std::shared_ptr<CircleShape>  circle,  const sf::Vector2f& axis);
 
 sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle);
+
+void resolve_collision(const CollisionInfo& collision, std::shared_ptr<Shape> shape_A, std::shared_ptr<Shape> shape_B);
