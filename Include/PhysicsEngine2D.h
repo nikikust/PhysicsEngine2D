@@ -45,13 +45,12 @@ private:
     // --- Data
     
     DataStorage data_storage_;
-    
     DataLoader  data_loader_;
     DataEditor  data_editor_;
 
-    Interface   interface_;
-    Renderer    renderer_;
-    Window      window_;
+    graphics::Interface   interface_;
+    graphics::Renderer    renderer_;
+    graphics::Window      window_;
 
     physics::Engine      engine_;
 };

@@ -1,7 +1,7 @@
 #include "../../Include/DataCore/DataEditor.h"
 
 
-DataEditor::DataEditor(DataStorage& data_storage, Window& window)
+DataEditor::DataEditor(DataStorage& data_storage, graphics::Window& window)
     : data_storage_(data_storage),
       window_      (window)
 {

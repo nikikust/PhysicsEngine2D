@@ -5,24 +5,28 @@
 #include "Painter.h"
 
 
-class Renderer
+namespace graphics
 {
-public:
-    Renderer(DataStorage& data_storage, DataLoader& data_loader, Window& window);
-    Renderer() = delete;
-    Renderer(Renderer&) = delete;
-    Renderer(Renderer&&) = delete;
-    ~Renderer();
+    class Renderer
+    {
+    public:
+        Renderer(DataStorage& data_storage, DataLoader& data_loader, graphics::Window& window);
+        Renderer() = delete;
+        Renderer(Renderer&) = delete;
+        Renderer(Renderer&&) = delete;
+        ~Renderer();
 
-    // --- //
+        // --- //
 
-    void update();
-    void draw();
+        void update();
+        void draw();
 
-private:
-    DataStorage& data_storage_;
-    DataLoader&  data_loader_;
-    Window&      window_;
+    private:
+        DataStorage& data_storage_;
+        DataLoader&  data_loader_;
 
-    Painter painter_;
-};
+        graphics::Window& window_;
+
+        graphics::Painter painter_;
+    };
+} // namespace graphics

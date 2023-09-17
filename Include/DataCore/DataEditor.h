@@ -7,7 +7,7 @@
 class DataEditor
 {
 public:
-    DataEditor(DataStorage& data_storage, Window& window);
+    DataEditor(DataStorage& data_storage, graphics::Window& window);
     DataEditor() = delete;
     DataEditor(DataEditor&) = delete;
     DataEditor(DataEditor&&) = delete;
@@ -48,6 +48,7 @@ private:
 
 private:
     DataStorage& data_storage_;
-    Window&      window_;
+
+    graphics::Window& window_;
 
 };

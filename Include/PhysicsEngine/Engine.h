@@ -9,7 +9,7 @@ namespace physics
     class Engine
     {
     public:
-        Engine(DataStorage& data_storage, Window& window);
+        Engine(DataStorage& data_storage, graphics::Window& window);
         Engine() = delete;
         Engine(Engine&) = delete;
         Engine(Engine&&) = delete;
@@ -22,7 +22,8 @@ namespace physics
 
     private:
         DataStorage& data_storage_;
-        Window&      window_;
+
+        graphics::Window& window_;
 
         CollisionSolver collision_solver_;
     };

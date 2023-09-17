@@ -3,7 +3,7 @@
 
 namespace physics
 {
-    Engine::Engine(DataStorage& data_storage, Window& window)
+    Engine::Engine(DataStorage& data_storage, graphics::Window& window)
         : data_storage_(data_storage), window_(window), collision_solver_(data_storage_)
     {
     }

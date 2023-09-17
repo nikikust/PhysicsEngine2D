@@ -7,7 +7,7 @@
 class DataLoader
 {
 public:
-    DataLoader(DataStorage& data_storage, Window& window);
+    DataLoader(DataStorage& data_storage, graphics::Window& window);
     DataLoader() = delete;
     DataLoader(DataLoader&) = delete;
     DataLoader(DataLoader&&) = delete;
@@ -23,5 +23,6 @@ private:
 
     // --- //
     DataStorage& data_storage_;
-    Window&      window_;
+
+    graphics::Window& window_;
 };

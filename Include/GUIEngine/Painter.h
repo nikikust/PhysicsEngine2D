@@ -7,24 +7,28 @@
 #include "Window.h"
 
 
-class Painter
+namespace graphics
 {
-public:
-    Painter(DataStorage& data_storage, Window& window);
-    Painter() = delete;
-    Painter(Painter&) = delete;
-    Painter(Painter&&) = delete;
-    ~Painter();
+    class Painter
+    {
+    public:
+        Painter(DataStorage& data_storage, graphics::Window& window);
+        Painter() = delete;
+        Painter(Painter&) = delete;
+        Painter(Painter&&) = delete;
+        ~Painter();
 
-    // --- //
+        // --- //
 
-    void draw_rectangle (std::shared_ptr<physics::PolygonShape> rectangle);
-    void draw_circle    (std::shared_ptr<physics::CircleShape>    circle   );
+        void draw_rectangle (std::shared_ptr<physics::PolygonShape> rectangle);
+        void draw_circle    (std::shared_ptr<physics::CircleShape>    circle   );
 
-private:
-    DataStorage& data_storage_;
-    Window&      window_;
+    private:
+        DataStorage& data_storage_;
 
-    sf::CircleShape circle_brush;
-    sf::ConvexShape polygon_brush;
-};
+        graphics::Window& window_;
+
+        sf::CircleShape circle_brush;
+        sf::ConvexShape polygon_brush;
+    };
+} // namespace graphics

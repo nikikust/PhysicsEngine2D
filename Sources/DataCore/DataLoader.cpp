@@ -3,7 +3,7 @@
 #include "../../Include/PhysicsEngine/Shapes/CircleShape.h"
 
 
-DataLoader::DataLoader(DataStorage& data_storage, Window& window)
+DataLoader::DataLoader(DataStorage& data_storage, graphics::Window& window)
     : data_storage_(data_storage), window_(window)
 {
 }
