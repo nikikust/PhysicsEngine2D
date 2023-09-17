@@ -3,7 +3,7 @@
 
 namespace physics
 {
-    // #define USE_GRAVITY
+    #define USE_GRAVITY
 
     #ifdef USE_GRAVITY
     sf::Vector2f Shape::gravity{ 0.f, 980.f };
@@ -12,6 +12,7 @@ namespace physics
     #endif
 
     int32_t Shape::max_object_id = 0;
+
 
     Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle, float mass,
                  const sf::Vector2f& linear_speed, float angular_speed,

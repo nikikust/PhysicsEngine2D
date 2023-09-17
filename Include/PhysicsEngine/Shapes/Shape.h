@@ -51,8 +51,8 @@ namespace physics
 
         void move       (const sf::Vector2f& delta);
         void accelerate (const sf::Vector2f& delta);
-        void rotate (float angle);
-        void spin   (float angle);
+        void rotate     (float angle);
+        void spin       (float angle);
 
         void update(float delta_time);
         void wrap_to_screen(const sf::Vector2u& window_size);
@@ -90,6 +90,7 @@ namespace physics
         int32_t   id_;
         int32_t   material_id_;
 
+        // --- Config
         static int32_t      max_object_id;
         static sf::Vector2f gravity;
     };

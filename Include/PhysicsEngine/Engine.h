@@ -21,10 +21,17 @@ namespace physics
         void update();
 
     private:
+        void step();
+
+
         DataStorage& data_storage_;
 
         graphics::Window& window_;
 
         CollisionSolver collision_solver_;
+
+        
+        // Config
+        static int32_t steps_amount;
     };
 } // namespace physics

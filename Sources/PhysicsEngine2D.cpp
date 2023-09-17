@@ -25,7 +25,6 @@ PhysicsEngine2D::PhysicsEngine2D(const std::string& app_title)
       renderer_    (data_storage_, data_loader_, window_),
       interface_   (data_storage_, data_loader_, window_)
 {
-    
 }
 PhysicsEngine2D::~PhysicsEngine2D()
 {

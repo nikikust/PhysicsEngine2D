@@ -307,10 +307,10 @@ namespace physics
             (inv_mass_A.y + inv_mass_B.y) == 0.f ? 0 : nominator / (inv_mass_A.y + inv_mass_B.y)
         };
 
-        speed_A.x -= I.x / shape_A->get_mass() * collision.collision_normal.x;
-        speed_A.y -= I.y / shape_B->get_mass() * collision.collision_normal.y;
-        speed_B.x += I.x / shape_A->get_mass() * collision.collision_normal.x;
-        speed_B.y += I.y / shape_B->get_mass() * collision.collision_normal.y;
+        speed_A.x -= I.x / shape_A->get_mass() * collision.collision_normal.x * (!fixated_A.first);
+        speed_A.y -= I.y / shape_B->get_mass() * collision.collision_normal.y * (!fixated_A.second);
+        speed_B.x += I.x / shape_A->get_mass() * collision.collision_normal.x * (!fixated_B.first);
+        speed_B.y += I.y / shape_B->get_mass() * collision.collision_normal.y * (!fixated_B.second);
 
         shape_A->set_linear_speed(speed_A);
         shape_B->set_linear_speed(speed_B);
