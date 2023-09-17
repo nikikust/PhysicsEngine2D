@@ -6,12 +6,12 @@ int32_t Shape::max_object_id = 0;
 
 Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle, float mass,
              const sf::Vector2f& linear_speed, float angular_speed,
-             const sf::Vector2f& linear_acceleration, const sf::Vector2f& angular_acceleration, const sf::Vector2f& force,
+             const sf::Vector2f& linear_acceleration, float angular_acceleration, const sf::Vector2f& force,
              bool fixed_x, bool fixed_y, bool fixed_angle)
     : position_(position), angle_(angle),
       linear_speed_(linear_speed), angular_speed_(angular_speed), 
       linear_acceleration_(linear_acceleration), angular_acceleration_(angular_acceleration), force_(force),
-      mass_(mass), fixed_x_(fixed_x), fixed_y_(fixed_y), fixed_angle_(fixed_angle), shape_type_(shape_type)
+      mass_(mass), fixed_linear_({ fixed_x, fixed_y }), fixed_angle_(fixed_angle), shape_type_(shape_type)
 {
     moment_of_inertia_ = 0;
 
@@ -54,7 +54,7 @@ void Shape::set_linear_acceleration(const sf::Vector2f& linear_acceleration)
 {
     linear_acceleration_ = linear_acceleration;
 }
-void Shape::set_angular_acceleration(const sf::Vector2f& angular_acceleration)
+void Shape::set_angular_acceleration(float angular_acceleration)
 {
     angular_acceleration_ = angular_acceleration;
 }
@@ -92,7 +92,7 @@ sf::Vector2f Shape::get_linear_acceleration() const
 {
     return linear_acceleration_;
 }
-sf::Vector2f Shape::get_angular_acceleration() const
+float Shape::get_angular_acceleration() const
 {
     return angular_acceleration_;
 }
@@ -135,12 +135,23 @@ void Shape::spin(float angle)
 void Shape::update(float delta_time)
 {
     linear_acceleration_ = force_ / mass_;
-    linear_speed_       += linear_acceleration_ * delta_time;
-    position_           += linear_speed_        * delta_time;
+
+    linear_speed_  += linear_acceleration_  * delta_time;
+    angular_speed_ += angular_acceleration_ * delta_time;
+
+    if (fixed_linear_.first)
+        linear_speed_.x = 0;
+    if (fixed_linear_.second)
+        linear_speed_.y = 0;
+    if (fixed_angle_)
+        angular_speed_ = 0;
+
+    position_ += linear_speed_  * delta_time;
+    angle_    += angular_speed_ * delta_time;
 
     force_ = { 0,0 };
 }
-void Shape::teleport(const sf::Vector2u& window_size)
+void Shape::wrap_to_screen(const sf::Vector2u& window_size)
 {
     sf::Vector2f pos{
         position_.x / (float)window_size.x,
@@ -161,4 +172,22 @@ void Shape::teleport(const sf::Vector2u& window_size)
     pos.y *= (float)window_size.y;
 
     position_ = pos;
+}
+
+void Shape::set_linear_fixation(bool x, bool y)
+{
+    fixed_linear_ = { x, y };
+}
+void Shape::set_angular_fixation(bool a)
+{
+    fixed_angle_ = a;
+}
+
+std::pair<bool, bool> Shape::get_linear_fixation()
+{
+    return fixed_linear_;
+}
+bool Shape::get_angular_fixation()
+{
+    return fixed_angle_;
 }

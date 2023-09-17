@@ -3,7 +3,7 @@
 
 PolygonShape::PolygonShape(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& position, float angle, float mass,
                            const sf::Vector2f& linear_speed, float angular_speed,
-                           const sf::Vector2f& linear_acceleration, const sf::Vector2f& angular_acceleration,
+                           const sf::Vector2f& linear_acceleration, float angular_acceleration,
                            const sf::Vector2f& force,
                            bool fixed_x, bool fixed_y, bool fixed_angle)
     : Shape(ShapeType::Rectangle, position, angle, mass, linear_speed, angular_speed,

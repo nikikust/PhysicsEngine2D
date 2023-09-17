@@ -235,17 +235,51 @@ sf::Vector2f CollisionSolver::circle_polygon_closest_point(std::shared_ptr<Polyg
 
 void CollisionSolver::resolve_collision_simple(const CollisionInfo& collision, std::shared_ptr<Shape> shape_A, std::shared_ptr<Shape> shape_B)
 {
-    shape_A->move(-collision.collision_normal * collision.depth / 2.f);
-    shape_B->move( collision.collision_normal * collision.depth / 2.f);
+    auto fixated_A = shape_A->get_linear_fixation();
+    auto fixated_B = shape_B->get_linear_fixation();
+
+    sf::Vector2f resolve_coefficients_x{ 0.5f, 0.5f };
+    sf::Vector2f resolve_coefficients_y{ 0.5f, 0.5f };
+
+    if (fixated_A.first)
+    {
+        resolve_coefficients_x.x = 0.f; // First  x stands
+        resolve_coefficients_x.y = 1.f; // Second x gets all movement
+    }
+    if (fixated_B.first)
+    {
+        resolve_coefficients_x.x *= 2;   // First  x get all movement (0.5 * 2 = 1) or stands (0 * 2 = 0)
+        resolve_coefficients_x.x  = 0.f; // Second x stands
+    }
+
+    if (fixated_A.second)
+    {
+        resolve_coefficients_y.x = 0.f; // First  y stands
+        resolve_coefficients_y.y = 1.f; // Second y gets all movement
+    }
+    if (fixated_B.second)
+    {
+        resolve_coefficients_y.x *= 2;   // First  y get all movement (0.5 * 2 = 1) or stands (0 * 2 = 0)
+        resolve_coefficients_y.x  = 0.f; // Second y stands
+    }
+
+    sf::Vector2f normal_A{ collision.collision_normal.x * resolve_coefficients_x.x, collision.collision_normal.y * resolve_coefficients_y.x };
+    sf::Vector2f normal_B{ collision.collision_normal.x * resolve_coefficients_x.y, collision.collision_normal.y * resolve_coefficients_y.y };
+
+    shape_A->move(-normal_A * collision.depth);
+    shape_B->move( normal_B * collision.depth);
 }
 void CollisionSolver::resolve_collision(const CollisionInfo& collision, std::shared_ptr<Shape> shape_A, std::shared_ptr<Shape> shape_B)
 {
     resolve_collision_simple(collision, shape_A, shape_B);
 
-    auto  speed_A = shape_A->get_linear_speed();
-    auto  speed_B = shape_B->get_linear_speed();
+    auto speed_A = shape_A->get_linear_speed();
+    auto speed_B = shape_B->get_linear_speed();
 
-    auto  relative_speed = speed_B - speed_A;
+    auto relative_speed = speed_B - speed_A;
+
+    if (utils::dot(relative_speed, collision.collision_normal) > 0.f)
+        return;
 
     auto& material_A = data_storage_.scene_data.materials.at(shape_A->get_material_id());
     auto& material_B = data_storage_.scene_data.materials.at(shape_B->get_material_id());
@@ -254,8 +288,12 @@ void CollisionSolver::resolve_collision(const CollisionInfo& collision, std::sha
 
     float I = -(1 + e) * utils::dot(relative_speed, collision.collision_normal) / (1 / shape_A->get_mass() + 1 / shape_B->get_mass());
 
+    std::cout << speed_A.x << " " << speed_A.y << " ";
+
     speed_A -= I / shape_A->get_mass() * collision.collision_normal;
-    speed_B += I / shape_A->get_mass() * collision.collision_normal;
+    speed_B += I / shape_B->get_mass() * collision.collision_normal;
+
+    std::cout << speed_A.x << " " << speed_A.y << std::endl;
 
     shape_A->set_linear_speed(speed_A);
     shape_B->set_linear_speed(speed_B);

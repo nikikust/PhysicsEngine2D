@@ -46,6 +46,6 @@ void Engine::update()
 
         shape_A->update(data_storage_.status.delta_time / 1000.f);
 
-        shape_A->teleport(window_.get_render_area().getSize()); // to keep object inside screen
+        shape_A->wrap_to_screen(window_.get_render_area().getSize()); // to keep object inside screen
     }
 }

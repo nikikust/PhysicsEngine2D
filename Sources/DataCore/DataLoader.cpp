@@ -105,7 +105,7 @@ void DataLoader::load_scene_2()
 
     int col_start = 1, col_end = 7;
 
-    for (uint32_t i = 0; i < 20; ++i)
+    for (uint32_t i = 0; i < 2; ++i)
     {
         PolygonShape polygon = PolygonShape::generate_rectangle(window_.get_render_area().getSize());
 
@@ -116,7 +116,9 @@ void DataLoader::load_scene_2()
         shapes.insert({ polygon.get_id(), std::make_shared<PolygonShape>(polygon) });
     }
 
-    for (uint32_t i = 0; i < 20; ++i)
+    shapes.at(2)->set_linear_fixation(true, true);
+
+    for (uint32_t i = 0; i < 2; ++i)
     {
         CircleShape circle = CircleShape::generate_circle(window_.get_render_area().getSize());
 
