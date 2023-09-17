@@ -1,6 +1,6 @@
 #pragma once
-#include "../../Include/DataOperations/DataStorage.h"
-#include "../../Include/DataOperations/DataLoader.h"
+#include "../../Include/DataCore/DataStorage.h"
+#include "../../Include/DataCore/DataLoader.h"
 
 #include "Window.h"
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "../../../Include/DataOperations/DataStorage.h"
-#include "../../../Include/Modules/Window.h"
+#include "../../Include/DataCore/DataStorage.h"
+#include "../../Include/GUIEngine/Window.h"
 
 #include "CollisionSolver.h"
 

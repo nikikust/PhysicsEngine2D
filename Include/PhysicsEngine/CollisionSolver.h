@@ -1,9 +1,9 @@
 #pragma once
-#include "../../../Include/Utils/Functions.h"
-#include "../../../Include/DataOperations/DataStorage.h"
+#include "../../Include/Utils/Functions.h"
+#include "../../Include/DataCore/DataStorage.h"
 
-#include "../../../Include/DataOperations/Shapes/PolygonShape.h"
-#include "../../../Include/DataOperations/Shapes/CircleShape.h"
+#include "../../Include/PhysicsEngine/Shapes/PolygonShape.h"
+#include "../../Include/PhysicsEngine/Shapes/CircleShape.h"
 
 
 struct CollisionInfo

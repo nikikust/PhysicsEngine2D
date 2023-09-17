@@ -1,6 +1,6 @@
-#include "../../Include/DataOperations/DataLoader.h"
-#include "../../Include/DataOperations/Shapes/PolygonShape.h"
-#include "../../Include/DataOperations/Shapes/CircleShape.h"
+#include "../../Include/DataCore/DataLoader.h"
+#include "../../Include/PhysicsEngine/Shapes/PolygonShape.h"
+#include "../../Include/PhysicsEngine/Shapes/CircleShape.h"
 
 
 DataLoader::DataLoader(DataStorage& data_storage, Window& window)

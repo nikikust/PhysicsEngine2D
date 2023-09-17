@@ -15,14 +15,14 @@
  */
 
 #pragma once
-#include "../Include/DataOperations/DataLoader.h"
-#include "../Include/DataOperations/DataEditor.h"
+#include "../Include/DataCore/DataLoader.h"
+#include "../Include/DataCore/DataEditor.h"
 
-#include "../Include/Modules/Engine/Engine.h"
+#include "../Include/PhysicsEngine/Engine.h"
 
-#include "../Include/Modules/Interface.h"
-#include "../Include/Modules/Renderer.h"
-#include "../Include/Modules/Window.h"
+#include "../Include/GUIEngine/Interface.h"
+#include "../Include/GUIEngine/Renderer.h"
+#include "../Include/GUIEngine/Window.h"
 
 
 class PhysicsEngine2D

@@ -1,7 +1,8 @@
 #pragma once
-#include "../../Include/DataOperations/DataStorage.h"
-#include "../../Include/DataOperations/Shapes/PolygonShape.h"
-#include "../../Include/DataOperations/Shapes/CircleShape.h"
+#include "../../Include/DataCore/DataStorage.h"
+
+#include "../../Include/PhysicsEngine/Shapes/PolygonShape.h"
+#include "../../Include/PhysicsEngine/Shapes/CircleShape.h"
 
 #include "Window.h"
 

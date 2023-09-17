@@ -1,4 +1,4 @@
-#include "../../Include/DataOperations/DataEditor.h"
+#include "../../Include/DataCore/DataEditor.h"
 
 
 DataEditor::DataEditor(DataStorage& data_storage, Window& window)

@@ -36,22 +36,22 @@ add_executable(${PROJECT_NAME}
 
     Sources/PhysicsEngine2D.cpp
 
-    Sources/DataOperations/DataEditor.cpp
-    Sources/DataOperations/DataLoader.cpp
-    Sources/DataOperations/DataStorage.cpp
+    Sources/DataCore/DataEditor.cpp
+    Sources/DataCore/DataLoader.cpp
+    Sources/DataCore/DataStorage.cpp
 
-    Sources/Modules/Interface.cpp
-    Sources/Modules/Painter.cpp
-    Sources/Modules/Renderer.cpp
-    Sources/Modules/Window.cpp
+    Sources/GUIEngine/Interface.cpp
+    Sources/GUIEngine/Painter.cpp
+    Sources/GUIEngine/Renderer.cpp
+    Sources/GUIEngine/Window.cpp
     
-    Sources/Engine/Engine.cpp
-    Sources/Engine/Material.cpp
-    Sources/Engine/CollisionSolver.cpp
+    Sources/PhysicsEngine/Engine.cpp
+    Sources/PhysicsEngine/Material.cpp
+    Sources/PhysicsEngine/CollisionSolver.cpp
 
-    Sources/Engine/Shapes/Shape.cpp
-    Sources/Engine/Shapes/PolygonShape.cpp
-    Sources/Engine/Shapes/CircleShape.cpp
+    Sources/PhysicsEngine/Shapes/Shape.cpp
+    Sources/PhysicsEngine/Shapes/PolygonShape.cpp
+    Sources/PhysicsEngine/Shapes/CircleShape.cpp
 )
 target_link_libraries(${PROJECT_NAME}
     ${CMAKE_THREAD_LIBS_INIT}
