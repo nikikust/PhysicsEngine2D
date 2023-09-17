@@ -89,5 +89,6 @@ protected:
     int32_t   id_;
     int32_t   material_id_;
 
-    static int32_t max_object_id;
+    static int32_t      max_object_id;
+    static sf::Vector2f gravity;
 };

@@ -17,8 +17,9 @@ public:
 
 private:
     
-    void load_scene_1();
-    void load_scene_2();
+    void load_scene_1(); // specified entities
+    void load_scene_2(); // random entities
+    void load_scene_3(); // scene with ground
 
     // --- //
     DataStorage& data_storage_;

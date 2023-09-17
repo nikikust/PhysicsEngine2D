@@ -105,7 +105,7 @@ void DataLoader::load_scene_2()
 
     int col_start = 1, col_end = 7;
 
-    for (uint32_t i = 0; i < 2; ++i)
+    for (uint32_t i = 0; i < 20; ++i)
     {
         PolygonShape polygon = PolygonShape::generate_rectangle(window_.get_render_area().getSize());
 
@@ -116,9 +116,7 @@ void DataLoader::load_scene_2()
         shapes.insert({ polygon.get_id(), std::make_shared<PolygonShape>(polygon) });
     }
 
-    shapes.at(2)->set_linear_fixation(true, true);
-
-    for (uint32_t i = 0; i < 2; ++i)
+    for (uint32_t i = 0; i < 20; ++i)
     {
         CircleShape circle = CircleShape::generate_circle(window_.get_render_area().getSize());
 
@@ -128,4 +126,41 @@ void DataLoader::load_scene_2()
 
         shapes.insert({ circle.get_id(), std::make_shared<CircleShape>(circle) });
     }
+}
+void DataLoader::load_scene_3()
+{
+    auto& materials = data_storage_.scene_data.materials;
+    auto& shapes    = data_storage_.scene_data.shapes;
+
+    // --- Materials
+    Material material{
+        sf::Color::White,  // Color
+        1.0f,              // Elasticity
+        "Default material" // Name
+    };
+
+    materials.insert({ material.get_id(), std::make_shared<Material>(material) });
+
+    // --- Shapes
+    PolygonShape ground{
+        { {-1000, 20}, {1000, 20}, {1000, -20}, {-1000, -20} }, // Vertices
+        {1280, 1300}, // Position
+        0.f,        // Rotation
+        1000.f      // Mass
+    };
+
+    ground.set_linear_fixation(true, true);
+
+    PolygonShape polygon{
+        { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
+        {1280, 200}, // Position
+        0.f,         // Rotation
+        1000.f       // Mass
+    };
+
+    ground .set_material_id(material.get_id());
+    polygon.set_material_id(material.get_id());
+
+    shapes.insert({ ground .get_id(), std::make_shared<PolygonShape>(ground ) });
+    shapes.insert({ polygon.get_id(), std::make_shared<PolygonShape>(polygon) });
 }

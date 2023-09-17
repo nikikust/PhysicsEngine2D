@@ -3,6 +3,14 @@
 
 int32_t Shape::max_object_id = 0;
 
+// #define USE_GRAVITY
+
+#ifdef USE_GRAVITY
+sf::Vector2f Shape::gravity{ 0.f, 980.f };
+#else
+sf::Vector2f Shape::gravity{ 0.f, 0.f };
+#endif
+
 
 Shape::Shape(ShapeType shape_type, const sf::Vector2f& position, float angle, float mass,
              const sf::Vector2f& linear_speed, float angular_speed,
@@ -134,7 +142,7 @@ void Shape::spin(float angle)
 
 void Shape::update(float delta_time)
 {
-    linear_acceleration_ = force_ / mass_;
+    linear_acceleration_ = force_ / mass_ + gravity;
 
     linear_speed_  += linear_acceleration_  * delta_time;
     angular_speed_ += angular_acceleration_ * delta_time;

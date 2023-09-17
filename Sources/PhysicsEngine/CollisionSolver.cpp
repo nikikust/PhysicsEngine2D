@@ -276,6 +276,9 @@ void CollisionSolver::resolve_collision(const CollisionInfo& collision, std::sha
     auto speed_A = shape_A->get_linear_speed();
     auto speed_B = shape_B->get_linear_speed();
 
+    auto fixated_A = shape_A->get_linear_fixation();
+    auto fixated_B = shape_B->get_linear_fixation();
+
     auto relative_speed = speed_B - speed_A;
 
     if (utils::dot(relative_speed, collision.collision_normal) > 0.f)
@@ -286,14 +289,26 @@ void CollisionSolver::resolve_collision(const CollisionInfo& collision, std::sha
 
     float e = fminf(material_A->get_elasticity(), material_B->get_elasticity());
 
-    float I = -(1 + e) * utils::dot(relative_speed, collision.collision_normal) / (1 / shape_A->get_mass() + 1 / shape_B->get_mass());
+    sf::Vector2f inv_mass_A{
+        (fixated_A.first  ? 0.f : 1 / shape_A->get_mass()),
+        (fixated_A.second ? 0.f : 1 / shape_A->get_mass())
+    };
+    sf::Vector2f inv_mass_B{
+        (fixated_B.first  ? 0.f : 1 / shape_B->get_mass()),
+        (fixated_B.second ? 0.f : 1 / shape_B->get_mass())
+    };
 
-    std::cout << speed_A.x << " " << speed_A.y << " ";
+    float nominator = -(1 + e) * utils::dot(relative_speed, collision.collision_normal);
 
-    speed_A -= I / shape_A->get_mass() * collision.collision_normal;
-    speed_B += I / shape_B->get_mass() * collision.collision_normal;
+    sf::Vector2f I{
+        (inv_mass_A.x + inv_mass_B.x) == 0.f ? 0 : nominator / (inv_mass_A.x + inv_mass_B.x),
+        (inv_mass_A.y + inv_mass_B.y) == 0.f ? 0 : nominator / (inv_mass_A.y + inv_mass_B.y)
+    };
 
-    std::cout << speed_A.x << " " << speed_A.y << std::endl;
+    speed_A.x -= I.x / shape_A->get_mass() * collision.collision_normal.x;
+    speed_A.y -= I.y / shape_B->get_mass() * collision.collision_normal.y;
+    speed_B.x += I.x / shape_A->get_mass() * collision.collision_normal.x;
+    speed_B.y += I.y / shape_B->get_mass() * collision.collision_normal.y;
 
     shape_A->set_linear_speed(speed_A);
     shape_B->set_linear_speed(speed_B);
