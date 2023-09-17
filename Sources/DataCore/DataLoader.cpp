@@ -26,44 +26,44 @@ void DataLoader::load_scene_1()
     auto& shapes = data_storage_.scene_data.shapes;
 
     // --- Materials
-    Material material_1{
+    physics::Material material_1{
         sf::Color::White,  // Color
         0.6f,              // Elasticity
         "Default material" // Name
     };
 
-    Material material_2{
+    physics::Material material_2{
         sf::Color::Red,                 // Color
         0.6f,                           // Elasticity
         "'Collision detected' material" // Name
     };
 
-    materials.insert({ material_1.get_id(), std::make_shared<Material>(material_1) });
-    materials.insert({ material_2.get_id(), std::make_shared<Material>(material_2) });
+    materials.insert({ material_1.get_id(), std::make_shared<physics::Material>(material_1) });
+    materials.insert({ material_2.get_id(), std::make_shared<physics::Material>(material_2) });
 
     // --- Shapes
-    PolygonShape polygon_1{
+    physics::PolygonShape polygon_1{
         { {-150, 0}, {-100, -50}, {100, -50}, {150, 0}, {100, 50}, {-100, 50} }, // Vertices
         {200, 200}, // Position
         0.f,        // Rotation
         1500.f      // Mass
     };
 
-    CircleShape circle_1{
+    physics::CircleShape circle_1{
         50,         // Radius
         {400, 200}, // Position
         0.f,        // Rotation
         1500.f      // Mass
     };
 
-    CircleShape circle_2{
+    physics::CircleShape circle_2{
         50,         // Radius
         {600, 200}, // Position
         0.f,        // Rotation
         1500.f      // Mass
     };
 
-    PolygonShape polygon_2{
+    physics::PolygonShape polygon_2{
         { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
         {800, 200}, // Position
         0.f,        // Rotation
@@ -75,10 +75,10 @@ void DataLoader::load_scene_1()
     circle_2 .set_material_id(material_1.get_id());
     polygon_2.set_material_id(material_1.get_id());
 
-    shapes.insert({ polygon_1.get_id(), std::make_shared<PolygonShape>(polygon_1) });
-    shapes.insert({ circle_1.get_id(),  std::make_shared<CircleShape> (circle_1)  });
-    shapes.insert({ circle_2.get_id(),  std::make_shared<CircleShape> (circle_2)  });
-    shapes.insert({ polygon_2.get_id(), std::make_shared<PolygonShape>(polygon_2) });
+    shapes.insert({ polygon_1.get_id(), std::make_shared<physics::PolygonShape>(polygon_1) });
+    shapes.insert({ circle_1.get_id(),  std::make_shared<physics::CircleShape> (circle_1)  });
+    shapes.insert({ circle_2.get_id(),  std::make_shared<physics::CircleShape> (circle_2)  });
+    shapes.insert({ polygon_2.get_id(), std::make_shared<physics::PolygonShape>(polygon_2) });
 }
 void DataLoader::load_scene_2()
 {
@@ -96,9 +96,9 @@ void DataLoader::load_scene_2()
         float elasticity = float(rand() % (el_end - el_start + 1) + el_start) / 100.f;
 
         // Creation
-        Material material{ colors[i], elasticity, "material_" + std::to_string(i) };
+        physics::Material material{ colors[i], elasticity, "material_" + std::to_string(i) };
 
-        materials.insert({ material.get_id(), std::make_shared<Material>(material) });
+        materials.insert({ material.get_id(), std::make_shared<physics::Material>(material) });
     }
 
     // --- Shapes
@@ -107,24 +107,24 @@ void DataLoader::load_scene_2()
 
     for (uint32_t i = 0; i < 20; ++i)
     {
-        PolygonShape polygon = PolygonShape::generate_rectangle(window_.get_render_area().getSize());
+        physics::PolygonShape polygon = physics::PolygonShape::generate_rectangle(window_.get_render_area().getSize());
 
         int material = rand() % (col_end - col_start + 1) + col_start;
 
         polygon.set_material_id(materials.at(material)->get_id());
 
-        shapes.insert({ polygon.get_id(), std::make_shared<PolygonShape>(polygon) });
+        shapes.insert({ polygon.get_id(), std::make_shared<physics::PolygonShape>(polygon) });
     }
 
     for (uint32_t i = 0; i < 20; ++i)
     {
-        CircleShape circle = CircleShape::generate_circle(window_.get_render_area().getSize());
+        physics::CircleShape circle = physics::CircleShape::generate_circle(window_.get_render_area().getSize());
 
         int material = rand() % (col_end - col_start + 1) + col_start;
 
         circle.set_material_id(materials.at(material)->get_id());
 
-        shapes.insert({ circle.get_id(), std::make_shared<CircleShape>(circle) });
+        shapes.insert({ circle.get_id(), std::make_shared<physics::CircleShape>(circle) });
     }
 }
 void DataLoader::load_scene_3()
@@ -133,16 +133,16 @@ void DataLoader::load_scene_3()
     auto& shapes    = data_storage_.scene_data.shapes;
 
     // --- Materials
-    Material material{
+    physics::Material material{
         sf::Color::White,  // Color
         1.0f,              // Elasticity
         "Default material" // Name
     };
 
-    materials.insert({ material.get_id(), std::make_shared<Material>(material) });
+    materials.insert({ material.get_id(), std::make_shared<physics::Material>(material) });
 
     // --- Shapes
-    PolygonShape ground{
+    physics::PolygonShape ground{
         { {-1000, 20}, {1000, 20}, {1000, -20}, {-1000, -20} }, // Vertices
         {1280, 1300}, // Position
         0.f,        // Rotation
@@ -151,7 +151,7 @@ void DataLoader::load_scene_3()
 
     ground.set_linear_fixation(true, true);
 
-    PolygonShape polygon{
+    physics::PolygonShape polygon{
         { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
         {1280, 200}, // Position
         0.f,         // Rotation
@@ -161,6 +161,6 @@ void DataLoader::load_scene_3()
     ground .set_material_id(material.get_id());
     polygon.set_material_id(material.get_id());
 
-    shapes.insert({ ground .get_id(), std::make_shared<PolygonShape>(ground ) });
-    shapes.insert({ polygon.get_id(), std::make_shared<PolygonShape>(polygon) });
+    shapes.insert({ ground .get_id(), std::make_shared<physics::PolygonShape>(ground ) });
+    shapes.insert({ polygon.get_id(), std::make_shared<physics::PolygonShape>(polygon) });
 }

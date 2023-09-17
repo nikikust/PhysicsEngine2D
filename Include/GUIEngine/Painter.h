@@ -18,8 +18,8 @@ public:
 
     // --- //
 
-    void draw_rectangle (std::shared_ptr<PolygonShape> rectangle);
-    void draw_circle    (std::shared_ptr<CircleShape>    circle   );
+    void draw_rectangle (std::shared_ptr<physics::PolygonShape> rectangle);
+    void draw_circle    (std::shared_ptr<physics::CircleShape>    circle   );
 
 private:
     DataStorage& data_storage_;

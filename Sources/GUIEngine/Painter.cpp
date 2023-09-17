@@ -13,7 +13,7 @@ Painter::~Painter()
 }
 
 
-void Painter::draw_rectangle(std::shared_ptr<PolygonShape> polygon)
+void Painter::draw_rectangle(std::shared_ptr<physics::PolygonShape> polygon)
 {
     auto& materials = data_storage_.scene_data.materials;
     auto  color     = sf::Color::White;
@@ -39,7 +39,7 @@ void Painter::draw_rectangle(std::shared_ptr<PolygonShape> polygon)
 
     window_.get_render_area().draw(polygon_brush);
 }
-void Painter::draw_circle(std::shared_ptr<CircleShape> circle)
+void Painter::draw_circle(std::shared_ptr<physics::CircleShape> circle)
 {
     auto& materials = data_storage_.scene_data.materials;
     auto  color = sf::Color::White;

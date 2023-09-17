@@ -4,24 +4,26 @@
 
 #include "CollisionSolver.h"
 
-
-class Engine
+namespace physics
 {
-public:
-    Engine(DataStorage& data_storage, Window& window);
-    Engine() = delete;
-    Engine(Engine&) = delete;
-    Engine(Engine&&) = delete;
+    class Engine
+    {
+    public:
+        Engine(DataStorage& data_storage, Window& window);
+        Engine() = delete;
+        Engine(Engine&) = delete;
+        Engine(Engine&&) = delete;
 
-    ~Engine();
+        ~Engine();
 
-    // --- //
+        // --- //
 
-    void update();
+        void update();
 
-private:
-    DataStorage& data_storage_;
-    Window&      window_;
+    private:
+        DataStorage& data_storage_;
+        Window&      window_;
 
-    CollisionSolver collision_solver_;
-};
+        CollisionSolver collision_solver_;
+    };
+} // namespace physics

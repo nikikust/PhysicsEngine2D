@@ -50,7 +50,8 @@ private:
     DataEditor  data_editor_;
 
     Interface   interface_;
-    Engine      engine_;
     Renderer    renderer_;
     Window      window_;
+
+    physics::Engine      engine_;
 };

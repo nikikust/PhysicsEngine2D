@@ -87,8 +87,8 @@ struct DataStorage
 
     struct SceneData
     {
-        std::unordered_map<int32_t, std::shared_ptr<Shape>>    shapes{};
-        std::unordered_map<int32_t, std::shared_ptr<Material>> materials{};
+        std::unordered_map<int32_t, std::shared_ptr<physics::Shape>>    shapes{};
+        std::unordered_map<int32_t, std::shared_ptr<physics::Material>> materials{};
     } scene_data;
 
 };

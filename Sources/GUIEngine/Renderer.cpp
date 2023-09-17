@@ -30,8 +30,8 @@ void Renderer::draw()
 
         switch (shape->get_shape())
         {
-        case ShapeType::Rectangle: painter_.draw_rectangle(std::static_pointer_cast<PolygonShape>(shape)); break;
-        case ShapeType::Circle:    painter_.draw_circle   (std::static_pointer_cast<CircleShape> (shape)); break;
+        case physics::ShapeType::Rectangle: painter_.draw_rectangle(std::static_pointer_cast<physics::PolygonShape>(shape)); break;
+        case physics::ShapeType::Circle:    painter_.draw_circle   (std::static_pointer_cast<physics::CircleShape> (shape)); break;
         default: break;
         }
     }
