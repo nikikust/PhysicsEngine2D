@@ -40,18 +40,18 @@ add_executable(${PROJECT_NAME}
     Sources/DataOperations/DataLoader.cpp
     Sources/DataOperations/DataStorage.cpp
 
-    Sources/DataOperations/Shapes/Shape.cpp
-    Sources/DataOperations/Shapes/PolygonShape.cpp
-    Sources/DataOperations/Shapes/CircleShape.cpp
-
     Sources/Modules/Interface.cpp
     Sources/Modules/Painter.cpp
     Sources/Modules/Renderer.cpp
     Sources/Modules/Window.cpp
     
-    Sources/Modules/Engine/Engine.cpp
-    Sources/Modules/Engine/Material.cpp
-    Sources/Modules/Engine/CollisionSolver.cpp
+    Sources/Engine/Engine.cpp
+    Sources/Engine/Material.cpp
+    Sources/Engine/CollisionSolver.cpp
+
+    Sources/Engine/Shapes/Shape.cpp
+    Sources/Engine/Shapes/PolygonShape.cpp
+    Sources/Engine/Shapes/CircleShape.cpp
 )
 target_link_libraries(${PROJECT_NAME}
     ${CMAKE_THREAD_LIBS_INIT}
