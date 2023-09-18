@@ -20,6 +20,40 @@ namespace physics
             step();
     }
 
+    void Engine::add_circle(const physics::CircleShape& circle)
+    {
+        data_storage_.scene_data.shapes.insert({ circle.get_id(), std::make_shared<physics::CircleShape>(circle) });
+    }
+    void Engine::add_polygon(const physics::PolygonShape& polygon)
+    {
+        data_storage_.scene_data.shapes.insert({ polygon.get_id(), std::make_shared<physics::PolygonShape>(polygon) });
+    }
+    void Engine::add_material(const physics::Material& material)
+    {
+        data_storage_.scene_data.materials.insert({ material.get_id(), std::make_shared<physics::Material>(material) });
+    }
+
+    std::shared_ptr<physics::Shape> Engine::get_shape(uint32_t id)
+    {
+        if (data_storage_.scene_data.shapes.contains(id))
+            return data_storage_.scene_data.shapes.at(id);
+
+        return nullptr;
+    }
+    std::shared_ptr<physics::Material> Engine::get_material(uint32_t id)
+    {
+        if (data_storage_.scene_data.materials.contains(id))
+            return data_storage_.scene_data.materials.at(id);
+
+        return nullptr;
+    }
+
+    const std::unordered_map<int32_t, std::shared_ptr<physics::Shape>>& Engine::get_shapes() const
+    {
+        return data_storage_.scene_data.shapes;
+    }
+
+
     void Engine::step()
     {
         auto& shapes = data_storage_.scene_data.shapes;

@@ -32,8 +32,8 @@ namespace graphics
 
             switch (shape->get_shape())
             {
-            case physics::ShapeType::Rectangle: painter_.draw_rectangle(std::static_pointer_cast<physics::PolygonShape>(shape)); break;
-            case physics::ShapeType::Circle:    painter_.draw_circle   (std::static_pointer_cast<physics::CircleShape> (shape)); break;
+            case physics::ShapeType::Rectangle: painter_.draw_polygon(std::static_pointer_cast<physics::PolygonShape>(shape)); break;
+            case physics::ShapeType::Circle:    painter_.draw_circle (std::static_pointer_cast<physics::CircleShape> (shape)); break;
             default: break;
             }
         }

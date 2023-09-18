@@ -14,20 +14,20 @@ namespace physics
 
 	// --- //
 
-	sf::Color Material::get_color()
+	sf::Color Material::get_color() const
 	{
 		return color_;
 	}
-	float Material::get_elasticity()
+	float Material::get_elasticity() const
 	{
 		return elasticity_;
 	}
 
-	int32_t Material::get_id()
+	int32_t Material::get_id() const
 	{
 		return id_;
 	}
-	std::string Material::get_name()
+	std::string Material::get_name() const
 	{
 		return name_;
 	}

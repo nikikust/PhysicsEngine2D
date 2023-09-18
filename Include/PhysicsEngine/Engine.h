@@ -20,6 +20,15 @@ namespace physics
 
         void update();
 
+        void add_circle   (const physics::CircleShape&  circle );
+        void add_polygon  (const physics::PolygonShape& polygon);
+        void add_material (const physics::Material&     material);
+
+        std::shared_ptr<physics::Shape>    get_shape    (uint32_t id);
+        std::shared_ptr<physics::Material> get_material (uint32_t id);
+
+        const std::unordered_map<int32_t, std::shared_ptr<physics::Shape>>& get_shapes() const;
+
     private:
         void step();
 
@@ -30,6 +39,12 @@ namespace physics
 
         CollisionSolver collision_solver_;
 
+        // Data
+        struct SceneData
+        {
+            std::unordered_map<int32_t, std::shared_ptr<physics::Shape>>    shapes{};
+            std::unordered_map<int32_t, std::shared_ptr<physics::Material>> materials{};
+        } scene_data_;
         
         // Config
         static int32_t steps_amount;

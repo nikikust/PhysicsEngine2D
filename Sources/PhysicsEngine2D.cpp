@@ -245,32 +245,32 @@ void PhysicsEngine2D::process_inputs()
     if (utils::key_down(sf::Keyboard::Q))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->rotate(-(float)PI / 1000.f);
+            engine_.get_shape(1)->rotate(-(float)PI / 1000.f);
     }
     if (utils::key_down(sf::Keyboard::E))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->rotate((float)PI / 1000.f);
+            engine_.get_shape(1)->rotate((float)PI / 1000.f);
     }
     if (utils::key_down(sf::Keyboard::W))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.f, -0.5f });
+            engine_.get_shape(1)->accelerate({0.f, -0.5f});
     }
     if (utils::key_down(sf::Keyboard::A))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ -0.5f, 0.f });
+            engine_.get_shape(1)->accelerate({ -0.5f, 0.f });
     }
     if (utils::key_down(sf::Keyboard::S))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.f, 0.5f });
+            engine_.get_shape(1)->accelerate({ 0.f, 0.5f });
     }
     if (utils::key_down(sf::Keyboard::D))
     {
         if (data_editor_.keyboard_io_is_released())
-            data_storage_.scene_data.shapes.at(1)->accelerate({ 0.5f, 0.f });
+            engine_.get_shape(1)->accelerate({ 0.5f, 0.f });
     }
 
     // --- //

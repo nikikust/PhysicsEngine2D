@@ -15,7 +15,7 @@ namespace graphics
     }
 
 
-    void Painter::draw_rectangle(std::shared_ptr<physics::PolygonShape> polygon)
+    void Painter::draw_polygon(std::shared_ptr<physics::PolygonShape> polygon)
     {
         auto& materials = data_storage_.scene_data.materials;
         auto  color     = sf::Color::White;
