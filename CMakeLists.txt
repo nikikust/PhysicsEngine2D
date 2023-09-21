@@ -14,7 +14,7 @@ find_package(Threads REQUIRED)
 add_subdirectory(third_party)
 
 include_directories(
-	Include/
+	Include
     ${CMAKE_BINARY_DIR}/_deps/imgui-src/
     ${CMAKE_BINARY_DIR}/_deps/imgui-src/backends/
     ${CMAKE_BINARY_DIR}/_deps/imgui-src/misc/cpp/
@@ -25,7 +25,7 @@ include_directories(
 
 
 add_library(functions STATIC
-    Sources/Utils/Functions.cpp
+    Sources/GameEngine/Utils/Functions.cpp
 )
 target_link_libraries(functions
     ImGui-SFML::ImGui-SFML
@@ -34,24 +34,28 @@ target_link_libraries(functions
 add_executable(${PROJECT_NAME}
     Main.cpp
 
-    Sources/PhysicsEngine2D.cpp
+    Sources/GameEngine/PhysicsEngine2D.cpp
+    Sources/GameEngine/Entity.cpp
 
-    Sources/DataCore/DataEditor.cpp
-    Sources/DataCore/DataLoader.cpp
-    Sources/DataCore/DataStorage.cpp
+    Sources/GameEngine/DataCore/DataEditor.cpp
+    Sources/GameEngine/DataCore/DataLoader.cpp
+    Sources/GameEngine/DataCore/DataStorage.cpp
 
-    Sources/GUIEngine/Interface.cpp
-    Sources/GUIEngine/Painter.cpp
-    Sources/GUIEngine/Renderer.cpp
-    Sources/GUIEngine/Window.cpp
+    Sources/GameEngine/GUIEngine/Interface.cpp
+    Sources/GameEngine/GUIEngine/Painter.cpp
+    Sources/GameEngine/GUIEngine/Renderer.cpp
+    Sources/GameEngine/GUIEngine/Window.cpp
     
-    Sources/PhysicsEngine/Engine.cpp
-    Sources/PhysicsEngine/Material.cpp
-    Sources/PhysicsEngine/CollisionSolver.cpp
+    Sources/GameEngine/PhysicsEngine/Engine.cpp
+    Sources/GameEngine/PhysicsEngine/World.cpp
+    Sources/GameEngine/PhysicsEngine/Fixture.cpp
+    Sources/GameEngine/PhysicsEngine/PhysMath.cpp
+    Sources/GameEngine/PhysicsEngine/RigidBody.cpp
+    Sources/GameEngine/PhysicsEngine/CollisionSolver.cpp
 
-    Sources/PhysicsEngine/Shapes/Shape.cpp
-    Sources/PhysicsEngine/Shapes/PolygonShape.cpp
-    Sources/PhysicsEngine/Shapes/CircleShape.cpp
+    Sources/GameEngine/PhysicsEngine/Shapes/Shape.cpp
+    Sources/GameEngine/PhysicsEngine/Shapes/PolygonShape.cpp
+    Sources/GameEngine/PhysicsEngine/Shapes/CircleShape.cpp
 )
 target_link_libraries(${PROJECT_NAME}
     ${CMAKE_THREAD_LIBS_INIT}
