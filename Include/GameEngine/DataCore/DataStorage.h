@@ -1,12 +1,12 @@
 #pragma once
 #include <GameEngine/Utils/Functions.h>
-#include <GameEngine/PhysicsEngine/Shapes/Shape.h>
+#include <GameEngine/Game/Entities/EntitiesStorage.h>
 
 
 struct DataStorage
 {
     DataStorage();
-    DataStorage(DataStorage&) = delete;
+    DataStorage(DataStorage& ) = delete;
     DataStorage(DataStorage&&) = delete;
 
     ~DataStorage();
@@ -25,8 +25,6 @@ struct DataStorage
 
         struct Fields
         {
-
-
             struct CursorMessage
             {
                 std::string message = "";
@@ -53,23 +51,23 @@ struct DataStorage
     struct Status
     {
         time_t start_time_for_autosave = time(0);
-        long long last_time;
-        float delta_time;
+        long long last_time = 0;
+        float delta_time = 0.f;
 
-        bool mouse_captured    = false;
+        bool mouse_captured = false;
         bool keyboard_captured = false;
 
         enum class MovementMode
         {
-            IDLE              = 0,
-            MovingCamera      = 1
+            IDLE = 0,
+            MovingCamera = 1
         } movement_mode = MovementMode::IDLE;
 
-        sf::Vector2i mouse_position_on_click  = { 0, 0 };
+        sf::Vector2i mouse_position_on_click = { 0, 0 };
         sf::Vector2i camera_position_on_click = { 0, 0 };
-        sf::Vector2i point_position_on_click  = { 0, 0 };
+        sf::Vector2i point_position_on_click = { 0, 0 };
 
-        bool make_screenshot         = false;
+        bool make_screenshot = false;
         int  screenshot_frames_delay = 0;
     } status;
 
@@ -80,4 +78,6 @@ struct DataStorage
         float scale_modifier = 0.0;
         float scale_modifier_as_pow2 = 1;
     } camera;
+
+    game::EntitiesStorage entities_storage;
 };

@@ -1,12 +1,6 @@
 #pragma once
 #include <GameEngine/Utils/Functions.h>
-#include <GameEngine/DataCore/DataStorage.h>
-
-#include <GameEngine/PhysicsEngine/Shapes/PolygonShape.h>
-#include <GameEngine/PhysicsEngine/Shapes/CircleShape.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
-#include <GameEngine/PhysicsEngine/PhysMath.h>
-#include <GameEngine/PhysicsEngine/Fixture.h>
 
 
 namespace physics

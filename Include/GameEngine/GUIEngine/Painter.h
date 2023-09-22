@@ -1,16 +1,15 @@
 #pragma once
-#include <GameEngine/DataCore/DataStorage.h>
-#include <GameEngine/PhysicsEngine/Shapes/CircleShape.h>
-#include <GameEngine/PhysicsEngine/Shapes/PolygonShape.h>
-#include <GameEngine/GUIEngine/Window.h>
+#include <GameEngine/Utils/Functions.h>
 
 
 namespace graphics
 {
+    class Window;
+
     class Painter
     {
     public:
-        Painter(DataStorage& data_storage, graphics::Window& window);
+        Painter(graphics::Window& window);
         Painter() = delete;
         Painter(Painter&) = delete;
         Painter(Painter&&) = delete;
@@ -18,12 +17,10 @@ namespace graphics
 
         // --- //
 
-        void draw_polygon (std::shared_ptr<physics::PolygonShape> polygon);
-        void draw_circle  (std::shared_ptr<physics::CircleShape>  circle );
+        void draw_polygon (const sf::Vector2f position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color);
+        void draw_circle  (const sf::Vector2f position, float radius,                              const sf::Color& color);
 
     private:
-        DataStorage& data_storage_;
-
         graphics::Window& window_;
 
         sf::CircleShape circle_brush;

@@ -15,7 +15,7 @@ namespace physics
         // --- //
         void update(float delta_time);
 
-        std::shared_ptr<physics::RigidBody> get_body(int32_t id);
+        std::shared_ptr<physics::RigidBody> get_body(int32_t id) const;
 
         std::shared_ptr<physics::RigidBody> add_body(const physics::RigidBody& body);
 

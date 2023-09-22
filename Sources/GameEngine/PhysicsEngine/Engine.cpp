@@ -18,11 +18,11 @@ namespace physics
         for (int step_cnt = 0; step_cnt < steps_amount; ++step_cnt)
             selected_world_.update(delta_time / steps_amount);
     }
-    std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id)
+    std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id) const
     {
         return selected_world_.get_body(id);
     }
-    std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id, int32_t world_id)
+    std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id, int32_t world_id) const
     {
         // TO DO: world selection
         return selected_world_.get_body(id);
@@ -31,5 +31,11 @@ namespace physics
     std::shared_ptr<physics::RigidBody> Engine::add_body(const physics::RigidBody& body)
     {
         return selected_world_.add_body(body);
+    }
+
+    World& Engine::get_world()
+    {
+        // TO DO: world selection
+        return selected_world_;
     }
 } // namespace physics

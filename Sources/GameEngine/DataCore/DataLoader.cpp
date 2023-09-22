@@ -1,10 +1,8 @@
 #include <GameEngine/DataCore/DataLoader.h>
-#include <GameEngine/PhysicsEngine/Shapes/CircleShape.h>
-#include <GameEngine/PhysicsEngine/Shapes/PolygonShape.h>
 
 
-DataLoader::DataLoader(DataStorage& data_storage, graphics::Window& window)
-    : data_storage_(data_storage), window_(window)
+DataLoader::DataLoader(DataStorage& data_storage, graphics::Window& window, physics::Engine& engine)
+    : data_storage_(data_storage), window_(window), engine_(engine)
 {
 }
 DataLoader::~DataLoader()
@@ -15,70 +13,22 @@ int DataLoader::init()
 {
     srand((unsigned int)time(NULL));
 
-    load_scene_4();
+    load_scene_1();
 
     return 0;
 }
 
 void DataLoader::load_scene_1()
 {
-    // auto& materials = data_storage_.scene_data.materials;
-    // auto& shapes = data_storage_.scene_data.shapes;
-    // 
-    // // --- Materials
-    // physics::Material material_1{
-    //     sf::Color::White,  // Color
-    //     0.6f,              // Elasticity
-    //     "Default material" // Name
-    // };
-    // 
-    // physics::Material material_2{
-    //     sf::Color::Red,                 // Color
-    //     0.6f,                           // Elasticity
-    //     "'Collision detected' material" // Name
-    // };
-    // 
-    // materials.insert({ material_1.get_id(), std::make_shared<physics::Material>(material_1) });
-    // materials.insert({ material_2.get_id(), std::make_shared<physics::Material>(material_2) });
-    // 
-    // // --- Shapes
-    // physics::PolygonShape polygon_1{
-    //     { {-150, 0}, {-100, -50}, {100, -50}, {150, 0}, {100, 50}, {-100, 50} }, // Vertices
-    //     {200, 200}, // Position
-    //     0.f,        // Rotation
-    //     1500.f      // Mass
-    // };
-    // 
-    // physics::CircleShape circle_1{
-    //     50,         // Radius
-    //     {400, 200}, // Position
-    //     0.f,        // Rotation
-    //     1500.f      // Mass
-    // };
-    // 
-    // physics::CircleShape circle_2{
-    //     50,         // Radius
-    //     {600, 200}, // Position
-    //     0.f,        // Rotation
-    //     1500.f      // Mass
-    // };
-    // 
-    // physics::PolygonShape polygon_2{
-    //     { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
-    //     {800, 200}, // Position
-    //     0.f,        // Rotation
-    //     1500.f      // Mass
-    // };
-    // 
-    // polygon_1.set_material_id(material_1.get_id());
-    // circle_1 .set_material_id(material_1.get_id());
-    // circle_2 .set_material_id(material_1.get_id());
-    // polygon_2.set_material_id(material_1.get_id());
-    // 
-    // shapes.insert({ polygon_1.get_id(), std::make_shared<physics::PolygonShape>(polygon_1) });
-    // shapes.insert({ circle_1.get_id(),  std::make_shared<physics::CircleShape> (circle_1)  });
-    // shapes.insert({ circle_2.get_id(),  std::make_shared<physics::CircleShape> (circle_2)  });
-    // shapes.insert({ polygon_2.get_id(), std::make_shared<physics::PolygonShape>(polygon_2) });
+    game::PolygonEntity polygon_1{ engine_.get_world(), {100, 100} , 0 };
+    game::CircleEntity  circle_1 { engine_.get_world(), {300, 100} , 0 };
+    game::CircleEntity  circle_2 { engine_.get_world(), {100, 300} , 0 };
+    game::PolygonEntity polygon_2{ engine_.get_world(), {300, 300} , 0 };
+
+    data_storage_.entities_storage.add_entity(polygon_1);
+    data_storage_.entities_storage.add_entity(circle_1 );
+    data_storage_.entities_storage.add_entity(circle_2 );
+    data_storage_.entities_storage.add_entity(polygon_2);
 }
 void DataLoader::load_scene_2()
 {

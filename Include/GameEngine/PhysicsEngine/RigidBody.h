@@ -51,13 +51,13 @@ namespace physics
         void wrap_to_screen(const sf::Vector2u& window_size);
 
         // --- Shapes
-        std::shared_ptr<physics::Fixture> add_circle   (const physics::CircleShape&  circle );
-        std::shared_ptr<physics::Fixture> add_polygon  (const physics::PolygonShape& polygon);
+        std::shared_ptr<physics::Fixture> add_shape (const physics::CircleShape&  circle );
+        std::shared_ptr<physics::Fixture> add_shape (const physics::PolygonShape& polygon);
 
-        std::shared_ptr<physics::Fixture> get_fixture    (uint32_t id);
+        std::shared_ptr<physics::Fixture> get_fixture    (uint32_t id) const;
         void                              remove_fixture (uint32_t id);
 
-        const std::unordered_map<int32_t, std::shared_ptr<physics::Fixture>>& get_fixtures() const;
+        const std::vector<std::shared_ptr<physics::Fixture>>& get_fixtures() const;
 
         // --- //
 		int32_t get_id() const;
@@ -84,7 +84,7 @@ namespace physics
         bool                  fixed_angle_  = false;
 		
         // --- Shapes
-        std::unordered_map<int32_t, std::shared_ptr<physics::Fixture>> fixtures_;
+        std::vector<std::shared_ptr<physics::Fixture>> fixtures_;
 
         // --- //
 

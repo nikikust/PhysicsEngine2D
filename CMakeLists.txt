@@ -35,7 +35,11 @@ add_executable(${PROJECT_NAME}
     Main.cpp
 
     Sources/GameEngine/PhysicsEngine2D.cpp
-    Sources/GameEngine/Entity.cpp
+
+    Sources/GameEngine/Game/Entities/Entity.cpp
+    Sources/GameEngine/Game/Entities/CircleEntity.cpp
+    Sources/GameEngine/Game/Entities/PolygonEntity.cpp
+    Sources/GameEngine/Game/Entities/EntitiesStorage.cpp
 
     Sources/GameEngine/DataCore/DataEditor.cpp
     Sources/GameEngine/DataCore/DataLoader.cpp

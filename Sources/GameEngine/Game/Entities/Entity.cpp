@@ -1,4 +1,4 @@
-#include <GameEngine/Entity.h>
+#include <GameEngine/Game/Entities/Entity.h>
 
 
 namespace game
@@ -17,6 +17,11 @@ namespace game
 	sf::Color Entity::get_color() const
 	{
 		return color_;
+	}
+
+	int32_t Entity::get_id() const
+	{
+		return id_;
 	}
 
 	void Entity::set_color(const sf::Color& color)

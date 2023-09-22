@@ -1,7 +1,7 @@
 #include <GameEngine/PhysicsEngine/World.h>
 
 
-#define USE_GRAVITY
+// #define USE_GRAVITY
 
 #ifdef USE_GRAVITY
 sf::Vector2f physics::World::gravity_{ 0.f, 980.f };
@@ -42,7 +42,7 @@ namespace physics
         }
 	}
 
-    std::shared_ptr<physics::RigidBody> World::get_body(int32_t id)
+    std::shared_ptr<physics::RigidBody> World::get_body(int32_t id) const
     {
         if (bodies_.contains(id))
             return bodies_.at(id);
@@ -60,14 +60,12 @@ namespace physics
     void World::update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A,
                                  const std::shared_ptr<physics::RigidBody>& body_B)
     {
-        for (auto& shape_pair_A : body_A->get_fixtures())
+        for (auto& fixture_A : body_A->get_fixtures())
         {
-            auto& fixture_A = shape_pair_A.second;
             auto& shape_A   = fixture_A->get_shape();
 
-            for (auto& shape_pair_B : body_B->get_fixtures())
+            for (auto& fixture_B : body_B->get_fixtures())
             {
-                auto& fixture_B = shape_pair_B.second;
                 auto& shape_B = fixture_B->get_shape();
 
                 std::optional<CollisionInfo> collision = std::nullopt;

@@ -50,6 +50,9 @@ namespace physics
         auto& vertices_A = polygon_A->get_vertices();
         auto& vertices_B = polygon_B->get_vertices();
 
+        auto polygon_A_position = physics::rotate_point(polygon_A->get_position(), transform_A);
+        auto polygon_B_position = physics::rotate_point(polygon_B->get_position(), transform_B);
+
         float total_min_depth = std::numeric_limits<float>::max();
         sf::Vector2f normal{};
 
@@ -74,7 +77,7 @@ namespace physics
             {
                 total_min_depth = min_depth;
 
-                if (utils::dot(polygon_B->get_position() - polygon_A->get_position(), axis) < 0.f)
+                if (utils::dot(polygon_B_position - polygon_A_position, axis) < 0.f)
                     normal = -axis;
                 else
                     normal = axis;
@@ -101,14 +104,14 @@ namespace physics
             {
                 total_min_depth = min_depth;
 
-                if (utils::dot(polygon_B->get_position() - polygon_A->get_position(), axis) < 0.f)
+                if (utils::dot(polygon_B_position - polygon_A_position, axis) < 0.f)
                     normal = -axis;
                 else
                     normal = axis;
             }
         }
 
-        return { { polygon_A->get_position(), normal, total_min_depth,
+        return { { polygon_A_position, normal, total_min_depth,
                    fminf(polygon_A_raw->get_restitution(), polygon_B_raw->get_restitution())} };
     }
     std::optional<CollisionInfo> CollisionSolver::polygon_circle_collision(std::shared_ptr<Fixture> polygon_raw, std::shared_ptr<Fixture> circle_raw, 
@@ -121,6 +124,9 @@ namespace physics
         // --- //
 
         auto& vertices = polygon->get_vertices();
+
+        auto polygon_position = physics::rotate_point(polygon->get_position(), transform_A);
+        auto circle_position  = physics::rotate_point(circle ->get_position(), transform_B);
 
         float total_min_depth = std::numeric_limits<float>::max();
         sf::Vector2f normal{};
@@ -146,7 +152,7 @@ namespace physics
             {
                 total_min_depth = min_depth;
 
-                if (utils::dot(circle->get_position() - polygon->get_position(), axis) < 0.f)
+                if (utils::dot(circle_position - polygon_position, axis) < 0.f)
                     normal = -axis;
                 else
                     normal = axis;
@@ -155,7 +161,7 @@ namespace physics
 
         auto closest_point = circle_polygon_closest_point(polygon, circle, transform_A, transform_B);
 
-        auto axis = utils::normalize(closest_point - circle->get_position());
+        auto axis = utils::normalize(closest_point - circle_position);
 
         auto [projections_A_min, projections_A_max] = polygon_projection(polygon, axis, transform_A);
         auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis, transform_B);
@@ -169,13 +175,13 @@ namespace physics
         {
             total_min_depth = min_depth;
 
-            if (utils::dot(circle->get_position() - polygon->get_position(), axis) < 0.f)
+            if (utils::dot(circle_position - polygon_position, axis) < 0.f)
                 normal = -axis;
             else
                 normal = axis;
         }
 
-        return { { polygon->get_position(), normal, total_min_depth,
+        return { { polygon_position, normal, total_min_depth,
                    fminf(polygon_raw->get_restitution(), circle_raw->get_restitution())} };
     }
     std::optional<CollisionInfo> CollisionSolver::circle_polygon_collision(std::shared_ptr<Fixture> circle_raw, std::shared_ptr<Fixture> polygon_raw, 

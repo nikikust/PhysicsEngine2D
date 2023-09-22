@@ -19,7 +19,7 @@
 
 PhysicsEngine2D::PhysicsEngine2D(const std::string& app_title)
     : window_      (data_storage_, app_title),
-      data_loader_ (data_storage_, window_),
+      data_loader_ (data_storage_, window_, engine_),
       data_editor_ (data_storage_, window_),
       renderer_    (data_storage_, data_loader_, window_),
       interface_   (data_storage_, data_loader_, window_)
@@ -60,8 +60,8 @@ int PhysicsEngine2D::main_loop()
 
         // --- Update
         window_   .update();
-        engine_   .update(data_storage_.status.delta_time);
         renderer_ .update();
+        engine_   .update(data_storage_.status.delta_time);
         interface_.update();
 
         // --- Draw

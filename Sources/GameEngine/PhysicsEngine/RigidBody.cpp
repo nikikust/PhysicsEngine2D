@@ -185,37 +185,45 @@ namespace physics
     }
 
     // --- Shapes
-    std::shared_ptr<physics::Fixture> RigidBody::add_circle(const physics::CircleShape& circle)
+    std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::CircleShape& circle)
     {
         Fixture fixture{ std::make_shared<physics::CircleShape>(circle), this };
 
-        fixtures_.insert({ circle.get_id(), std::make_shared<physics::Fixture>(fixture) });
+        fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
 
-        return fixtures_.at(circle.get_id());
+        return fixtures_.back();
     }
-    std::shared_ptr<physics::Fixture> RigidBody::add_polygon(const physics::PolygonShape& polygon)
+    std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::PolygonShape& polygon)
     {
         Fixture fixture{ std::make_shared<physics::PolygonShape>(polygon), this };
 
-        fixtures_.insert({ polygon.get_id(), std::make_shared<physics::Fixture>(fixture) });
+        fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
 
-        return fixtures_.at(polygon.get_id());
+        return fixtures_.back();
     }
 
-    std::shared_ptr<physics::Fixture> RigidBody::get_fixture(uint32_t id)
+    std::shared_ptr<physics::Fixture> RigidBody::get_fixture(uint32_t id) const
     {
-        if (fixtures_.contains(id))
-            return fixtures_.at(id);
+        for (auto& fixture : fixtures_)
+            if (fixture->get_shape()->get_id() == id)
+                return fixture;
 
         return nullptr;
     }
     void RigidBody::remove_fixture(uint32_t id)
     {
-        if (fixtures_.contains(id))
-            fixtures_.erase(id);
+        for (auto it = fixtures_.begin(); it != fixtures_.end(); ++it)
+        {
+            if ((*it)->get_shape()->get_id() == id)
+            {
+                fixtures_.erase(it);
+
+                return;
+            }
+        }
     }
 
-    const std::unordered_map<int32_t, std::shared_ptr<physics::Fixture>>& RigidBody::get_fixtures() const
+    const std::vector<std::shared_ptr<physics::Fixture>>& RigidBody::get_fixtures() const
     {
         return fixtures_;
     }
