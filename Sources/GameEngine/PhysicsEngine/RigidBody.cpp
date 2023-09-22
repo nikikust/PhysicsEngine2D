@@ -185,17 +185,21 @@ namespace physics
     }
 
     // --- Shapes
-    void RigidBody::add_circle(const physics::CircleShape& circle)
+    std::shared_ptr<physics::Fixture> RigidBody::add_circle(const physics::CircleShape& circle)
     {
         Fixture fixture{ std::make_shared<physics::CircleShape>(circle), this };
 
         fixtures_.insert({ circle.get_id(), std::make_shared<physics::Fixture>(fixture) });
+
+        return fixtures_.at(circle.get_id());
     }
-    void RigidBody::add_polygon(const physics::PolygonShape& polygon)
+    std::shared_ptr<physics::Fixture> RigidBody::add_polygon(const physics::PolygonShape& polygon)
     {
         Fixture fixture{ std::make_shared<physics::PolygonShape>(polygon), this };
 
         fixtures_.insert({ polygon.get_id(), std::make_shared<physics::Fixture>(fixture) });
+
+        return fixtures_.at(polygon.get_id());
     }
 
     std::shared_ptr<physics::Fixture> RigidBody::get_fixture(uint32_t id)

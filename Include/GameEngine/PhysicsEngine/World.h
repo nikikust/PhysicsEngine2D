@@ -17,6 +17,8 @@ namespace physics
 
         std::shared_ptr<physics::RigidBody> get_body(int32_t id);
 
+        std::shared_ptr<physics::RigidBody> add_body(const physics::RigidBody& body);
+
     private:
         void update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A, 
                               const std::shared_ptr<physics::RigidBody>& body_B);

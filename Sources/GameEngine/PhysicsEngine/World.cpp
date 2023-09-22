@@ -50,6 +50,13 @@ namespace physics
         return nullptr;
     }
 
+    std::shared_ptr<physics::RigidBody> World::add_body(const physics::RigidBody& body)
+    {
+        bodies_.insert({ body.get_id(), std::make_shared<physics::RigidBody>(body) });
+
+        return bodies_.at(body.get_id());
+    }
+
     void World::update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A,
                                  const std::shared_ptr<physics::RigidBody>& body_B)
     {
