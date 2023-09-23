@@ -30,7 +30,7 @@ namespace game
 
 		auto rotated_center = physics::rotate_point(shape->get_position(), transform);
 
-		painter.draw_circle(transform.position, shape->get_radius(), color_);
+		painter.draw_circle(transform.position, shape->get_radius(), body_->get_angle(), color_);
 	}
 
 	const std::shared_ptr<physics::RigidBody>& CircleEntity::get_body() const
