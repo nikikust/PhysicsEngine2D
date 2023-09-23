@@ -15,8 +15,8 @@ namespace physics
         auto circle_B = std::dynamic_pointer_cast<CircleShape>(circle_B_raw->get_shape());
 
         // Prepare data
-        auto position_A = physics::rotate_point(circle_A->get_position(), transform_A);
-        auto position_B = physics::rotate_point(circle_B->get_position(), transform_B);
+        auto position_A = physics::rotate_and_move_point(circle_A->get_position(), transform_A);
+        auto position_B = physics::rotate_and_move_point(circle_B->get_position(), transform_B);
 
         auto radius_A = circle_A->get_radius();
         auto radius_B = circle_B->get_radius();
@@ -50,8 +50,8 @@ namespace physics
         auto& vertices_A = polygon_A->get_vertices();
         auto& vertices_B = polygon_B->get_vertices();
 
-        auto polygon_A_position = physics::rotate_point(polygon_A->get_position(), transform_A);
-        auto polygon_B_position = physics::rotate_point(polygon_B->get_position(), transform_B);
+        auto polygon_A_position = physics::rotate_and_move_point(polygon_A->get_position(), transform_A);
+        auto polygon_B_position = physics::rotate_and_move_point(polygon_B->get_position(), transform_B);
 
         float total_min_depth = std::numeric_limits<float>::max();
         sf::Vector2f normal{};
@@ -59,8 +59,8 @@ namespace physics
 
         for (int32_t i = 0; i < vertices_A.size(); ++i)
         {
-            auto point_A = physics::rotate_point(vertices_A.at(i), transform_A);
-            auto point_B = physics::rotate_point(vertices_A.at((i + 1) % vertices_A.size()), transform_A);
+            auto point_A = physics::rotate_and_move_point(vertices_A.at(i), transform_A);
+            auto point_B = physics::rotate_and_move_point(vertices_A.at((i + 1) % vertices_A.size()), transform_A);
 
             auto edge = point_B - point_A;
             auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
@@ -86,8 +86,8 @@ namespace physics
 
         for (int32_t i = 0; i < vertices_B.size(); ++i)
         {
-            auto point_A = physics::rotate_point(vertices_B.at(i), transform_B);
-            auto point_B = physics::rotate_point(vertices_B.at((i + 1) % vertices_B.size()), transform_B);
+            auto point_A = physics::rotate_and_move_point(vertices_B.at(i), transform_B);
+            auto point_B = physics::rotate_and_move_point(vertices_B.at((i + 1) % vertices_B.size()), transform_B);
 
             auto edge = point_B - point_A;
             auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
@@ -125,8 +125,8 @@ namespace physics
 
         auto& vertices = polygon->get_vertices();
 
-        auto polygon_position = physics::rotate_point(polygon->get_position(), transform_A);
-        auto circle_position  = physics::rotate_point(circle ->get_position(), transform_B);
+        auto polygon_position = physics::rotate_and_move_point(polygon->get_position(), transform_A);
+        auto circle_position  = physics::rotate_and_move_point(circle ->get_position(), transform_B);
 
         float total_min_depth = std::numeric_limits<float>::max();
         sf::Vector2f normal{};
@@ -134,8 +134,8 @@ namespace physics
 
         for (int32_t i = 0; i < vertices.size(); ++i)
         {
-            auto point_A = physics::rotate_point(vertices.at(i), transform_A);
-            auto point_B = physics::rotate_point(vertices.at((i + 1) % vertices.size()), transform_A);
+            auto point_A = physics::rotate_and_move_point(vertices.at(i), transform_A);
+            auto point_B = physics::rotate_and_move_point(vertices.at((i + 1) % vertices.size()), transform_A);
 
             auto edge = point_B - point_A;
             auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
@@ -204,7 +204,7 @@ namespace physics
 
         for (auto& vertex : vertices)
         {
-            float projection = utils::dot(physics::rotate_point(vertex, transform), axis);
+            float projection = utils::dot(physics::rotate_and_move_point(vertex, transform), axis);
 
             min_projection = std::min(min_projection, projection);
             max_projection = std::max(max_projection, projection);
@@ -214,7 +214,7 @@ namespace physics
     }
     std::pair<float, float> CollisionSolver::circle_projection(std::shared_ptr<CircleShape> circle, const sf::Vector2f& axis, Transform transform)
     {
-        float central = utils::dot(physics::rotate_point(circle->get_position(), transform), axis);
+        float central = utils::dot(physics::rotate_and_move_point(circle->get_position(), transform), axis);
 
         float min_projection = central - circle->get_radius();
         float max_projection = central + circle->get_radius();
@@ -227,11 +227,11 @@ namespace physics
         sf::Vector2f closest_point{};
         float min_distance = std::numeric_limits<float>::max();
 
-        auto circle_position  = physics::rotate_point(circle->get_position(), transform_B);
+        auto circle_position  = physics::rotate_and_move_point(circle->get_position(), transform_B);
 
         for (auto& vertex : polygon->get_vertices())
         {
-            auto rotated_vertex = physics::rotate_point(vertex, transform_A);
+            auto rotated_vertex = physics::rotate_and_move_point(vertex, transform_A);
 
             auto distance = utils::pif(rotated_vertex - circle_position);
 

@@ -10,5 +10,6 @@ namespace physics
 		float        angle;
 	};
 
-	sf::Vector2f rotate_point(const sf::Vector2f& point, Transform transform);
+	sf::Vector2f rotate_point         (const sf::Vector2f& point, const Transform& transform);
+	sf::Vector2f rotate_and_move_point(const sf::Vector2f& point, const Transform& transform);
 } // namespace physics

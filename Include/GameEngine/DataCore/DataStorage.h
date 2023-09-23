@@ -59,7 +59,7 @@ struct DataStorage
 
         enum class MovementMode
         {
-            IDLE = 0,
+            IDLE         = 0,
             MovingCamera = 1
         } movement_mode = MovementMode::IDLE;
 

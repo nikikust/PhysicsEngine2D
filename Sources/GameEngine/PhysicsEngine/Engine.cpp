@@ -8,6 +8,7 @@ namespace physics
 
     Engine::Engine()
     {
+        selected_world_ = std::make_shared<physics::World>();
     }
     Engine::~Engine()
     {
@@ -16,24 +17,24 @@ namespace physics
     void Engine::update(float delta_time)
     {
         for (int step_cnt = 0; step_cnt < steps_amount; ++step_cnt)
-            selected_world_.update(delta_time / steps_amount);
+            selected_world_->update(delta_time / steps_amount);
     }
     std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id) const
     {
-        return selected_world_.get_body(id);
+        return selected_world_->get_body(id);
     }
     std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id, int32_t world_id) const
     {
         // TO DO: world selection
-        return selected_world_.get_body(id);
+        return selected_world_->get_body(id);
     }
 
     std::shared_ptr<physics::RigidBody> Engine::add_body(const physics::RigidBody& body)
     {
-        return selected_world_.add_body(body);
+        return selected_world_->add_body(body);
     }
 
-    World& Engine::get_world()
+    std::shared_ptr<World> Engine::get_world()
     {
         // TO DO: world selection
         return selected_world_;

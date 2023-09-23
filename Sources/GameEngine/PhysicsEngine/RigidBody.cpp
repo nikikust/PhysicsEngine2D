@@ -69,7 +69,7 @@ namespace physics
         return *this;
     }
 
-    Transform RigidBody::get_transform() const
+    const Transform& RigidBody::get_transform() const
     {
         return transform_;
     }
@@ -77,7 +77,7 @@ namespace physics
     {
         return mass_;
     }
-    sf::Vector2f RigidBody::get_linear_speed() const
+    const sf::Vector2f& RigidBody::get_linear_speed() const
     {
         return linear_speed_;
     }
@@ -85,7 +85,7 @@ namespace physics
     {
         return angular_speed_;
     }
-    sf::Vector2f RigidBody::get_linear_acceleration() const
+    const sf::Vector2f& RigidBody::get_linear_acceleration() const
     {
         return linear_acceleration_;
     }
@@ -93,7 +93,7 @@ namespace physics
     {
         return angular_acceleration_;
     }
-    sf::Vector2f RigidBody::get_force() const
+    const sf::Vector2f& RigidBody::get_force() const
     {
         return force_;
     }

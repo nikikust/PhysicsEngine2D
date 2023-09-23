@@ -26,13 +26,13 @@ namespace physics
         RigidBody& set_linear_fixation  (bool x, bool y);
         RigidBody& set_angular_fixation (bool a);
 
-        Transform    get_transform            () const;
-        float        get_mass                 () const;
-        sf::Vector2f get_linear_speed         () const;
-        float        get_angular_speed        () const;
-        sf::Vector2f get_linear_acceleration  () const;
-        float        get_angular_acceleration () const;
-        sf::Vector2f get_force                () const;
+        const Transform&    get_transform            () const;
+        float               get_mass                 () const;
+        const sf::Vector2f& get_linear_speed         () const;
+        float               get_angular_speed        () const;
+        const sf::Vector2f& get_linear_acceleration  () const;
+        float               get_angular_acceleration () const;
+        const sf::Vector2f& get_force                () const;
 
         std::pair<bool, bool> get_linear_fixation  ();
         bool                  get_angular_fixation ();
