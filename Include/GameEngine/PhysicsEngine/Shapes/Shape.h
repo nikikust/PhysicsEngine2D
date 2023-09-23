@@ -17,13 +17,14 @@ namespace physics
 
         virtual ~Shape() = default;
 
-        sf::Vector2f get_center_of_mass   () const;
-        float        get_moment_of_inertia() const;
+
+        // --- //
+        virtual sf::Vector2f get_centroid          ()              const = 0;
+        virtual float        get_moment_of_inertia (float density) const = 0;
 
         // --- Fields manipulations
 
         sf::Vector2f get_position   () const;
-
         void         set_position   (const sf::Vector2f& position);
 
         ShapeType get_shape () const;

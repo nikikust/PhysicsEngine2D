@@ -161,29 +161,7 @@ namespace physics
 
         force_ = { 0,0 };
     }
-    void RigidBody::wrap_to_screen(const sf::Vector2u& window_size)
-    {
-        sf::Vector2f pos{
-            transform_.position.x / (float)window_size.x,
-            transform_.position.y / (float)window_size.y
-        };
-
-        if (pos.x < 0)
-            pos.x = 1.f - fmodf(fabsf(pos.x), 1.f);
-        else if (pos.x > 1)
-            pos.x = fmodf(pos.x, 1.f);
-
-        if (pos.y < 0)
-            pos.y = 1.f - fmodf(fabsf(pos.y), 1.f);
-        else if (pos.y > 1)
-            pos.y = fmodf(pos.y, 1.f);
-
-        pos.x *= (float)window_size.x;
-        pos.y *= (float)window_size.y;
-
-        transform_.position = pos;
-    }
-
+    
     // --- Shapes
     std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::CircleShape& circle)
     {

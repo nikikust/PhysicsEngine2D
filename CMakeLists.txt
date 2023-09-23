@@ -39,6 +39,7 @@ add_executable(${PROJECT_NAME}
     Sources/GameEngine/Game/Entities/Entity.cpp
     Sources/GameEngine/Game/Entities/CircleEntity.cpp
     Sources/GameEngine/Game/Entities/PolygonEntity.cpp
+    Sources/GameEngine/Game/Entities/ComplexEntity.cpp
     Sources/GameEngine/Game/Entities/EntitiesStorage.cpp
 
     Sources/GameEngine/DataCore/DataEditor.cpp

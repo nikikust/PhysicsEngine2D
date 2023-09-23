@@ -20,11 +20,13 @@ int DataLoader::init()
 
 void DataLoader::load_scene_1()
 {
+    game::ComplexEntity complex_1{ engine_.get_world(), {500, 500} , 0 };
     game::PolygonEntity polygon_1{ engine_.get_world(), {100, 100} , 0 };
     game::CircleEntity  circle_1 { engine_.get_world(), {300, 100} , 0 };
     game::CircleEntity  circle_2 { engine_.get_world(), {100, 300} , 0 };
     game::PolygonEntity polygon_2{ engine_.get_world(), {300, 300} , 0 };
 
+    data_storage_.entities_storage.add_entity(complex_1);
     data_storage_.entities_storage.add_entity(polygon_1);
     data_storage_.entities_storage.add_entity(circle_1 );
     data_storage_.entities_storage.add_entity(circle_2 );

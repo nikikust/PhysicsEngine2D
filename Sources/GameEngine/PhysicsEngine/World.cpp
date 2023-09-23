@@ -37,8 +37,6 @@ namespace physics
             }
 
             body_A->update(delta_time, gravity_);
-
-            body_A->wrap_to_screen(sf::Vector2u{2560, 1040}); // to keep object inside screen
         }
 	}
 
@@ -56,6 +54,12 @@ namespace physics
 
         return bodies_.at(body.get_id());
     }
+
+    const std::unordered_map<int32_t, std::shared_ptr<physics::RigidBody>>& World::get_bodies()
+    {
+        return bodies_;
+    }
+
 
     void World::update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A,
                                  const std::shared_ptr<physics::RigidBody>& body_B)

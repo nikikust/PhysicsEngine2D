@@ -60,8 +60,8 @@ int PhysicsEngine2D::main_loop()
 
         // --- Update
         window_   .update();
-        renderer_ .update();
-        engine_   .update(data_storage_.status.delta_time);
+        renderer_ .update(); 
+        engine_   .update(data_storage_.status.delta_time, data_storage_.screen_size);
         interface_.update();
 
         // --- Draw

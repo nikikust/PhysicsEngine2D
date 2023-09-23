@@ -9,6 +9,14 @@ namespace physics
     }
 
     // --- //
+    sf::Vector2f CircleShape::get_centroid() const
+    {
+        return position_;
+    }
+    float CircleShape::get_moment_of_inertia(float density) const
+    {
+        return (float)PI4 * powf(radius_, 4);
+    }
 
     void CircleShape::set_radius(float radius)
     {

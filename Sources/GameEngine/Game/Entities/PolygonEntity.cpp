@@ -22,14 +22,16 @@ namespace game
 
 	void PolygonEntity::render(graphics::Painter& painter)
 	{
+		auto& transform = body_->get_transform();
+
 		auto shape = std::dynamic_pointer_cast<physics::PolygonShape>(body_->get_fixtures().front()->get_shape());
 
 		auto rotated_vertices = shape->get_vertices();
 
 		for (auto& elem : rotated_vertices)
-			elem = physics::rotate_point(elem, body_->get_transform());
+			elem = physics::rotate_point(elem + shape->get_position(), transform);
 
-		painter.draw_polygon(body_->get_center_of_mass(), rotated_vertices, color_);
+		painter.draw_polygon(transform.position, rotated_vertices, color_);
 	}
 
 	const std::shared_ptr<physics::RigidBody>& PolygonEntity::get_body() const

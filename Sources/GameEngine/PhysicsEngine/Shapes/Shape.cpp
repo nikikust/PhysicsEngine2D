@@ -17,7 +17,6 @@ namespace physics
     {
         return position_;
     }
-
     void Shape::set_position(const sf::Vector2f& position)
     {
         position_ = position;

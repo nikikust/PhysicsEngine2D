@@ -57,6 +57,10 @@ namespace utils
     {
         return A.x * B.x + A.y * B.y;
     }
+    float cross(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return A.x * B.y - B.x * A.y;
+    }
 
     sf::Vector2f normalize(const sf::Vector2f& vector)
     {

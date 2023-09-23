@@ -2,8 +2,10 @@
 #include <GameEngine/GUIEngine/Window.h>
 #include <GameEngine/DataCore/DataStorage.h>
 #include <GameEngine/PhysicsEngine/Engine.h>
+
 #include <GameEngine/Game/Entities/CircleEntity.h>
 #include <GameEngine/Game/Entities/PolygonEntity.h>
+#include <GameEngine/Game/Entities/ComplexEntity.h>
 
 
 class DataLoader

@@ -48,7 +48,6 @@ namespace physics
 
         // --- //
         void update(float delta_time, const sf::Vector2f& gravity);
-        void wrap_to_screen(const sf::Vector2u& window_size);
 
         // --- Shapes
         std::shared_ptr<physics::Fixture> add_shape (const physics::CircleShape&  circle );

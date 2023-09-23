@@ -19,14 +19,16 @@ namespace game
 		body_->set_transform({ position, angle });
 	}
 
-
+	
 	void CircleEntity::render(graphics::Painter& painter)
 	{
+		auto& transform = body_->get_transform();
+
 		auto shape = std::dynamic_pointer_cast<physics::CircleShape>(body_->get_fixtures().front()->get_shape());
 
-		auto rotated_center = physics::rotate_point(shape->get_position(), body_->get_transform());
+		auto rotated_center = physics::rotate_point(shape->get_position(), transform);
 
-		painter.draw_circle(body_->get_center_of_mass(), shape->get_radius(), color_);
+		painter.draw_circle(transform.position, shape->get_radius(), color_);
 	}
 
 	const std::shared_ptr<physics::RigidBody>& CircleEntity::get_body() const

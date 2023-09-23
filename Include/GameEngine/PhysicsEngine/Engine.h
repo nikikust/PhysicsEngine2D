@@ -15,7 +15,7 @@ namespace physics
 
         // --- //
 
-        void update(float delta_time);
+        void update(float delta_time, const sf::Vector2i& window_size);
 
         std::shared_ptr<physics::RigidBody> get_body(int32_t id) const;
         std::shared_ptr<physics::RigidBody> get_body(int32_t id, int32_t world_id) const;
@@ -25,6 +25,9 @@ namespace physics
         std::shared_ptr<World> get_world();
 
     private:
+        void wrap_to_screen(std::shared_ptr<RigidBody> body, const sf::Vector2i& window_size);
+
+
         std::shared_ptr<World> selected_world_{};
 
         // Config
