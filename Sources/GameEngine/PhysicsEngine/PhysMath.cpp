@@ -5,17 +5,21 @@ namespace physics
 {
 	sf::Vector2f rotate_point(const sf::Vector2f& point, const Transform& transform)
 	{
-		return sf::Vector2f{
-			point.x * cosf(transform.angle) - point.y * sinf(transform.angle),
-			point.x * sinf(transform.angle) + point.y * cosf(transform.angle)
+		auto shifted_point = point - transform.centroid;
+
+		return transform.centroid + sf::Vector2f{
+			shifted_point.x * cosf(transform.angle) - shifted_point.y * sinf(transform.angle),
+			shifted_point.x * sinf(transform.angle) + shifted_point.y * cosf(transform.angle)
 		};
 	}
 
 	sf::Vector2f rotate_and_move_point(const sf::Vector2f& point, const Transform& transform)
 	{
-		return transform.position + sf::Vector2f {
-			point.x * cosf(transform.angle) - point.y * sinf(transform.angle),
-			point.x * sinf(transform.angle) + point.y * cosf(transform.angle)
+		auto shifted_point = point - transform.centroid;
+
+		return transform.position + transform.centroid + sf::Vector2f {
+			shifted_point.x * cosf(transform.angle) - shifted_point.y * sinf(transform.angle),
+			shifted_point.x * sinf(transform.angle) + shifted_point.y * cosf(transform.angle)
 		};
 	}
 

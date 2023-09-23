@@ -49,11 +49,11 @@ namespace physics
 
     void Engine::wrap_to_screen(std::shared_ptr<RigidBody> body, const sf::Vector2i& window_size)
     {
-        auto& transfrom = body->get_transform();
+        auto& position = body->get_position();
 
         sf::Vector2f pos{
-            transfrom.position.x / (float)window_size.x,
-            transfrom.position.y / (float)window_size.y
+            position.x / (float)window_size.x,
+            position.y / (float)window_size.y
         };
 
         if (pos.x < 0)
@@ -69,6 +69,6 @@ namespace physics
         pos.x *= (float)window_size.x;
         pos.y *= (float)window_size.y;
 
-        body->set_transform({ pos, transfrom.angle });
+        body->set_position(pos);
     }
 } // namespace physics

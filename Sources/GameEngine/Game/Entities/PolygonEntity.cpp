@@ -16,7 +16,9 @@ namespace game
 		body.add_shape(polygon)->set_restitution(0.6f);
 
 		body_ = world->add_body(body);
-		body_->set_transform({ position, angle });
+
+		body_->set_position(position);
+		body_->set_angle(angle);
 	}
 
 

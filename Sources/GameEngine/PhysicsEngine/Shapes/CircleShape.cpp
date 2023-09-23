@@ -16,7 +16,7 @@ namespace physics
         float mass = area * density;
         float mmoi = (float)PI4 * powf(radius_, 4);
 
-        return { area , mass, (mass > 0.f) ? 1.f / mass : 0.f, position_, mmoi};
+        return { area , mass, (mass > 0.f) ? 1.f / mass : 0.f, {}, mmoi };
     }
 
     void CircleShape::set_radius(float radius)

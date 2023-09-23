@@ -15,7 +15,8 @@ namespace physics
 
 
         // --- Physics
-        RigidBody& set_transform            (const Transform&    transform           );
+        RigidBody& set_position             (const sf::Vector2f& position            );
+        RigidBody& set_angle                (float               angle               );
         RigidBody& set_linear_speed         (const sf::Vector2f& linear_speed        );
         RigidBody& set_angular_speed        (float               angular_speed       );
         RigidBody& set_linear_acceleration  (const sf::Vector2f& linear_acceleration );
@@ -25,6 +26,8 @@ namespace physics
         RigidBody& set_linear_fixation  (bool x, bool y);
         RigidBody& set_angular_fixation (bool a);
 
+        const sf::Vector2f& get_position             () const;
+        float               get_angle                () const;
         const Transform&    get_transform            () const;
         const sf::Vector2f& get_linear_speed         () const;
         float               get_angular_speed        () const;
@@ -64,7 +67,7 @@ namespace physics
         void update_physical_data_remove(physics::Fixture& fixture);
 
         // --- Data
-        physics::Transform transform_;
+        Transform    transform_             = {};
 
         sf::Vector2f linear_speed_          = {};
         float        angular_speed_         = 0;

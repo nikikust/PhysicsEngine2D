@@ -43,7 +43,7 @@ int PhysicsEngine2D::run()
 
 int PhysicsEngine2D::load_data()
 {
-    std::cout << "Init data loader ... ";
+    std::cout << "Init data loader ... " << std::endl;
     if (data_loader_.init() != 0)
         return 1;
     std::cout << "Done" << std::endl;

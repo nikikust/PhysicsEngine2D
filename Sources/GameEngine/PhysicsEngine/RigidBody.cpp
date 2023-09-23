@@ -13,9 +13,15 @@ namespace physics
 
     // --- //
 
-    RigidBody& RigidBody::set_transform(const physics::Transform& transform)
+    RigidBody& RigidBody::set_position(const sf::Vector2f& position)
     {
-        transform_ = transform;
+        transform_.position = position;
+
+        return *this;
+    }
+    RigidBody& RigidBody::set_angle(float angle)
+    {
+        transform_.angle = angle;
 
         return *this;
     }
@@ -63,6 +69,14 @@ namespace physics
         return *this;
     }
 
+    const sf::Vector2f& RigidBody::get_position() const
+    {
+        return transform_.position;
+    }
+    float RigidBody::get_angle() const
+    {
+        return transform_.angle;
+    }
     const Transform& RigidBody::get_transform() const
     {
         return transform_;
@@ -132,7 +146,7 @@ namespace physics
     {
         linear_acceleration_ = force_ * physical_data_.inv_mass + gravity;
 
-        linear_speed_ += linear_acceleration_ * delta_time;
+        linear_speed_  += linear_acceleration_  * delta_time;
         angular_speed_ += angular_acceleration_ * delta_time;
 
         if (fixed_linear_.first)
@@ -253,6 +267,7 @@ namespace physics
 
         // STEP 4. Save new data:
         physical_data_ = new_data;
+        transform_.centroid = physical_data_.centroid;
     }
 
     void RigidBody::update_physical_data_append(physics::Fixture& fixture)
@@ -262,9 +277,19 @@ namespace physics
 
         auto physical_data_to_add = fixture.get_physical_data();
 
+        physical_data_to_add.centroid += fixture.get_shape()->get_position();
+
         if (physical_data_to_add.mass == 0.f)
             return;
 
+        if (physical_data_.mass == 0.f)
+        {
+            physical_data_ = physical_data_to_add;
+
+            transform_.centroid = physical_data_.centroid;
+
+            return;
+        }
 
         physical_data_.centroid = (physical_data_.centroid * physical_data_.mass + physical_data_to_add.centroid * physical_data_to_add.mass) /
                                   (physical_data_.mass + physical_data_to_add.mass);
@@ -290,6 +315,8 @@ namespace physics
 
             physical_data_.mmoi += physical_data.mmoi;
         }
+
+        transform_.centroid = physical_data_.centroid;
     }
 
     void RigidBody::update_physical_data_remove(physics::Fixture& fixture)

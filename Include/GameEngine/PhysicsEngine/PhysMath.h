@@ -7,6 +7,8 @@ namespace physics
 	struct Transform
 	{
 		sf::Vector2f position = {};
+
+		sf::Vector2f centroid = {};
 		float        angle    = 0;
 	};
 
