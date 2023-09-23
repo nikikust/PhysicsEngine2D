@@ -9,7 +9,7 @@ namespace physics
 	class Fixture
 	{
 	public:
-		Fixture(std::shared_ptr<Shape> shape, RigidBody* body);
+		Fixture(std::shared_ptr<Shape> shape);
 
 
 		// --- //
@@ -17,10 +17,19 @@ namespace physics
 
 		float    get_restitution() const;
 		Fixture& set_restitution(float restitution);
+		
+		// --- Physical data
+		bool update_physical_data();
+
+		const PhysicalData& get_physical_data() const;
+		PhysicalData        get_physical_data(const sf::Vector2f axis) const;
+
+		bool has_shape();
 
 	private:
 		std::shared_ptr<Shape> shape_;
-		physics::RigidBody*    body_;
+
+		PhysicalData physical_data_;
 
 		float restitution_;
 		float friction_;

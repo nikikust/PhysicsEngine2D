@@ -9,45 +9,8 @@ namespace physics
     }
 
     // --- //
-    sf::Vector2f PolygonShape::get_centroid() const
-    {
-        sf::Vector2f centroid{};
 
-        sf::Vector2f A{};
-        sf::Vector2f B{};
-
-        float signed_area         = 0.0f;
-        float partial_signed_area = 0.0f;
-
-        auto count = (int32_t)vertices_.size();
-
-        for (int32_t i = 0; i < count - 1; ++i)
-        {
-            A = vertices_.at(i);
-            B = vertices_.at(i + 1);
-
-            partial_signed_area = A.x * B.y - B.x * A.y;
-            signed_area += partial_signed_area;
-
-            centroid += (A + B) * partial_signed_area;
-        }
-
-        { // connect last and first vertices
-            A = vertices_.at(count - 1);
-            B = vertices_.at(0);
-
-            partial_signed_area = A.x * B.y - B.x * A.y;
-            signed_area += partial_signed_area;
-
-            centroid += (A + B) * partial_signed_area;
-        }
-
-        signed_area *= 0.5;
-        centroid /= (6.0f * signed_area);
-
-        return centroid + position_;
-    }
-    float PolygonShape::get_moment_of_inertia(float density) const
+    PhysicalData PolygonShape::calculate_physical_data(float density) const
     {
         // Accumulate the following values
         float area = 0.0;
@@ -56,8 +19,7 @@ namespace physics
         sf::Vector2f center = { 0.0, 0.0 };
         float mmoi = 0.0;
 
-        // Take each vertex pair starting from the last-first vertex
-        // in order to consider all sides.
+        // Take each vertex pair starting from the last-first vertex in order to consider all sides.
         auto count = (int32_t)vertices_.size();
         for (int32_t i = 0; i < count - 1; ++i)
         {
@@ -93,7 +55,7 @@ namespace physics
         // Transfer mass moment of inertia from the origin to the center of mass
         mmoi -= mass * utils::dot(center, center);
 
-        return mmoi;
+        return PhysicalData{ area, mass, (mass > 0.f) ? 1.f / mass : 0.f, center, mmoi };
     }
 
     void PolygonShape::set_vertices(const std::vector<sf::Vector2f>& vertices)

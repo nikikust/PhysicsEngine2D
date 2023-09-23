@@ -307,12 +307,12 @@ namespace physics
             return;
 
         sf::Vector2f inv_mass_A{
-            (fixated_A.first  ? 0.f : 1 / body_A->get_mass()),
-            (fixated_A.second ? 0.f : 1 / body_A->get_mass())
+            (fixated_A.first  ? 0.f : body_A->get_inv_mass()),
+            (fixated_A.second ? 0.f : body_A->get_inv_mass())
         };
         sf::Vector2f inv_mass_B{
-            (fixated_B.first  ? 0.f : 1 / body_B->get_mass()),
-            (fixated_B.second ? 0.f : 1 / body_B->get_mass())
+            (fixated_B.first  ? 0.f : body_B->get_inv_mass()),
+            (fixated_B.second ? 0.f : body_B->get_inv_mass())
         };
 
         float nominator = -(1 + collision.elasticity) * utils::dot(relative_speed, collision.collision_normal);
@@ -322,10 +322,10 @@ namespace physics
             (inv_mass_A.y + inv_mass_B.y) == 0.f ? 0 : nominator / (inv_mass_A.y + inv_mass_B.y)
         };
 
-        speed_A.x -= I.x / body_A->get_mass() * collision.collision_normal.x * (!fixated_A.first);
-        speed_A.y -= I.y / body_B->get_mass() * collision.collision_normal.y * (!fixated_A.second);
-        speed_B.x += I.x / body_A->get_mass() * collision.collision_normal.x * (!fixated_B.first);
-        speed_B.y += I.y / body_B->get_mass() * collision.collision_normal.y * (!fixated_B.second);
+        speed_A.x -= I.x * body_A->get_inv_mass() * collision.collision_normal.x * (!fixated_A.first);
+        speed_A.y -= I.y * body_A->get_inv_mass() * collision.collision_normal.y * (!fixated_A.second);
+        speed_B.x += I.x * body_B->get_inv_mass() * collision.collision_normal.x * (!fixated_B.first);
+        speed_B.y += I.y * body_B->get_inv_mass() * collision.collision_normal.y * (!fixated_B.second);
 
         body_A->set_linear_speed(speed_A);
         body_B->set_linear_speed(speed_B);

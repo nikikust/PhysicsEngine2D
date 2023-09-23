@@ -16,7 +16,6 @@ namespace physics
 
         // --- Physics
         RigidBody& set_transform            (const Transform&    transform           );
-        RigidBody& set_mass                 (float               mass                );
         RigidBody& set_linear_speed         (const sf::Vector2f& linear_speed        );
         RigidBody& set_angular_speed        (float               angular_speed       );
         RigidBody& set_linear_acceleration  (const sf::Vector2f& linear_acceleration );
@@ -27,12 +26,13 @@ namespace physics
         RigidBody& set_angular_fixation (bool a);
 
         const Transform&    get_transform            () const;
-        float               get_mass                 () const;
         const sf::Vector2f& get_linear_speed         () const;
         float               get_angular_speed        () const;
         const sf::Vector2f& get_linear_acceleration  () const;
         float               get_angular_acceleration () const;
         const sf::Vector2f& get_force                () const;
+
+        float get_inv_mass() const;
 
         std::pair<bool, bool> get_linear_fixation  ();
         bool                  get_angular_fixation ();
@@ -42,9 +42,6 @@ namespace physics
         RigidBody& accelerate (const sf::Vector2f& delta);
         RigidBody& rotate     (float angle);
         RigidBody& spin       (float angle);
-        
-        sf::Vector2f get_center_of_mass   () const;
-        float        get_moment_of_inertia() const;
 
         // --- //
         void update(float delta_time, const sf::Vector2f& gravity);
@@ -62,6 +59,10 @@ namespace physics
 		int32_t get_id() const;
 
 	private:
+        void update_physical_data();
+        void update_physical_data_append(physics::Fixture& fixture);
+        void update_physical_data_remove(physics::Fixture& fixture);
+
         // --- Data
         physics::Transform transform_;
 
@@ -73,10 +74,7 @@ namespace physics
 
         sf::Vector2f force_                 = {};
 
-        float        mass_                  = 1;
-
-        // --- Calculated values
-        float        moment_of_inertia_     = 1;
+        PhysicalData physical_data_         = {};
 
         // --- Flags
         std::pair<bool, bool> fixed_linear_ = {}; // x and y

@@ -3,25 +3,19 @@
 
 namespace physics
 {
-	int32_t RigidBody::max_body_id_ = 0;
+    int32_t RigidBody::max_body_id_ = 0;
 
 
-	RigidBody::RigidBody()
-	{
-		id_ = ++max_body_id_;
-	}
+    RigidBody::RigidBody()
+    {
+        id_ = ++max_body_id_;
+    }
 
-	// --- //
+    // --- //
 
     RigidBody& RigidBody::set_transform(const physics::Transform& transform)
     {
         transform_ = transform;
-
-        return *this;
-    }
-    RigidBody& RigidBody::set_mass(float mass)
-    {
-        mass_ = mass;
 
         return *this;
     }
@@ -73,10 +67,6 @@ namespace physics
     {
         return transform_;
     }
-    float RigidBody::get_mass() const
-    {
-        return mass_;
-    }
     const sf::Vector2f& RigidBody::get_linear_speed() const
     {
         return linear_speed_;
@@ -98,6 +88,11 @@ namespace physics
         return force_;
     }
 
+    float RigidBody::get_inv_mass() const
+    {
+        return physical_data_.inv_mass;
+    }
+
     std::pair<bool, bool> RigidBody::get_linear_fixation()
     {
         return fixed_linear_;
@@ -105,15 +100,6 @@ namespace physics
     bool RigidBody::get_angular_fixation()
     {
         return fixed_angle_;
-    }
-
-    sf::Vector2f RigidBody::get_center_of_mass() const
-    {
-        return transform_.position;
-    }
-    float RigidBody::get_moment_of_inertia() const
-    {
-        return moment_of_inertia_;
     }
 
     RigidBody& RigidBody::move(const sf::Vector2f& delta)
@@ -144,7 +130,7 @@ namespace physics
     // --- //
     void RigidBody::update(float delta_time, const sf::Vector2f& gravity)
     {
-        linear_acceleration_ = force_ / mass_ + gravity;
+        linear_acceleration_ = force_ * physical_data_.inv_mass + gravity;
 
         linear_speed_ += linear_acceleration_ * delta_time;
         angular_speed_ += angular_acceleration_ * delta_time;
@@ -156,8 +142,8 @@ namespace physics
         if (fixed_angle_)
             angular_speed_ = 0;
 
-        transform_.position += linear_speed_ * delta_time;
-        transform_.angle += angular_speed_ * delta_time;
+        transform_.position += linear_speed_  * delta_time;
+        transform_.angle    += angular_speed_ * delta_time;
 
         force_ = { 0,0 };
     }
@@ -165,7 +151,9 @@ namespace physics
     // --- Shapes
     std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::CircleShape& circle)
     {
-        Fixture fixture{ std::make_shared<physics::CircleShape>(circle), this };
+        Fixture fixture{ std::make_shared<physics::CircleShape>(circle) };
+
+        update_physical_data_append(fixture);
 
         fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
 
@@ -173,7 +161,9 @@ namespace physics
     }
     std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::PolygonShape& polygon)
     {
-        Fixture fixture{ std::make_shared<physics::PolygonShape>(polygon), this };
+        Fixture fixture{ std::make_shared<physics::PolygonShape>(polygon) };
+
+        update_physical_data_append(fixture);
 
         fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
 
@@ -210,6 +200,101 @@ namespace physics
     int32_t RigidBody::get_id() const
     {
         return id_;
+    }
+
+
+    void RigidBody::update_physical_data()
+    {
+        PhysicalData new_data{};
+
+        // STEP 1. Find global centroid:
+        for (auto& fixture : fixtures_)
+        {
+            if (!fixture->update_physical_data())
+                continue;
+
+            auto physical_data = fixture->get_physical_data();
+
+            if (physical_data.mass == 0.f)
+                continue;
+
+            physical_data.centroid += fixture->get_shape()->get_position();
+
+            if (new_data.mass == 0.f)
+            {
+                new_data = physical_data;
+
+                continue;
+            }
+
+            new_data.centroid = (new_data.centroid * new_data.mass + physical_data.centroid * physical_data.mass) / 
+                                (new_data.mass + physical_data.mass);
+
+            new_data.area += physical_data.area;
+            new_data.mass += physical_data.mass;
+        }
+
+        // STEP 2. Find gloabal moment of inertia:
+        for (auto& fixture : fixtures_)
+        {
+            if (!fixture->has_shape())
+                continue;
+
+            auto physical_data = fixture->get_physical_data(new_data.centroid - fixture->get_shape()->get_position());
+
+            if (physical_data.mass == 0.f)
+                continue;
+
+            new_data.mmoi += physical_data.mmoi;
+        }
+
+        // STEP 3. Perform final calculations:
+        new_data.inv_mass = (new_data.mass > 0.f) ? 1.f / new_data.mass : 0.f;
+
+        // STEP 4. Save new data:
+        physical_data_ = new_data;
+    }
+
+    void RigidBody::update_physical_data_append(physics::Fixture& fixture)
+    {
+        if (!fixture.update_physical_data())
+            return;
+
+        auto physical_data_to_add = fixture.get_physical_data();
+
+        if (physical_data_to_add.mass == 0.f)
+            return;
+
+
+        physical_data_.centroid = (physical_data_.centroid * physical_data_.mass + physical_data_to_add.centroid * physical_data_to_add.mass) /
+                                  (physical_data_.mass + physical_data_to_add.mass);
+
+        physical_data_.mass += physical_data_to_add.mass;
+        physical_data_.area += physical_data_to_add.area;
+
+        physical_data_.inv_mass = (physical_data_.mass > 0.f) ? 1.f / physical_data_.mass : 0.f;
+
+        physical_data_to_add = fixture.get_physical_data(physical_data_.centroid);
+
+        physical_data_.mmoi = physical_data_to_add.mmoi;
+
+        for (auto& i_fixture : fixtures_)
+        {
+            if (!i_fixture->has_shape())
+                continue;
+
+            auto physical_data = i_fixture->get_physical_data(physical_data_.centroid - i_fixture->get_shape()->get_position());
+
+            if (physical_data.mass == 0.f)
+                continue;
+
+            physical_data_.mmoi += physical_data.mmoi;
+        }
+    }
+
+    void RigidBody::update_physical_data_remove(physics::Fixture& fixture)
+    {
+        // TO DO: implement.
     }
 
 } // namespace physics

@@ -10,8 +10,7 @@ namespace physics
         CircleShape(float radius, const sf::Vector2f& position);
 
 
-        sf::Vector2f get_centroid          ()              const override;
-        float        get_moment_of_inertia (float density) const override;
+        PhysicalData calculate_physical_data(float density) const override;
 
         void  set_radius(float radius);
         float get_radius() const;

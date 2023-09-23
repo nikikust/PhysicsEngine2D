@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/Utils/Functions.h>
+#include <GameEngine/PhysicsEngine/PhysMath.h>
 
 
 namespace physics
@@ -19,13 +20,12 @@ namespace physics
 
 
         // --- //
-        virtual sf::Vector2f get_centroid          ()              const = 0;
-        virtual float        get_moment_of_inertia (float density) const = 0;
+        virtual PhysicalData calculate_physical_data(float density) const = 0;
 
         // --- Fields manipulations
 
-        sf::Vector2f get_position   () const;
-        void         set_position   (const sf::Vector2f& position);
+        sf::Vector2f get_position () const;
+        void         set_position (const sf::Vector2f& position);
 
         ShapeType get_shape () const;
         int32_t   get_id    () const;

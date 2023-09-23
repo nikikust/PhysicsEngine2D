@@ -31,6 +31,13 @@ void DataLoader::load_scene_1()
     data_storage_.entities_storage.add_entity(circle_1 );
     data_storage_.entities_storage.add_entity(circle_2 );
     data_storage_.entities_storage.add_entity(polygon_2);
+
+    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::ComplexEntity>(data_storage_.entities_storage.add_entity(complex_1))->get_body()->get_inv_mass();
+    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::PolygonEntity>(data_storage_.entities_storage.add_entity(polygon_1))->get_body()->get_inv_mass();
+    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::CircleEntity> (data_storage_.entities_storage.add_entity(circle_1 ))->get_body()->get_inv_mass();
+    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::CircleEntity> (data_storage_.entities_storage.add_entity(circle_2 ))->get_body()->get_inv_mass();
+    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::PolygonEntity>(data_storage_.entities_storage.add_entity(polygon_2))->get_body()->get_inv_mass();
+    // std::cout << std::endl;
 }
 void DataLoader::load_scene_2()
 {
