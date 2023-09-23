@@ -4,7 +4,7 @@ include(FetchContent)
 FetchContent_Declare(
     imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
-    GIT_TAG        823a1385a269d923d35b82b2f470f3ae1fa8b5a3
+    GIT_TAG        a1b60fc1f5589d498ab1080c2572da725fcbd0e3
 )
 
 FetchContent_Declare(
@@ -16,7 +16,7 @@ FetchContent_Declare(
 FetchContent_Declare(
     imgui-sfml
     GIT_REPOSITORY https://github.com/SFML/imgui-sfml.git
-    GIT_TAG        de565ac8f2b795dedc0307b60830cb006afd2ecd
+    GIT_TAG        6bd43671d3fab76f94b1f0877d943d8cc3b34c3b
 )
 
 # FetchContent_Declare(
