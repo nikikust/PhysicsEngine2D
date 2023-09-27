@@ -25,6 +25,8 @@
 #define PI2 (3.14159265 / 2)
 #define PI4 (3.14159265 / 4)
 
+#define DEBUG
+
 
 namespace utils
 {
@@ -36,22 +38,19 @@ namespace utils
         bool should_be_open = false;
     };
 
-    float  min(float a, float b);
-    float  max(float a, float b);
+    int   minmax (int a, int num, int b);       // equal to: min(max(num, a), b);
+    float minmax (float a, float num, float b);
 
-    int    minmax(int a, int num, int b);       // equal to - min(max(num, a), b);
-    float  minmax(float a, float num, float b);
-    bool   in(int a, int num, int b);           // true if - a <= num <= b
-    bool   in_f(float a, float num, float b);
-    float  mod_f(float X, float Y);             // modulus for float numbers
-    double randf(double start, double end, int amount); // returns random float inside (start / end) with the number of values specified in amount
-    float  pif(float a, float b);               // Pythagorean theorem: a, b -> c
-    float  pif(const sf::Vector2i& x);
-    float  pif(const sf::Vector2f& x);
-    float  distance(const sf::Vector2i& A, const sf::Vector2i& B, const sf::Vector2i& C);
+    bool in(int a, int num, int b);       // true if: a <= num <= b
 
-    float  dot  (const sf::Vector2f& A, const sf::Vector2f& B);
-    float  cross(const sf::Vector2f& A, const sf::Vector2f& B);
+    float length   (const sf::Vector2f& x);
+    float distance (const sf::Vector2f& A, const sf::Vector2f& B);
+
+    float length_squared   (const sf::Vector2f& x);
+    float distance_squared (const sf::Vector2f& A, const sf::Vector2f& B);
+
+    float dot   (const sf::Vector2f& A, const sf::Vector2f& B);
+    float cross (const sf::Vector2f& A, const sf::Vector2f& B);
 
     sf::Vector2f normalize(const sf::Vector2f& vector);
 

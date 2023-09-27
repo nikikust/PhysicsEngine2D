@@ -30,22 +30,41 @@ namespace graphics
         
         window_.get_render_area().draw(polygon_brush);
     }
-    void Painter::draw_circle(const sf::Vector2f& position, float radius, float angle, const sf::Color& color)
+    void Painter::draw_circle(const sf::Vector2f& position, float radius, float angle, const sf::Color& color, bool draw_rotation_line)
     {
         circle_brush.setRadius(radius);
         circle_brush.setOrigin(radius, radius);
         circle_brush.setPosition(position);
         circle_brush.setRotation(angle * 180.f / (float)PI);
-        
+
         circle_brush.setFillColor(color);
         circle_brush.setOutlineColor(color);
-        
-        circle_angle_brush.setPosition(position);
-        circle_angle_brush.setSize({ radius, 2.f });
-        circle_angle_brush.setRotation(angle * 180.f / (float)PI);
 
         window_.get_render_area().draw(circle_brush);
-        window_.get_render_area().draw(circle_angle_brush);
+
+        if (draw_rotation_line)
+        {
+            circle_angle_brush.setPosition(position);
+            circle_angle_brush.setSize({ radius, 2.f });
+            circle_angle_brush.setRotation(angle * 180.f / (float)PI);
+
+            window_.get_render_area().draw(circle_angle_brush);
+        }
     }
+
+#ifdef DEBUG
+    void Painter::draw_debug(const std::vector<DebugDraw>& debug_entities)
+    {
+        for (auto& entity : debug_entities)
+        {
+            switch (entity.type)
+            {
+            case DebugDraw::Circle:  draw_circle (entity.position, entity.radius, entity.angle, entity.color, false); break;
+            case DebugDraw::Polygon: draw_polygon(entity.position, entity.vertices,             entity.color);        break;
+            default: break;
+            }
+        }
+    }
+#endif // DEBUG
     
 } // namespace graphics

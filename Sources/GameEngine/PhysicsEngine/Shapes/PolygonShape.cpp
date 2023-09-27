@@ -21,10 +21,11 @@ namespace physics
 
         // Take each vertex pair starting from the last-first vertex in order to consider all sides.
         auto count = (int32_t)vertices_.size();
-        for (int32_t i = 0; i < count - 1; ++i)
+        for (int32_t i = 0; i < count; ++i)
         {
+            int32_t i_and_one = (i == count - 1) ? 0 : i + 1;
             sf::Vector2f A = vertices_.at(i);
-            sf::Vector2f B = vertices_.at(i + 1);
+            sf::Vector2f B = vertices_.at(i_and_one);
 
             float area_step = physics::triangle_area(A, B);
             float mass_step = density * area_step;
@@ -37,20 +38,6 @@ namespace physics
             mass += mass_step;
             mmoi += mmoi_step;
         }
-
-        sf::Vector2f A = vertices_.at(count - 1);
-        sf::Vector2f B = vertices_.at(0);
-
-        float area_step = physics::triangle_area(A, B);
-        float mass_step = density * area_step;
-        sf::Vector2f center_step = physics::triangle_center(A, B);
-
-        float mmoi_step = physics::triangle_mmoi(A, B, mass_step);
-
-        area += area_step;
-        center = (mass * center + mass_step * center_step) / (mass + mass_step);
-        mass += mass_step;
-        mmoi += mmoi_step;
 
         // Transfer mass moment of inertia from the origin to the center of mass
         mmoi -= mass * utils::dot(center, center);

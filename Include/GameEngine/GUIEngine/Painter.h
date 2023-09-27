@@ -6,6 +6,21 @@ namespace graphics
 {
     class Window;
 
+    struct DebugDraw
+    {
+        enum { Circle, Polygon } type;
+
+        sf::Vector2f position;
+        sf::Color    color;
+
+        // Circle part
+        float radius;
+        float angle;
+
+        // Polygon part
+        std::vector<sf::Vector2f> vertices;
+    };
+
     class Painter
     {
     public:
@@ -18,7 +33,11 @@ namespace graphics
         // --- //
 
         void draw_polygon (const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color);
-        void draw_circle  (const sf::Vector2f& position, float radius, float angle,                 const sf::Color& color);
+        void draw_circle  (const sf::Vector2f& position, float radius, float angle,                 const sf::Color& color, bool draw_rotation_line = true);
+
+#ifdef DEBUG
+        void draw_debug(const std::vector<DebugDraw>& debug_entities);
+#endif // DEBUG
 
     private:
         graphics::Window& window_;

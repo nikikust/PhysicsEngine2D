@@ -20,6 +20,10 @@ namespace graphics
         void update();
         void draw();
 
+#ifdef DEBUG
+        void draw_debug(const std::vector<DebugDraw>& debug_entities);
+#endif
+
     private:
         DataStorage& data_storage_;
         DataLoader&  data_loader_;

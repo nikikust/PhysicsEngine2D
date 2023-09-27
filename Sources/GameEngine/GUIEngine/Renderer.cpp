@@ -29,4 +29,11 @@ namespace graphics
         for (auto& [k, entity] : entities)
             entity->render(painter_);
     }
+
+#ifdef DEBUG
+    void Renderer::draw_debug(const std::vector<DebugDraw>& debug_entities)
+    {
+        painter_.draw_debug(debug_entities);
+    }
+#endif // DEBUG
 } // namespace graphics

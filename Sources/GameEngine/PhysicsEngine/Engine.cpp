@@ -45,6 +45,12 @@ namespace physics
         return selected_world_;
     }
 
+#ifdef DEBUG
+    const std::vector<graphics::DebugDraw>& Engine::get_debug_entities()
+    {
+        return selected_world_->get_debug_entities();
+    }
+#endif // DEBUG
 
 
     void Engine::wrap_to_screen(std::shared_ptr<RigidBody> body, const sf::Vector2i& window_size)

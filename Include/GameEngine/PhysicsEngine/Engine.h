@@ -1,6 +1,10 @@
 #pragma once
 #include <GameEngine/PhysicsEngine/World.h>
 
+#ifdef DEBUG
+#include <GameEngine/GUIEngine/Painter.h>
+#endif // DEBUG
+
 
 namespace physics
 {
@@ -23,6 +27,10 @@ namespace physics
         std::shared_ptr<physics::RigidBody> add_body(const physics::RigidBody& body);
 
         std::shared_ptr<World> get_world();
+
+#ifdef DEBUG
+        const std::vector<graphics::DebugDraw>& get_debug_entities();
+#endif // DEBUG
 
     private:
         void wrap_to_screen(std::shared_ptr<RigidBody> body, const sf::Vector2i& window_size);

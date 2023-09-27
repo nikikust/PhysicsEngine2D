@@ -1,7 +1,7 @@
 #include <GameEngine/PhysicsEngine/World.h>
 
 
-// #define USE_GRAVITY
+#define USE_GRAVITY
 
 #ifdef USE_GRAVITY
 sf::Vector2f physics::World::gravity_{ 0.f, 980.f };
@@ -22,6 +22,10 @@ namespace physics
 
 	void World::update(float delta_time)
 	{
+#ifdef DEBUG
+        collision_solver_.debug_entities.clear();
+#endif // DEBUG
+
         for (auto& body_pair_A : bodies_)
         {
             auto& body_A = body_pair_A.second;
@@ -31,6 +35,9 @@ namespace physics
                 auto& body_B = body_pair_B.second;
 
                 if (body_A->get_id() >= body_B->get_id())
+                    continue;
+
+                if (!broad_check(body_A, body_B))
                     continue;
 
                 update_body_pair(body_A, body_B);
@@ -66,36 +73,29 @@ namespace physics
     {
         for (auto& fixture_A : body_A->get_fixtures())
         {
-            auto& shape_A   = fixture_A->get_shape();
-
             for (auto& fixture_B : body_B->get_fixtures())
             {
-                auto& shape_B = fixture_B->get_shape();
-
-                std::optional<CollisionInfo> collision = std::nullopt;
-
-                switch (shape_A->get_shape()) {
-                case ShapeType::Rectangle:
-                    switch (shape_B->get_shape()) {
-                    case ShapeType::Rectangle: collision = collision_solver_.polygons_collision       (fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()); break;
-                    case ShapeType::Circle:    collision = collision_solver_.polygon_circle_collision (fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()); break;
-                    default: break;
-                    } break;
-                case ShapeType::Circle:
-                    switch (shape_B->get_shape()) {
-                    case ShapeType::Rectangle: collision = collision_solver_.circle_polygon_collision (fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()); break;
-                    case ShapeType::Circle:    collision = collision_solver_.circles_collision        (fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()); break;
-                    default: break;
-                    } break;
-                default: break;
-                }
-
-                if (collision)
+                if (auto collision = collision_solver_.collide(fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()))
                 {
-                    collision_solver_.resolve_collision(*collision, body_A, body_B);
+                    collision_solver_.separate_bodies        (*collision, body_A, body_B);
+                    collision_solver_.write_collision_points (*collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
+                    collision_solver_.resolve_collision      (*collision, body_A, body_B);
                 }
             }
         }
     }
+
+    bool World::broad_check(const std::shared_ptr<physics::RigidBody>& body_A, const std::shared_ptr<physics::RigidBody>& body_B)
+    {
+        return true;
+    }
+
+#ifdef DEBUG
+    const std::vector<graphics::DebugDraw>& World::get_debug_entities()
+    {
+        return collision_solver_.debug_entities;
+    }
+#endif // DEBUG
+
 
 } // namespace physics

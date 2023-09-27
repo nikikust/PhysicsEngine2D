@@ -4,53 +4,40 @@
 namespace utils
 {
     // --- Math
-
-    float  min(float a, float b) { return (a > b) ? b : a; }
-    float  max(float a, float b) { return (a > b) ? a : b; }
-
-    int    minmax(int a, int num, int b) 
+    int   minmax(int a, int num, int b) 
     { 
         return (a > num) ? a : (b < num) ? b : num; 
     }
-    float  minmax(float a, float num, float b) 
+    float minmax(float a, float num, float b) 
     { 
         return (a > num) ? a : (b < num) ? b : num; 
     }
-    bool   in(int a, int num, int b) 
-    { 
-        return (num >= a && num <= b); 
-    }
-    bool   in_f(float a, float num, float b) 
-    { 
-        return (num >= a - 0.01 && num <= b + 0.01); 
-    }
-    float  mod_f(float X, float Y)
+
+    bool  in(int a, int num, int b)
     {
-        if (X > 0)
-            return fmod(X, Y);
-        else
-            return fmod(Y - fmod(-X, Y), Y);
+        return (num >= a && num <= b);
     }
-    double randf(double start, double end, int amount)
-    {
-        return start + (rand() % amount) / double(amount) * (end - start);
-    }
-    float  pif(float a, float b) 
-    { 
-        return sqrt(a * a + b * b); 
-    }
-    float  pif(const sf::Vector2i& x)
-    {
-        return sqrt((float)x.x * x.x + (float)x.y * x.y);
-    }
-    float  pif(const sf::Vector2f& x)
+
+    float length(const sf::Vector2f& x)
     {
         return sqrt(x.x * x.x + x.y * x.y);
     }
-    float  distance(const sf::Vector2i& P1, const sf::Vector2i& P2, const sf::Vector2i& X)
-    { 
-        return abs((long long)(P2.y - P1.y) * X.x - (long long)(P2.x - P1.x) * X.y + (long long)P2.x * P1.y - (long long)P2.y * P1.x) 
-                   / pif((float)P2.x - P1.x, (float)P2.y - P1.y);
+    float distance(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        sf::Vector2f diff = B - A;
+
+        return sqrt(diff.x * diff.x + diff.y * diff.y);
+    }
+
+    float length_squared(const sf::Vector2f& x)
+    {
+        return x.x * x.x + x.y * x.y;
+    }
+    float distance_squared(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        sf::Vector2f diff = B - A;
+
+        return diff.x * diff.x + diff.y * diff.y;
     }
 
     float dot(const sf::Vector2f& A, const sf::Vector2f& B)
@@ -64,7 +51,7 @@ namespace utils
 
     sf::Vector2f normalize(const sf::Vector2f& vector)
     {
-        return vector / utils::pif(vector);
+        return vector / utils::length(vector);
     }
 
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B)

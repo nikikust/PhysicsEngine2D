@@ -67,6 +67,11 @@ int PhysicsEngine2D::main_loop()
         // --- Draw
         window_.cls();
         renderer_.draw();
+
+#ifdef DEBUG
+        renderer_.draw_debug(engine_.get_debug_entities());
+#endif // DEBUG
+        
         window_.flip();
 
         data_editor_.check_screenshot_status();

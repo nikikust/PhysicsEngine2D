@@ -17,6 +17,7 @@ namespace physics
     {
         return position_;
     }
+
     void Shape::set_position(const sf::Vector2f& position)
     {
         position_ = position;
@@ -26,6 +27,7 @@ namespace physics
     {
         return shape_type_;
     }
+
     int32_t Shape::get_id() const
     {
         return id_;

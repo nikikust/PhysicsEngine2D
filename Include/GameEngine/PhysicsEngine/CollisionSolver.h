@@ -2,37 +2,64 @@
 #include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
 
+#ifdef DEBUG
+#include <GameEngine/GUIEngine/Painter.h>
+#endif // DEBUG
+
 
 namespace physics
 {
-	struct CollisionInfo
-	{
-		sf::Vector2f collision_point;
-		sf::Vector2f collision_normal;
+    struct ContactInfo
+    {
+        sf::Vector2f collision_point_1;   // 1st for: circ - circ, circ - poly
+        sf::Vector2f collision_point_2;   // 2nd for: poly - poly
+        int32_t      collision_point_cnt;
+    };
 
-		float depth;
-		float elasticity;
-	};
+    struct CollisionInfo
+    {
+        ContactInfo contact_info;
 
-	class CollisionSolver
-	{
-	public:
-		CollisionSolver();
+        sf::Vector2f collision_normal;
 
-		std::optional<CollisionInfo> circles_collision        (std::shared_ptr<Fixture> circle_A_raw,  std::shared_ptr<Fixture> circle_B_raw , Transform transform_A, Transform transform_B);
-		std::optional<CollisionInfo> polygons_collision       (std::shared_ptr<Fixture> polygon_A_raw, std::shared_ptr<Fixture> polygon_B_raw, Transform transform_A, Transform transform_B);
-		std::optional<CollisionInfo> polygon_circle_collision (std::shared_ptr<Fixture> polygon_raw,   std::shared_ptr<Fixture> circle_raw   , Transform transform_A, Transform transform_B);
-		std::optional<CollisionInfo> circle_polygon_collision (std::shared_ptr<Fixture> circle_raw,    std::shared_ptr<Fixture> polygon_raw  , Transform transform_A, Transform transform_B);
+        float depth;
+        float elasticity;
+    };
 
-		std::pair<float, float> polygon_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, Transform transform);
-		std::pair<float, float> circle_projection (std::shared_ptr<CircleShape>  circle,  const sf::Vector2f& axis, Transform transform);
+    class CollisionSolver
+    {
+    public:
+        CollisionSolver();
 
-		sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, Transform transform_A, Transform transform_B);
 
-		void resolve_collision_simple(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B);
-		void resolve_collision       (const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B);
+        std::optional<CollisionInfo> collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
+                                             const Transform& transform_A, const Transform& transform_B);
+        
+        void separate_bodies(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
 
-	private:
+        void write_collision_points(CollisionInfo& collision, std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
+                                    const Transform& transform_A, const Transform& transform_B);
 
-	};
+        void resolve_collision(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
+
+#ifdef DEBUG
+        static std::vector<graphics::DebugDraw> debug_entities;
+#endif // DEBUG
+
+    private:
+        std::optional<CollisionInfo> circles_collision        (std::shared_ptr<Fixture> circle_A_raw,  std::shared_ptr<Fixture> circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> polygons_collision       (std::shared_ptr<Fixture> polygon_A_raw, std::shared_ptr<Fixture> polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> polygon_circle_collision (std::shared_ptr<Fixture> polygon_raw,   std::shared_ptr<Fixture> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> circle_polygon_collision (std::shared_ptr<Fixture> circle_raw,    std::shared_ptr<Fixture> polygon_raw,   const Transform& transform_A, const Transform& transform_B) const;
+
+        std::pair<float, float> polygon_projection (std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, Transform transform) const;
+        std::pair<float, float> circle_projection  (std::shared_ptr<CircleShape>  circle,  const sf::Vector2f& axis, Transform transform) const;
+
+        sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, Transform transform_A, Transform transform_B) const;
+
+        ContactInfo circles_collision_points        (std::shared_ptr<Shape> circle_A_raw,  std::shared_ptr<Shape> circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
+        ContactInfo circle_polygon_collision_points (std::shared_ptr<Shape> polygon_raw,   std::shared_ptr<Shape> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
+        ContactInfo polygons_collision_points       (std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
+
+    };
 } // namespace physics

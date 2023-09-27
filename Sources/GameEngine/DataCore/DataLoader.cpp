@@ -13,31 +13,27 @@ int DataLoader::init()
 {
     srand((unsigned int)time(NULL));
 
-    load_scene_1();
+    load_scene_3();
 
     return 0;
 }
 
 void DataLoader::load_scene_1()
 {
-    game::ComplexEntity complex_1{ engine_.get_world(), {500, 500} , 0 };
-    game::PolygonEntity polygon_1{ engine_.get_world(), {100, 100} , 0 };
-    game::CircleEntity  circle_1 { engine_.get_world(), {300, 100} , 0 };
-    game::CircleEntity  circle_2 { engine_.get_world(), {100, 300} , 0 };
-    game::PolygonEntity polygon_2{ engine_.get_world(), {300, 300} , 0 };
+    auto  world = engine_.get_world();
+    auto& storage = data_storage_.entities_storage;
 
-    data_storage_.entities_storage.add_entity(complex_1);
-    data_storage_.entities_storage.add_entity(polygon_1);
-    data_storage_.entities_storage.add_entity(circle_1 );
-    data_storage_.entities_storage.add_entity(circle_2 );
-    data_storage_.entities_storage.add_entity(polygon_2);
+    game::ComplexEntity complex_1{ world, {500, 500}, 0 };
+    game::PolygonEntity polygon_1{ world, {100, 100}, 0 };
+    game::CircleEntity  circle_1 { world, {400, 100}, 0 };
+    game::CircleEntity  circle_2 { world, {100, 300}, 0 };
+    game::PolygonEntity polygon_2{ world, {400, 300}, 0 };
 
-    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::ComplexEntity>(data_storage_.entities_storage.add_entity(complex_1))->get_body()->get_inv_mass();
-    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::PolygonEntity>(data_storage_.entities_storage.add_entity(polygon_1))->get_body()->get_inv_mass();
-    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::CircleEntity> (data_storage_.entities_storage.add_entity(circle_1 ))->get_body()->get_inv_mass();
-    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::CircleEntity> (data_storage_.entities_storage.add_entity(circle_2 ))->get_body()->get_inv_mass();
-    // std::cout << std::endl << 1.f / std::dynamic_pointer_cast<game::PolygonEntity>(data_storage_.entities_storage.add_entity(polygon_2))->get_body()->get_inv_mass();
-    // std::cout << std::endl;
+    storage.add_entity(complex_1);
+    storage.add_entity(polygon_1);
+    storage.add_entity(circle_1 );
+    storage.add_entity(circle_2 );
+    storage.add_entity(polygon_2);
 }
 void DataLoader::load_scene_2()
 {
@@ -88,40 +84,22 @@ void DataLoader::load_scene_2()
 }
 void DataLoader::load_scene_3()
 {
-    // auto& materials = data_storage_.scene_data.materials;
-    // auto& shapes    = data_storage_.scene_data.shapes;
-    // 
-    // // --- Materials
-    // physics::Material material{
-    //     sf::Color::White,  // Color
-    //     1.0f,              // Elasticity
-    //     "Default material" // Name
-    // };
-    // 
-    // materials.insert({ material.get_id(), std::make_shared<physics::Material>(material) });
-    // 
-    // // --- Shapes
-    // physics::PolygonShape ground{
-    //     { {-1000, 20}, {1000, 20}, {1000, -20}, {-1000, -20} }, // Vertices
-    //     {1280, 1300}, // Position
-    //     0.f,        // Rotation
-    //     1000.f      // Mass
-    // };
-    // 
-    // ground.set_linear_fixation(true, true);
-    // 
-    // physics::PolygonShape polygon{
-    //     { {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
-    //     {1280, 200}, // Position
-    //     0.f,         // Rotation
-    //     1000.f       // Mass
-    // };
-    // 
-    // ground .set_material_id(material.get_id());
-    // polygon.set_material_id(material.get_id());
-    // 
-    // shapes.insert({ ground .get_id(), std::make_shared<physics::PolygonShape>(ground ) });
-    // shapes.insert({ polygon.get_id(), std::make_shared<physics::PolygonShape>(polygon) });
+    auto  world   = engine_.get_world();
+    auto& storage = data_storage_.entities_storage;
+    
+    game::ComplexEntity complex_1{ world, { 800,  500}, 0 };
+    game::PolygonEntity polygon_1{ world, { 400,  100}, 0 };
+    game::CircleEntity  circle_1 { world, { 700,  100}, 0 };
+    game::CircleEntity  circle_2 { world, { 400,  300}, 0 };
+    game::PolygonEntity polygon_2{ world, { 700,  300}, 0 };
+    game::GroundEntity  ground_1{ world, {1280, 1200}, 0 };
+
+    storage.add_entity(complex_1);
+    storage.add_entity(polygon_1);
+    storage.add_entity(circle_1 );
+    storage.add_entity(circle_2 );
+    storage.add_entity(polygon_2);
+    storage.add_entity(ground_1 );
 }
 void DataLoader::load_scene_4()
 {
