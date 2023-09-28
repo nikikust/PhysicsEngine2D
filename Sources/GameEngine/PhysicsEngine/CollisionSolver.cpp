@@ -503,7 +503,7 @@ namespace physics
 
 
     // --- Aditional methods
-    std::pair<float, float> CollisionSolver::polygon_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, Transform transform) const
+    std::pair<float, float> CollisionSolver::polygon_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, const Transform& transform) const
     {
         float min_projection = std::numeric_limits<float>::max();
         float max_projection = std::numeric_limits<float>::lowest();
@@ -523,7 +523,7 @@ namespace physics
         return { min_projection, max_projection };
     }
 
-    std::pair<float, float> CollisionSolver::circle_projection(std::shared_ptr<CircleShape> circle, const sf::Vector2f& axis, Transform transform) const
+    std::pair<float, float> CollisionSolver::circle_projection(std::shared_ptr<CircleShape> circle, const sf::Vector2f& axis, const Transform& transform) const
     {
         float central = utils::dot(physics::rotate_and_move_point(circle->get_position(), transform), axis);
 

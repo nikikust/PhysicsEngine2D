@@ -21,7 +21,7 @@ namespace physics
     }
     RigidBody& RigidBody::set_angle(float angle)
     {
-        transform_.angle = angle;
+        transform_.rotation.set_angle(angle);
 
         return *this;
     }
@@ -75,7 +75,7 @@ namespace physics
     }
     float RigidBody::get_angle() const
     {
-        return transform_.angle;
+        return transform_.rotation.get_angle();
     }
     const Transform& RigidBody::get_transform() const
     {
@@ -130,7 +130,7 @@ namespace physics
     }
     RigidBody& RigidBody::rotate(float angle)
     {
-        transform_.angle += angle;
+        transform_.rotation.rotate(angle);
 
         return *this;
     }
@@ -157,7 +157,8 @@ namespace physics
             angular_speed_ = 0;
 
         transform_.position += linear_speed_  * delta_time;
-        transform_.angle    += angular_speed_ * delta_time;
+
+        transform_.rotation.rotate(angular_speed_ * delta_time);
 
         force_ = { 0,0 };
     }

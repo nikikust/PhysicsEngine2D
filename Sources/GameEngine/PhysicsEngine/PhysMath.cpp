@@ -8,8 +8,8 @@ namespace physics
 		auto shifted_point = point - transform.centroid;
 
 		return transform.centroid + sf::Vector2f{
-			shifted_point.x * cosf(transform.angle) - shifted_point.y * sinf(transform.angle),
-			shifted_point.x * sinf(transform.angle) + shifted_point.y * cosf(transform.angle)
+			shifted_point.x * transform.rotation.get_cos() - shifted_point.y * transform.rotation.get_sin(),
+			shifted_point.x * transform.rotation.get_sin() + shifted_point.y * transform.rotation.get_cos()
 		};
 	}
 
@@ -18,8 +18,8 @@ namespace physics
 		auto shifted_point = point - transform.centroid;
 
 		return transform.position + transform.centroid + sf::Vector2f {
-			shifted_point.x * cosf(transform.angle) - shifted_point.y * sinf(transform.angle),
-			shifted_point.x * sinf(transform.angle) + shifted_point.y * cosf(transform.angle)
+			shifted_point.x * transform.rotation.get_cos() - shifted_point.y * transform.rotation.get_sin(),
+			shifted_point.x * transform.rotation.get_sin() + shifted_point.y * transform.rotation.get_cos()
 		};
 	}
 

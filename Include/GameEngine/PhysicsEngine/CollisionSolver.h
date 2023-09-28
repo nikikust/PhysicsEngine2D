@@ -52,8 +52,8 @@ namespace physics
         std::optional<CollisionInfo> polygon_circle_collision (std::shared_ptr<Fixture> polygon_raw,   std::shared_ptr<Fixture> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
         std::optional<CollisionInfo> circle_polygon_collision (std::shared_ptr<Fixture> circle_raw,    std::shared_ptr<Fixture> polygon_raw,   const Transform& transform_A, const Transform& transform_B) const;
 
-        std::pair<float, float> polygon_projection (std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, Transform transform) const;
-        std::pair<float, float> circle_projection  (std::shared_ptr<CircleShape>  circle,  const sf::Vector2f& axis, Transform transform) const;
+        std::pair<float, float> polygon_projection (std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, const Transform& transform) const;
+        std::pair<float, float> circle_projection  (std::shared_ptr<CircleShape>  circle,  const sf::Vector2f& axis, const Transform& transform) const;
 
         sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, Transform transform_A, Transform transform_B) const;
 

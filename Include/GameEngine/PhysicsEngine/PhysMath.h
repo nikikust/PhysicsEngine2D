@@ -1,15 +1,16 @@
 #pragma once
 #include <GameEngine/Utils/Functions.h>
+#include <GameEngine/PhysicsEngine/Rotation.h>
 
 
 namespace physics
 {
 	struct Transform
 	{
-		sf::Vector2f position = {};
+		sf::Vector2f position{};
 
-		sf::Vector2f centroid = {};
-		float        angle    = 0;
+		sf::Vector2f centroid{};
+		Rotation     rotation{};
 	};
 
 	struct PhysicalData

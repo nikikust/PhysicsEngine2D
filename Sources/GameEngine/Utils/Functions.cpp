@@ -13,7 +13,7 @@ namespace utils
         return (a > num) ? a : (b < num) ? b : num; 
     }
 
-    bool  in(int a, int num, int b)
+    bool in(int a, int num, int b)
     {
         return (num >= a && num <= b);
     }
