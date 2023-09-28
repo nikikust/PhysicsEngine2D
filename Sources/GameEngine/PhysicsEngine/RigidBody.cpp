@@ -291,6 +291,7 @@ namespace physics
 
         // STEP 3. Perform final calculations:
         new_data.inv_mass = (new_data.mass > 0.f) ? 1.f / new_data.mass : 0.f;
+        new_data.inv_mmoi = (new_data.mmoi > 0.f) ? 1.f / new_data.mmoi : 0.f;
 
         // STEP 4. Save new data:
         physical_data_ = new_data;
@@ -324,7 +325,6 @@ namespace physics
         physical_data_.mass += physical_data_to_add.mass;
         physical_data_.area += physical_data_to_add.area;
 
-        physical_data_.inv_mass = (physical_data_.mass > 0.f) ? 1.f / physical_data_.mass : 0.f;
 
         physical_data_to_add = fixture.get_physical_data(physical_data_.centroid);
 
@@ -344,6 +344,9 @@ namespace physics
         }
 
         transform_.centroid = physical_data_.centroid;
+
+        physical_data_.inv_mass = (physical_data_.mass > 0.f) ? 1.f / physical_data_.mass : 0.f;
+        physical_data_.inv_mmoi = (physical_data_.mmoi > 0.f) ? 1.f / physical_data_.mmoi : 0.f;
     }
 
     void RigidBody::update_physical_data_remove(physics::Fixture& fixture)

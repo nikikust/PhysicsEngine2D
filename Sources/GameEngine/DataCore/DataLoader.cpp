@@ -104,7 +104,7 @@ void DataLoader::load_scene_3()
 
     for (int32_t i = 0; i < 40; ++i)
     {
-        game::PolygonEntity polygon{ world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850)}, utils::randf(0.f, (float)PI * 2.f, 360)};
+        game::PolygonEntity polygon{ world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850)}, 0}; // utils::randf(0.f, (float)PI * 2.f, 360)
         storage.add_entity(polygon);
     }
 }

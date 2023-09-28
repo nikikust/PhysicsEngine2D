@@ -9,7 +9,7 @@
 
 namespace physics
 {
-    struct ContactInfo
+    struct ContacstInfo
     {
         sf::Vector2f collision_point_1;   // 1st for: circ - circ, circ - poly
         sf::Vector2f collision_point_2;   // 2nd for: poly - poly
@@ -18,8 +18,7 @@ namespace physics
 
     struct CollisionInfo
     {
-        ContactInfo contact_info;
-
+        sf::Vector2f contact_point;
         sf::Vector2f collision_normal;
 
         float depth;
@@ -40,7 +39,9 @@ namespace physics
         void write_collision_points(CollisionInfo& collision, std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
                                     const Transform& transform_A, const Transform& transform_B);
 
-        void resolve_collision(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
+        void resolve_collision_basic(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
+
+        void resolve_collision_with_rotation(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
 
 #ifdef DEBUG
         static std::vector<graphics::DebugDraw> debug_entities;
@@ -57,9 +58,9 @@ namespace physics
 
         sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, Transform transform_A, Transform transform_B) const;
 
-        ContactInfo circles_collision_points        (std::shared_ptr<Shape> circle_A_raw,  std::shared_ptr<Shape> circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
-        ContactInfo circle_polygon_collision_points (std::shared_ptr<Shape> polygon_raw,   std::shared_ptr<Shape> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
-        ContactInfo polygons_collision_points       (std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
+        sf::Vector2f circles_collision_points        (std::shared_ptr<Shape> circle_A_raw,  std::shared_ptr<Shape> circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
+        sf::Vector2f circle_polygon_collision_points (std::shared_ptr<Shape> polygon_raw,   std::shared_ptr<Shape> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
+        sf::Vector2f polygons_collision_points       (std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
 
     };
 } // namespace physics

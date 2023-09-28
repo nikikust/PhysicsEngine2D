@@ -21,7 +21,8 @@ namespace physics
 
 		sf::Vector2f centroid = { 0.0f, 0.0f };
 
-		float mmoi = 0.0f;
+		float mmoi     = 0.0f;
+		float inv_mmoi = 0.0f;
 	};
 
 	/// @brief Rotates point around centroid, specified in transform

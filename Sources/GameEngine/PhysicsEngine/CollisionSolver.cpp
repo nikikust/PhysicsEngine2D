@@ -252,21 +252,21 @@ namespace physics
         switch (shape_A->get_shape()) {
         case ShapeType::Polygon:
             switch (shape_B->get_shape()) {
-            case ShapeType::Polygon: collision.contact_info = polygons_collision_points       (shape_A, shape_B, transform_A, transform_B); break;
-            case ShapeType::Circle:  collision.contact_info = circle_polygon_collision_points (shape_A, shape_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: collision.contact_point = polygons_collision_points       (shape_A, shape_B, transform_A, transform_B); break;
+            case ShapeType::Circle:  collision.contact_point = circle_polygon_collision_points (shape_A, shape_B, transform_A, transform_B); break;
             default: break;
             } break;
         case ShapeType::Circle:
             switch (shape_B->get_shape()) {
-            case ShapeType::Polygon: collision.contact_info = circle_polygon_collision_points (shape_B, shape_A, transform_B, transform_A); break;
-            case ShapeType::Circle:  collision.contact_info = circles_collision_points        (shape_A, shape_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: collision.contact_point = circle_polygon_collision_points (shape_B, shape_A, transform_B, transform_A); break;
+            case ShapeType::Circle:  collision.contact_point = circles_collision_points        (shape_A, shape_B, transform_A, transform_B); break;
             default: break;
             } break;
         default: break;
         }
     }
 
-    ContactInfo CollisionSolver::circles_collision_points(std::shared_ptr<Shape> circle_A_raw, std::shared_ptr<Shape> circle_B_raw,
+    sf::Vector2f CollisionSolver::circles_collision_points(std::shared_ptr<Shape> circle_A_raw, std::shared_ptr<Shape> circle_B_raw,
                                                           const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -281,20 +281,19 @@ namespace physics
         auto radius_B = circle_B->get_radius();
 
         // --- //
-        ContactInfo contact{
-            { (position_A.x * radius_B + position_B.x * radius_A) / (radius_A + radius_B),
-              (position_A.y * radius_B + position_B.y * radius_A) / (radius_A + radius_B) },
-            {}, 1
+        sf::Vector2f contact{
+            (position_A.x * radius_B + position_B.x * radius_A) / (radius_A + radius_B),
+            (position_A.y * radius_B + position_B.y * radius_A) / (radius_A + radius_B) 
         };
 
 #ifdef DEBUG
-        debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contact.collision_point_1, sf::Color::Blue, 4, 0, {} });
+        debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contact, sf::Color::Blue, 4, 0, {} });
 #endif // DEBUG
 
         return contact;
     }
 
-    ContactInfo CollisionSolver::polygons_collision_points(std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw,
+    sf::Vector2f CollisionSolver::polygons_collision_points(std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw,
                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -314,7 +313,7 @@ namespace physics
         // --- //
 
         float min_distance = std::numeric_limits<float>::max();
-        ContactInfo contacts{};
+        ContacstInfo contacts{};
 
         auto count_A = (int32_t)vertices_A.size();
         auto count_B = (int32_t)vertices_B.size();
@@ -371,16 +370,21 @@ namespace physics
         }
 
 #ifdef DEBUG
-        debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contacts.collision_point_1, sf::Color::Blue, 4, 0, {} });
-
-        if (contacts.collision_point_cnt == 2)
-            debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contacts.collision_point_2, sf::Color::Blue, 4, 0, {} });
+        if (contacts.collision_point_cnt == 1)
+            debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contacts.collision_point_1, sf::Color::Blue, 4, 0, {} });
+        else
+        {
+            // debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contacts.collision_point_2, sf::Color::Blue, 4, 0, {} });
+            debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, (contacts.collision_point_1 + contacts.collision_point_2) / 2.f, sf::Color::Blue, 4, 0, {} });
+        }
 #endif // DEBUG
-
-        return contacts;
+        if (contacts.collision_point_cnt == 1)
+            return contacts.collision_point_1;
+        else
+            return (contacts.collision_point_1 + contacts.collision_point_2) / 2.f;
     }
 
-    ContactInfo CollisionSolver::circle_polygon_collision_points(std::shared_ptr<Shape> polygon_raw, std::shared_ptr<Shape> circle_raw,
+    sf::Vector2f CollisionSolver::circle_polygon_collision_points(std::shared_ptr<Shape> polygon_raw, std::shared_ptr<Shape> circle_raw,
                                                                  const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -398,7 +402,7 @@ namespace physics
 
         // --- //
         float min_distance = std::numeric_limits<float>::max();
-        ContactInfo contact{};
+        sf::Vector2f contact{};
 
         auto count = (int32_t)vertices.size();
         for (int32_t i = 0; i < count; ++i)
@@ -413,13 +417,12 @@ namespace physics
             if (distance_squared < min_distance)
             {
                 min_distance = distance_squared;
-                contact.collision_point_1 = contact_point;
-                contact.collision_point_cnt = 1;
+                contact = contact_point;
             }
         }
 
 #ifdef DEBUG
-        debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contact.collision_point_1, sf::Color::Blue, 4, 0, {} });
+        debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Circle, contact, sf::Color::Blue, 4, 0, {} });
 #endif // DEBUG
 
         return contact;
@@ -467,8 +470,8 @@ namespace physics
         body_B->update_AABB( normal_B * collision.depth);
     }
 
-    void CollisionSolver::resolve_collision(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
-    {   
+    void CollisionSolver::resolve_collision_basic(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
+    {
         auto speed_A = body_A->get_linear_speed();
         auto speed_B = body_B->get_linear_speed();
 
@@ -481,11 +484,11 @@ namespace physics
             return;
 
         sf::Vector2f inv_mass_A{
-            (fixated_A.first  ? 0.f : body_A->get_inv_mass()),
+            (fixated_A.first ? 0.f : body_A->get_inv_mass()),
             (fixated_A.second ? 0.f : body_A->get_inv_mass())
         };
         sf::Vector2f inv_mass_B{
-            (fixated_B.first  ? 0.f : body_B->get_inv_mass()),
+            (fixated_B.first ? 0.f : body_B->get_inv_mass()),
             (fixated_B.second ? 0.f : body_B->get_inv_mass())
         };
 
@@ -503,6 +506,18 @@ namespace physics
 
         body_A->set_linear_speed(speed_A);
         body_B->set_linear_speed(speed_B);
+
+
+#ifdef DEBUG
+        // auto corner{ body_A->get_AABB().max - body_A->get_AABB().min };
+        // debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Polygon, body_A->get_AABB().min, sf::Color::White, 0, 0,
+        //     { { 0.f, 0.f }, { corner.x, 0.f }, { corner.x, corner.y }, { 0.f, corner.y } } });
+#endif // DEBUG
+    }
+
+    void CollisionSolver::resolve_collision_with_rotation(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
+    {
+        
 
 
 #ifdef DEBUG
