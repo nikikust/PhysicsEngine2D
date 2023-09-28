@@ -23,7 +23,6 @@ namespace physics
 
 		float mmoi = 0.0f;
 	};
-	
 
 	/// @brief Rotates point around centroid, specified in transform
 	/// @param point - point to rotate

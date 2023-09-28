@@ -7,7 +7,7 @@ namespace physics
 {
     enum ShapeType
     {
-        Rectangle = 0,
+        Polygon = 0,
         Circle    = 1
     };
 

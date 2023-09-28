@@ -19,16 +19,16 @@ namespace physics
         auto& shape_B = fixture_B->get_shape();
 
         switch (shape_A->get_shape()) {
-        case ShapeType::Rectangle:
+        case ShapeType::Polygon:
             switch (shape_B->get_shape()) {
-            case ShapeType::Rectangle: return polygons_collision       (fixture_A, fixture_B, transform_A, transform_B); break;
-            case ShapeType::Circle:    return polygon_circle_collision (fixture_A, fixture_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: return polygons_collision       (fixture_A, fixture_B, transform_A, transform_B); break;
+            case ShapeType::Circle:  return polygon_circle_collision (fixture_A, fixture_B, transform_A, transform_B); break;
             default: break;
             } break;
         case ShapeType::Circle:
             switch (shape_B->get_shape()) {
-            case ShapeType::Rectangle: return circle_polygon_collision (fixture_A, fixture_B, transform_A, transform_B); break;
-            case ShapeType::Circle:    return circles_collision        (fixture_A, fixture_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: return circle_polygon_collision (fixture_A, fixture_B, transform_A, transform_B); break;
+            case ShapeType::Circle:  return circles_collision        (fixture_A, fixture_B, transform_A, transform_B); break;
             default: break;
             } break;
         default: break;
@@ -249,16 +249,16 @@ namespace physics
         auto& shape_B = fixture_B->get_shape();
 
         switch (shape_A->get_shape()) {
-        case ShapeType::Rectangle:
+        case ShapeType::Polygon:
             switch (shape_B->get_shape()) {
-            case ShapeType::Rectangle: collision.contact_info = polygons_collision_points       (shape_A, shape_B, transform_A, transform_B); break;
-            case ShapeType::Circle:    collision.contact_info = circle_polygon_collision_points (shape_A, shape_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: collision.contact_info = polygons_collision_points       (shape_A, shape_B, transform_A, transform_B); break;
+            case ShapeType::Circle:  collision.contact_info = circle_polygon_collision_points (shape_A, shape_B, transform_A, transform_B); break;
             default: break;
             } break;
         case ShapeType::Circle:
             switch (shape_B->get_shape()) {
-            case ShapeType::Rectangle: collision.contact_info = circle_polygon_collision_points (shape_B, shape_A, transform_B, transform_A); break;
-            case ShapeType::Circle:    collision.contact_info = circles_collision_points        (shape_A, shape_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: collision.contact_info = circle_polygon_collision_points (shape_B, shape_A, transform_B, transform_A); break;
+            case ShapeType::Circle:  collision.contact_info = circles_collision_points        (shape_A, shape_B, transform_A, transform_B); break;
             default: break;
             } break;
         default: break;

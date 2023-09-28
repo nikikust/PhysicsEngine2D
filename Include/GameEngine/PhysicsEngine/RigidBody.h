@@ -85,6 +85,7 @@ namespace physics
 		
         // --- Shapes
         std::vector<std::shared_ptr<physics::Fixture>> fixtures_;
+        ShapeAABB aabb_;
 
         // --- //
 

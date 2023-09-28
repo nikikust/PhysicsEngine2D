@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/PhysicsEngine/Shapes/Shape.h>
+#include <GameEngine/PhysicsEngine/ShapeAABB.h>
 
 
 namespace physics
@@ -14,6 +15,7 @@ namespace physics
 
 		// --- //
 		const std::shared_ptr<Shape>& get_shape() const;
+		ShapeAABB get_AABB(const Transform& transform) const;
 
 		float    get_restitution() const;
 		Fixture& set_restitution(float restitution);
