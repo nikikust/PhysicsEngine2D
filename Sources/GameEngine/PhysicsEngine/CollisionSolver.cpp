@@ -517,8 +517,66 @@ namespace physics
 
     void CollisionSolver::resolve_collision_with_rotation(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
     {
-        
+        auto speed_A = body_A->get_linear_speed();
+        auto speed_B = body_B->get_linear_speed();
+        auto fixated_A = body_A->get_linear_fixation();
+        auto fixated_B = body_B->get_linear_fixation();
 
+        auto angular_speed_A = body_A->get_angular_speed();
+        auto angular_speed_B = body_B->get_angular_speed();
+        auto fixated_angle_A = body_A->get_angular_fixation();
+        auto fixated_angle_B = body_B->get_angular_fixation();
+
+        auto r_vector_A = collision.contact_point - (body_A->get_position() + body_A->get_transform().centroid);
+        auto r_vector_B = collision.contact_point - (body_B->get_position() + body_B->get_transform().centroid);
+
+        // --- //
+
+        sf::Vector2f r_vector_A_perp { -r_vector_A.y, r_vector_A.x };
+        sf::Vector2f r_vector_B_perp { -r_vector_B.y, r_vector_B.x };
+
+        auto relative_speed = (speed_B + angular_speed_B * r_vector_B_perp) - (speed_A + angular_speed_A * r_vector_A_perp);
+
+        if (utils::dot(relative_speed, collision.collision_normal) > 0.f)
+            return;
+
+        // --- //
+
+        float rA_dot_n = utils::dot(r_vector_A_perp, collision.collision_normal);
+        float rB_dot_n = utils::dot(r_vector_B_perp, collision.collision_normal);
+
+        sf::Vector2f inv_mass_A{
+            (fixated_A.first  ? 0.f : body_A->get_inv_mass()),
+            (fixated_A.second ? 0.f : body_A->get_inv_mass())
+        };
+        sf::Vector2f inv_mass_B{
+            (fixated_B.first  ? 0.f : body_B->get_inv_mass()),
+            (fixated_B.second ? 0.f : body_B->get_inv_mass())
+        };
+
+        float denom = (inv_mass_A.x + inv_mass_B.x) + 
+                      (rA_dot_n * rA_dot_n) * body_A->get_inv_mmoi() + 
+                      (rB_dot_n * rB_dot_n) * body_B->get_inv_mmoi();
+
+        // --- //
+        float nominator = -(1.f + collision.elasticity) * utils::dot(relative_speed, collision.collision_normal);
+        float I = nominator / denom;
+
+        sf::Vector2f I_axis{
+            (inv_mass_A.x + inv_mass_B.x) == 0.f ? 0 : I,
+            (inv_mass_A.y + inv_mass_B.y) == 0.f ? 0 : I
+        };
+
+        speed_A.x += -I_axis.x * body_A->get_inv_mass() * collision.collision_normal.x * (!fixated_A.first );
+        speed_A.y += -I_axis.y * body_A->get_inv_mass() * collision.collision_normal.y * (!fixated_A.second);
+        speed_B.x +=  I_axis.x * body_B->get_inv_mass() * collision.collision_normal.x * (!fixated_B.first );
+        speed_B.y +=  I_axis.y * body_B->get_inv_mass() * collision.collision_normal.y * (!fixated_B.second);
+
+        body_A->set_linear_speed(speed_A);
+        body_B->set_linear_speed(speed_B);
+
+        body_A->set_angular_speed(angular_speed_A - utils::cross(r_vector_A, I * collision.collision_normal) * body_A->get_inv_mmoi());
+        body_B->set_angular_speed(angular_speed_B + utils::cross(r_vector_B, I * collision.collision_normal) * body_B->get_inv_mmoi());
 
 #ifdef DEBUG
         // auto corner{ body_A->get_AABB().max - body_A->get_AABB().min };

@@ -74,9 +74,9 @@ namespace physics
             {
                 if (auto collision = collision_solver_.collide(fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()))
                 {
-                    collision_solver_.separate_bodies         (*collision, body_A, body_B);
-                    collision_solver_.write_collision_points  (*collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
-                    collision_solver_.resolve_collision_basic (*collision, body_A, body_B);
+                    collision_solver_.separate_bodies                 (*collision, body_A, body_B);
+                    collision_solver_.write_collision_points          (*collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
+                    collision_solver_.resolve_collision_with_rotation (*collision, body_A, body_B);
                 }
             }
         }

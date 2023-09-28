@@ -36,6 +36,7 @@ namespace physics
         const sf::Vector2f& get_force                () const;
 
         float get_inv_mass() const;
+        float get_inv_mmoi() const;
 
         std::pair<bool, bool> get_linear_fixation  ();
         bool                  get_angular_fixation ();

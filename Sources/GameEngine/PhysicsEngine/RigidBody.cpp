@@ -107,6 +107,11 @@ namespace physics
         return physical_data_.inv_mass;
     }
 
+    float RigidBody::get_inv_mmoi() const
+    {
+        return physical_data_.inv_mmoi;
+    }
+
     std::pair<bool, bool> RigidBody::get_linear_fixation()
     {
         return fixed_linear_;
@@ -292,6 +297,7 @@ namespace physics
         // STEP 3. Perform final calculations:
         new_data.inv_mass = (new_data.mass > 0.f) ? 1.f / new_data.mass : 0.f;
         new_data.inv_mmoi = (new_data.mmoi > 0.f) ? 1.f / new_data.mmoi : 0.f;
+        new_data.inv_mmoi = fixed_angle_ ? 0.f : new_data.inv_mmoi;
 
         // STEP 4. Save new data:
         physical_data_ = new_data;
@@ -315,6 +321,10 @@ namespace physics
             physical_data_ = physical_data_to_add;
 
             transform_.centroid = physical_data_.centroid;
+
+            physical_data_.inv_mass = (physical_data_.mass > 0.f) ? 1.f / physical_data_.mass : 0.f;
+            physical_data_.inv_mmoi = (physical_data_.mmoi > 0.f) ? 1.f / physical_data_.mmoi : 0.f;
+            physical_data_.inv_mmoi = fixed_angle_ ? 0.f : physical_data_.inv_mmoi;
 
             return;
         }
@@ -347,6 +357,7 @@ namespace physics
 
         physical_data_.inv_mass = (physical_data_.mass > 0.f) ? 1.f / physical_data_.mass : 0.f;
         physical_data_.inv_mmoi = (physical_data_.mmoi > 0.f) ? 1.f / physical_data_.mmoi : 0.f;
+        physical_data_.inv_mmoi = fixed_angle_ ? 0.f : physical_data_.inv_mmoi;
     }
 
     void RigidBody::update_physical_data_remove(physics::Fixture& fixture)
