@@ -161,6 +161,26 @@ namespace physics
         transform_.rotation.rotate(angular_speed_ * delta_time);
 
         force_ = { 0,0 };
+
+        update_AABB();
+    }
+
+    void RigidBody::update_AABB()
+    {
+        aabb_.reset();
+
+        for (auto& fixture : fixtures_)
+            aabb_.combine(fixture->get_AABB(transform_));
+    }
+
+    void RigidBody::update_AABB(const sf::Vector2f offset)
+    {
+        aabb_.move(offset);
+    }
+
+    const ShapeAABB& RigidBody::get_AABB() const
+    {
+        return aabb_;
     }
     
     // --- Shapes
@@ -172,6 +192,8 @@ namespace physics
 
         fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
 
+        update_AABB();
+
         return fixtures_.back();
     }
     std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::PolygonShape& polygon)
@@ -181,6 +203,8 @@ namespace physics
         update_physical_data_append(fixture);
 
         fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
+
+        update_AABB();
 
         return fixtures_.back();
     }
@@ -200,6 +224,8 @@ namespace physics
             if ((*it)->get_shape()->get_id() == id)
             {
                 fixtures_.erase(it);
+
+                update_AABB();
 
                 return;
             }

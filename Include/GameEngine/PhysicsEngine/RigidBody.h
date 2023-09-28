@@ -49,12 +49,18 @@ namespace physics
         // --- //
         void update(float delta_time, const sf::Vector2f& gravity);
 
+        void update_AABB();
+        void update_AABB(const sf::Vector2f offset);
+        const ShapeAABB& get_AABB() const;
+
         // --- Shapes
         std::shared_ptr<physics::Fixture> add_shape (const physics::CircleShape&  circle );
         std::shared_ptr<physics::Fixture> add_shape (const physics::PolygonShape& polygon);
 
         std::shared_ptr<physics::Fixture> get_fixture    (uint32_t id) const;
         void                              remove_fixture (uint32_t id);
+
+        
 
         const std::vector<std::shared_ptr<physics::Fixture>>& get_fixtures() const;
 

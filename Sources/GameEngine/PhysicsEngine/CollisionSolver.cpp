@@ -13,7 +13,8 @@ namespace physics
 
     // --- Collision detection
 
-    std::optional<CollisionInfo> CollisionSolver::collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, const Transform& transform_A, const Transform& transform_B)
+    std::optional<CollisionInfo> CollisionSolver::collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
+                                                          const Transform& transform_A, const Transform& transform_B)
     {
         auto& shape_A = fixture_A->get_shape();
         auto& shape_B = fixture_B->get_shape();
@@ -461,6 +462,9 @@ namespace physics
 
         body_A->move(-normal_A * collision.depth);
         body_B->move( normal_B * collision.depth);
+
+        body_A->update_AABB(-normal_A * collision.depth);
+        body_B->update_AABB( normal_B * collision.depth);
     }
 
     void CollisionSolver::resolve_collision(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const

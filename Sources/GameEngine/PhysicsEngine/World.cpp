@@ -26,14 +26,10 @@ namespace physics
         collision_solver_.debug_entities.clear();
 #endif // DEBUG
 
-        for (auto& body_pair_A : bodies_)
+        for (auto& [k_A, body_A] : bodies_)
         {
-            auto& body_A = body_pair_A.second;
-
-            for (auto& body_pair_B : bodies_)
+            for (auto& [k_B, body_B] : bodies_)
             {
-                auto& body_B = body_pair_B.second;
-
                 if (body_A->get_id() >= body_B->get_id())
                     continue;
 
@@ -42,9 +38,10 @@ namespace physics
 
                 update_body_pair(body_A, body_B);
             }
-
-            body_A->update(delta_time, gravity_);
         }
+
+        for (auto& [k, body] : bodies_)
+            body->update(delta_time, gravity_);
 	}
 
     std::shared_ptr<physics::RigidBody> World::get_body(int32_t id) const
@@ -87,7 +84,7 @@ namespace physics
 
     bool World::broad_check(const std::shared_ptr<physics::RigidBody>& body_A, const std::shared_ptr<physics::RigidBody>& body_B)
     {
-        return true;
+        return body_A->get_AABB().collides(body_B->get_AABB());
     }
 
 #ifdef DEBUG
