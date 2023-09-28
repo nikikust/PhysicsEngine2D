@@ -87,19 +87,26 @@ void DataLoader::load_scene_3()
     auto  world   = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
     
-    game::ComplexEntity complex_1{ world, { 800,  500}, 0 };
-    game::PolygonEntity polygon_1{ world, { 400,  100}, 0 };
-    game::CircleEntity  circle_1 { world, { 700,  100}, 0 };
-    game::CircleEntity  circle_2 { world, { 400,  300}, 0 };
-    game::PolygonEntity polygon_2{ world, { 700,  300}, 0 };
-    game::GroundEntity  ground_1{ world, {1280, 1200}, 0 };
-
+    game::ComplexEntity complex_1 { world, { 800,  500}, 0 };
+    game::PolygonEntity polygon_1 { world, { 400,  100}, 0 };
+    game::CircleEntity  circle_1  { world, { 700,  100}, 0 };
+    game::CircleEntity  circle_2  { world, { 400,  300}, 0 };
+    game::PolygonEntity polygon_2 { world, { 700,  300}, 0 };
+    game::GroundEntity  ground_1  { world, {1280, 1200}, 0 };
+    
     storage.add_entity(complex_1);
     storage.add_entity(polygon_1);
     storage.add_entity(circle_1 );
     storage.add_entity(circle_2 );
     storage.add_entity(polygon_2);
     storage.add_entity(ground_1 );
+
+
+    for (int32_t i = 0; i < 40; ++i)
+    {
+        game::PolygonEntity polygon{ world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850)}, utils::randf(0.f, (float)PI * 2.f, 360)};
+        storage.add_entity(polygon);
+    }
 }
 void DataLoader::load_scene_4()
 {

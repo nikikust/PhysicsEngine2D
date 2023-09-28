@@ -18,6 +18,15 @@ namespace utils
         return (num >= a && num <= b);
     }
 
+    int randi(int start, int end)
+    {
+        return start + rand() % (end - start + 1);
+    }
+    float randf(float start, float end, int amount)
+    {
+        return start + (rand() % amount) / float(amount) * (end - start);
+    }
+
     float length(const sf::Vector2f& x)
     {
         return sqrt(x.x * x.x + x.y * x.y);

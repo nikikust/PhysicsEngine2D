@@ -25,7 +25,7 @@
 #define PI2 (3.14159265 / 2)
 #define PI4 (3.14159265 / 4)
 
-#define DEBUG
+//#define DEBUG
 
 
 namespace utils
@@ -42,6 +42,9 @@ namespace utils
     float minmax (float a, float num, float b);
 
     bool in(int a, int num, int b);       // true if: a <= num <= b
+
+    int   randi(int   start, int   end);
+    float randf(float start, float end, int amount);
 
     float length   (const sf::Vector2f& x);
     float distance (const sf::Vector2f& A, const sf::Vector2f& B);

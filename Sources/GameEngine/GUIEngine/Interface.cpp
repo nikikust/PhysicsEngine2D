@@ -22,6 +22,7 @@ namespace graphics
         if (data_storage_.status.make_screenshot && data_storage_.settings.disable_interface_on_screenshot)
             return;
 
+        show_main_window();
 
         show_cursor_message();
 
@@ -49,6 +50,15 @@ namespace graphics
 
             data_storage_.status.start_time_for_autosave = time(0);
         }
+    }
+
+    void Interface::show_main_window()
+    {
+        ImGui::Begin("Main window");
+
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+        ImGui::End();
     }
 
     void Interface::show_cursor_message()

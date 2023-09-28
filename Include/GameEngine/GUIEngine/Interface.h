@@ -26,6 +26,8 @@ namespace graphics
 
         void check_autosave();
 
+        void show_main_window();
+
         void show_cursor_message();
 
         void show_exit_popup();

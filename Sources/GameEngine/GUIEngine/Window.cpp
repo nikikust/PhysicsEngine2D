@@ -14,7 +14,7 @@ namespace graphics
         window_.setPosition(sf::Vector2i(-10, 0));
 
         // window.setVerticalSyncEnabled(true);
-        window_.setFramerateLimit(400);
+        // window_.setFramerateLimit(400);
         window_.setKeyRepeatEnabled(false);
 
         data_storage_.screen_size = sf::Vector2i(window_.getSize());
