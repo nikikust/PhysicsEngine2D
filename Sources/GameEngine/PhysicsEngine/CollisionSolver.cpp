@@ -503,6 +503,13 @@ namespace physics
 
         body_A->set_linear_speed(speed_A);
         body_B->set_linear_speed(speed_B);
+
+
+#ifdef DEBUG
+        // auto corner{ body_A->get_AABB().max - body_A->get_AABB().min };
+        // debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Polygon, body_A->get_AABB().min, sf::Color::White, 0, 0,
+        //     { { 0.f, 0.f }, { corner.x, 0.f }, { corner.x, corner.y }, { 0.f, corner.y } } });
+#endif // DEBUG
     }
 
 
