@@ -28,6 +28,9 @@ namespace physics
 
 		bool has_shape();
 
+		bool is_sleeping();
+		void set_sleeping(bool flag);
+
 	private:
 		std::shared_ptr<Shape> shape_;
 
@@ -36,6 +39,8 @@ namespace physics
 		float restitution_;
 		float friction_;
 		float density_;
+
+		bool sleeping_;
 
 		// --- Cached values
 		std::optional<Transform> cached_transform_;

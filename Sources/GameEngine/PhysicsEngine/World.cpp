@@ -70,8 +70,14 @@ namespace physics
     {
         for (auto& fixture_A : body_A->get_fixtures())
         {
+            if (fixture_A->is_sleeping())
+                continue;
+
             for (auto& fixture_B : body_B->get_fixtures())
             {
+                if (fixture_B->is_sleeping())
+                    continue;
+
                 if (auto collision = collision_solver_.collide(fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()))
                 {
                     collision_solver_.separate_bodies                 (*collision, body_A, body_B);

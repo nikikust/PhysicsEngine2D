@@ -11,6 +11,8 @@ namespace physics
         friction_    = 0.6f;
         density_     = 1.0f;
 
+        sleeping_ = false;
+
         update_physical_data();
     }
 
@@ -108,6 +110,16 @@ namespace physics
     bool Fixture::has_shape()
     {
         return shape_ != nullptr;
+    }
+
+    bool Fixture::is_sleeping()
+    {
+        return sleeping_;
+    }
+
+    void Fixture::set_sleeping(bool flag)
+    {
+        sleeping_ = flag;
     }
     
 } // namespace physics

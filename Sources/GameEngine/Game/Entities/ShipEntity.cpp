@@ -17,17 +17,25 @@ namespace game
 			for (int32_t y = 0; y < max_y; ++y)
 			{
 				sf::Vector2f hor_center{ 25 + 50.f * x,      50.f * y };
-				sf::Vector2f ver_center{      50.f * x, 25 + 50.f * y };
+				sf::Vector2f ver_center{ 50.f * x, 25 + 50.f * y };
 
 				physics::PolygonShape bar_hor{ physics::rotate_polygon(box, {},        0.f), hor_center };
 				physics::PolygonShape bar_ver{ physics::rotate_polygon(box, {}, (float)PI2), ver_center };
 
-
 				if (x < max_x - 1)
-					body.add_shape(bar_hor)->set_restitution(0.6f);
+				{
+					auto fixture = body.add_shape(bar_hor);
 
+					if (utils::in(1, y, max_y - 2))
+						fixture->set_sleeping(true);
+				}
 				if (y < max_y - 1)
-					body.add_shape(bar_ver)->set_restitution(0.6f);
+				{
+					auto fixture = body.add_shape(bar_ver);
+
+					if (utils::in(1, x, max_x - 2))
+						fixture->set_sleeping(true);
+				}
 			}
 		}
 

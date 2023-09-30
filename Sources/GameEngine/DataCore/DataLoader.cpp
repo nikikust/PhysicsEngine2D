@@ -42,7 +42,7 @@ void DataLoader::load_scene_2()
 
     for (int32_t i = 0; i < 3; ++i)
     {
-        game::ShipEntity ship{ world, { i * 750.f, utils::randf(150, 1000, 850) }, 0 };
+        game::ShipEntity ship{ world, { i * 750.f, 100.f }, 0 };
 
         storage.add_entity(ship);
     }
