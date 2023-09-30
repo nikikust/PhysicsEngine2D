@@ -175,7 +175,8 @@ namespace physics
         aabb_.reset();
 
         for (auto& fixture : fixtures_)
-            aabb_.combine(fixture->get_AABB(transform_));
+            if (!fixture->is_sleeping())
+                aabb_.combine(fixture->get_AABB(transform_));
     }
 
     void RigidBody::update_AABB(const sf::Vector2f offset)
