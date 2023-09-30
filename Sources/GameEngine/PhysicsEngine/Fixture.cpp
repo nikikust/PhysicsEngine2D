@@ -117,9 +117,11 @@ namespace physics
         return sleeping_;
     }
 
-    void Fixture::set_sleeping(bool flag)
+    Fixture& Fixture::set_sleeping(bool flag)
     {
         sleeping_ = flag;
+
+        return *this;
     }
     
 } // namespace physics

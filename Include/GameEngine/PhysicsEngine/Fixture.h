@@ -29,7 +29,7 @@ namespace physics
 		bool has_shape();
 
 		bool is_sleeping();
-		void set_sleeping(bool flag);
+		Fixture& set_sleeping(bool flag);
 
 	private:
 		std::shared_ptr<Shape> shape_;
