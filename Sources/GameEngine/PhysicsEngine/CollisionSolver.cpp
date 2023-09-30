@@ -557,9 +557,13 @@ namespace physics
             (fixated_B.second ? 0.f : body_B->get_inv_mass())
         };
 
-        float denom = (inv_mass_A.x + inv_mass_B.x) + 
+
+        float denom = (body_A->get_inv_mass() + body_B->get_inv_mass()) +
                       (rA_dot_n * rA_dot_n) * body_A->get_inv_mmoi() + 
                       (rB_dot_n * rB_dot_n) * body_B->get_inv_mmoi();
+        
+        if (denom == 0.f)
+            return;
 
         // --- //
         float nominator = -(1.f + collision.elasticity) * utils::dot(relative_speed, collision.collision_normal);
@@ -570,16 +574,16 @@ namespace physics
             (inv_mass_A.y + inv_mass_B.y) == 0.f ? 0 : I
         };
 
-        speed_A.x += -I_axis.x * body_A->get_inv_mass() * collision.collision_normal.x * (!fixated_A.first );
-        speed_A.y += -I_axis.y * body_A->get_inv_mass() * collision.collision_normal.y * (!fixated_A.second);
-        speed_B.x +=  I_axis.x * body_B->get_inv_mass() * collision.collision_normal.x * (!fixated_B.first );
-        speed_B.y +=  I_axis.y * body_B->get_inv_mass() * collision.collision_normal.y * (!fixated_B.second);
+        speed_A.x += -I_axis.x * inv_mass_A.x * collision.collision_normal.x * (!fixated_A.first );
+        speed_A.y += -I_axis.y * inv_mass_A.y * collision.collision_normal.y * (!fixated_A.second);
+        speed_B.x +=  I_axis.x * inv_mass_B.x * collision.collision_normal.x * (!fixated_B.first );
+        speed_B.y +=  I_axis.y * inv_mass_B.y * collision.collision_normal.y * (!fixated_B.second);
 
         body_A->set_linear_speed(speed_A);
         body_B->set_linear_speed(speed_B);
 
-        body_A->set_angular_speed(angular_speed_A - utils::cross(r_vector_A, I * collision.collision_normal) * body_A->get_inv_mmoi());
-        body_B->set_angular_speed(angular_speed_B + utils::cross(r_vector_B, I * collision.collision_normal) * body_B->get_inv_mmoi());
+        body_A->set_angular_speed(angular_speed_A - utils::cross(r_vector_A, I * collision.collision_normal) * body_A->get_inv_mmoi() * (!fixated_angle_A));
+        body_B->set_angular_speed(angular_speed_B + utils::cross(r_vector_B, I * collision.collision_normal) * body_B->get_inv_mmoi() * (!fixated_angle_B));
 
 #ifdef DEBUG
         // auto corner{ body_A->get_AABB().max - body_A->get_AABB().min };
