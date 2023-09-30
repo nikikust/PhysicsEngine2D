@@ -11,7 +11,11 @@ namespace physics
 
 		sf::Vector2f centroid{};
 		Rotation     rotation{};
+
+		Transform& operator=(const Transform& b);
 	};
+	bool operator== (const Transform& left, const Transform& right);
+	bool operator!= (const Transform& left, const Transform& right);
 
 	struct PhysicalData
 	{

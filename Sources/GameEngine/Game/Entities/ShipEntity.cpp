@@ -10,7 +10,7 @@ namespace game
 
 		physics::RigidBody body;
 
-		int32_t max_x = 16, max_y = 16;
+		int32_t max_x = 12, max_y = 12;
 
 		for (int32_t x = 0; x < max_x; ++x)
 		{

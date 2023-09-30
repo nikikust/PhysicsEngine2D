@@ -84,4 +84,28 @@ namespace physics
 	{
 		return almost_equal(A.x, B.x) && almost_equal(A.y, B.y);
 	}
+
+	bool operator==(const Transform& left, const Transform& right)
+	{
+		return 
+			physics::almost_equal(left.position,             right.position            ) &&
+			physics::almost_equal(left.rotation.get_angle(), right.rotation.get_angle()) &&
+			physics::almost_equal(left.centroid,             right.centroid            );
+	}
+	bool operator!=(const Transform& left, const Transform& right)
+	{
+		return 
+			!physics::almost_equal(left.position,             right.position            ) ||
+			!physics::almost_equal(left.rotation.get_angle(), right.rotation.get_angle()) ||
+			!physics::almost_equal(left.centroid,             right.centroid            );
+	}
+	Transform& Transform::operator=(const Transform& b)
+	{
+		this->position = b.position;
+		this->centroid = b.centroid;
+
+		this->rotation.set_angle(b.rotation.get_angle());
+
+		return *this;
+	}
 } // namespace physics

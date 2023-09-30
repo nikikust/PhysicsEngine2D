@@ -20,8 +20,12 @@ namespace physics
         return shape_;
     }
 
-    ShapeAABB Fixture::get_AABB(const Transform& transform) const
+    ShapeAABB Fixture::get_AABB(const Transform& transform)
     {
+        if (cached_transform_.has_value() && cached_AABB.has_value() &&
+            *cached_transform_ == transform)
+            return *cached_AABB;
+
         ShapeAABB aabb;
 
         switch (shape_->get_shape())
@@ -55,6 +59,9 @@ namespace physics
         default:
             throw("Unknown shape type to calculate AABB!");
         }
+
+        cached_AABB       = aabb;
+        cached_transform_ = transform;
 
         return aabb;
     }

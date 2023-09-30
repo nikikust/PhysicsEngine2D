@@ -15,7 +15,7 @@ namespace physics
 
 		// --- //
 		const std::shared_ptr<Shape>& get_shape() const;
-		ShapeAABB get_AABB(const Transform& transform) const;
+		ShapeAABB get_AABB(const Transform& transform);
 
 		float    get_restitution() const;
 		Fixture& set_restitution(float restitution);
@@ -36,5 +36,9 @@ namespace physics
 		float restitution_;
 		float friction_;
 		float density_;
+
+		// --- Cached values
+		std::optional<Transform> cached_transform_;
+		std::optional<ShapeAABB> cached_AABB;
 	};
 } // namespace physics
