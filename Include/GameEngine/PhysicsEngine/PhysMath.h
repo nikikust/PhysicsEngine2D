@@ -39,6 +39,22 @@ namespace physics
 	sf::Vector2f rotate_and_move_point(const sf::Vector2f& point, const Transform& transform);
 
 
+	/// @brief Rotates vertices by specified angle
+	/// @param vertices - vertices to rotate
+	/// @param angle - rotation angle
+	/// @param offset - offset of polygon's center
+	/// @return Rotated vertices
+	std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, float angle);
+
+
+	/// @brief Rotates vertices around centroid, specified in transform
+	/// @param vertices - vertices to rotate
+	/// @param transform - rotation and offset rule
+	/// @param offset - offset of polygon's center
+	/// @return Rotated vertices
+	std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, const Transform& transform);
+
+
     /// @brief Calculates the area of the triangle
     /// @param A - Vector of the side A
     /// @param B - Vector of the side B

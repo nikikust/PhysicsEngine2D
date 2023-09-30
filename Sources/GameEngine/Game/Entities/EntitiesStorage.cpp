@@ -32,6 +32,12 @@ namespace game
 
         return entities_.at(entity.get_id());
     }
+    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::ShipEntity entity)
+    {
+        entities_.insert({ entity.get_id(), std::make_shared<game::ShipEntity>(entity) });
+
+        return entities_.at(entity.get_id());
+    }
     
 
     void EntitiesStorage::remove_entity(int32_t id)

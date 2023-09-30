@@ -52,19 +52,10 @@ namespace game
 		auto rotated_center_1 = physics::rotate_point(c_shape_1->get_position(), transform);
 		auto rotated_center_2 = physics::rotate_point(c_shape_2->get_position(), transform);
 
-		auto rotated_vertices_1 = p_shape_1->get_vertices();
-		auto rotated_vertices_2 = p_shape_2->get_vertices();
-
-		for (auto& elem : rotated_vertices_1)
-			elem = physics::rotate_point(elem + p_shape_1->get_position(), transform);
-		for (auto& elem : rotated_vertices_2)
-			elem = physics::rotate_point(elem + p_shape_2->get_position(), transform);
-
-
-		painter.draw_circle (transform.position + rotated_center_1, c_shape_1->get_radius(), body_->get_angle(), color_);
-		painter.draw_polygon(transform.position,                    rotated_vertices_1,                          color_);
-		painter.draw_circle (transform.position + rotated_center_2, c_shape_2->get_radius(), body_->get_angle(), color_);
-		painter.draw_polygon(transform.position,                    rotated_vertices_2,                          color_);
+		painter.draw_circle (transform.position + rotated_center_1, c_shape_1->get_radius(), body_->get_angle(),                           color_);
+		painter.draw_polygon(transform.position, physics::rotate_polygon(p_shape_1->get_vertices(), p_shape_1->get_position(), transform), color_);
+		painter.draw_circle (transform.position + rotated_center_2, c_shape_2->get_radius(), body_->get_angle(),                           color_);
+		painter.draw_polygon(transform.position, physics::rotate_polygon(p_shape_2->get_vertices(), p_shape_2->get_position(), transform), color_);
 	}
 
 	const std::shared_ptr<physics::RigidBody>& ComplexEntity::get_body() const

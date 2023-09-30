@@ -23,6 +23,26 @@ namespace physics
 		};
 	}
 
+	std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, float angle)
+	{
+		std::vector<sf::Vector2f> rotated_vertices = vertices;
+
+		for (auto& vertex : rotated_vertices)
+			vertex = utils::rotate_point(vertex + offset, angle);
+
+		return rotated_vertices;
+	}
+
+	std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, const Transform& transform)
+	{
+		std::vector<sf::Vector2f> rotated_vertices = vertices;
+
+		for (auto& vertex : rotated_vertices)
+			vertex = physics::rotate_point(vertex + offset, transform);
+
+		return rotated_vertices;
+	}
+
 	float triangle_area(const sf::Vector2f& A, const sf::Vector2f& B)
 	{
 		return utils::cross(A, B) / 2.f;

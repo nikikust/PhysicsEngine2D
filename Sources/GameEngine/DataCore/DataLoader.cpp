@@ -13,7 +13,7 @@ int DataLoader::init()
 {
     srand((unsigned int)time(NULL));
 
-    load_scene_3();
+    load_scene_2();
 
     return 0;
 }
@@ -37,50 +37,19 @@ void DataLoader::load_scene_1()
 }
 void DataLoader::load_scene_2()
 {
-    // auto& materials = data_storage_.scene_data.materials;
-    // auto& shapes = data_storage_.scene_data.shapes;
-    // 
-    // // --- Materials
-    // sf::Color colors[7] = { sf::Color::Red, sf::Color::Green, sf::Color::Blue, sf::Color::Magenta, sf::Color::Cyan, sf::Color::Yellow, sf::Color::White };
-    // 
-    // for (uint32_t i = 0; i < 7; ++i)
-    // {
-    //     // Elasticity
-    //     int el_start = 10, el_end = 90;
-    // 
-    //     float elasticity = float(rand() % (el_end - el_start + 1) + el_start) / 100.f;
-    // 
-    //     // Creation
-    //     physics::Material material{ colors[i], elasticity, "material_" + std::to_string(i) };
-    // 
-    //     materials.insert({ material.get_id(), std::make_shared<physics::Material>(material) });
-    // }
-    // 
-    // // --- Shapes
-    // 
-    // int col_start = 1, col_end = 7;
-    // 
-    // for (uint32_t i = 0; i < 20; ++i)
-    // {
-    //     physics::PolygonShape polygon = physics::PolygonShape::generate_rectangle(window_.get_render_area().getSize());
-    // 
-    //     int material = rand() % (col_end - col_start + 1) + col_start;
-    // 
-    //     polygon.set_material_id(materials.at(material)->get_id());
-    // 
-    //     shapes.insert({ polygon.get_id(), std::make_shared<physics::PolygonShape>(polygon) });
-    // }
-    // 
-    // for (uint32_t i = 0; i < 20; ++i)
-    // {
-    //     physics::CircleShape circle = physics::CircleShape::generate_circle(window_.get_render_area().getSize());
-    // 
-    //     int material = rand() % (col_end - col_start + 1) + col_start;
-    // 
-    //     circle.set_material_id(materials.at(material)->get_id());
-    // 
-    //     shapes.insert({ circle.get_id(), std::make_shared<physics::CircleShape>(circle) });
-    // }
+    auto  world = engine_.get_world();
+    auto& storage = data_storage_.entities_storage;
+
+    for (int32_t i = 0; i < 2; ++i)
+    {
+        game::ShipEntity ship{ world, { i * 850.f, utils::randf(150, 1000, 850) }, 0 };
+
+        storage.add_entity(ship);
+    }
+
+    game::GroundEntity ground_1{ world, {1280, 1200}, 0 };
+
+    storage.add_entity(ground_1);
 }
 void DataLoader::load_scene_3()
 {
@@ -102,9 +71,12 @@ void DataLoader::load_scene_3()
     storage.add_entity(ground_1 );
 
 
-    for (int32_t i = 0; i < 40; ++i)
+    for (int32_t i = 0; i < 25; ++i)
     {
-        game::PolygonEntity polygon{ world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850)}, 0}; // utils::randf(0.f, (float)PI * 2.f, 360)
+        game::CircleEntity  circle { world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) }, utils::randf(0.f, (float)PI * 2.f, 360)};
+        game::PolygonEntity polygon{ world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) }, utils::randf(0.f, (float)PI * 2.f, 360)};
+
+        storage.add_entity(circle );
         storage.add_entity(polygon);
     }
 }

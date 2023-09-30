@@ -7,21 +7,15 @@ namespace game
 		: Entity({ 127, 127, 127 })
 	{
 		std::vector<sf::Vector2f> base_vector{ {-700, -25}, {700, -25}, {700, 25}, {-700, 25} };
-		std::vector<sf::Vector2f> vector_1, vector_2;
-
-		for (int32_t i = 0; i < 4; ++i)
-		{
-			vector_1.push_back(utils::rotate_point(base_vector.at(i),  (float)PI2 / 7.f));
-			vector_2.push_back(utils::rotate_point(base_vector.at(i), -(float)PI2 / 7.f));
-		}
+		
 
 		physics::PolygonShape polygon_1{
-			vector_1, // Vertices
-			{-600, 0}    // Position
+			physics::rotate_polygon(base_vector, {},  (float)PI2 / 7.f), // Vertices
+			{-600, 0}													 // Position
 		};
 		physics::PolygonShape polygon_2{
-			vector_2, // Vertices
-			{ 600, 0}    // Position
+			physics::rotate_polygon(base_vector, {}, -(float)PI2 / 7.f), // Vertices
+			{ 600, 0}													 // Position
 		};
 
 		physics::RigidBody body;

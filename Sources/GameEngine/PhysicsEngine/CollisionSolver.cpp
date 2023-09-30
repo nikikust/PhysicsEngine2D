@@ -16,6 +16,9 @@ namespace physics
     std::optional<CollisionInfo> CollisionSolver::collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
                                                           const Transform& transform_A, const Transform& transform_B)
     {
+        if (!fixture_A->get_AABB(transform_A).collides(fixture_B->get_AABB(transform_B)))
+            return std::nullopt;
+
         auto& shape_A = fixture_A->get_shape();
         auto& shape_B = fixture_B->get_shape();
 
