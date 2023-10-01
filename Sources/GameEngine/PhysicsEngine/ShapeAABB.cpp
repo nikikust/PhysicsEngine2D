@@ -21,10 +21,8 @@ namespace physics
 	
 	void ShapeAABB::add_point(const sf::Vector2f& point)
 	{
-		min.x = fminf(min.x, point.x);
-		min.y = fminf(min.y, point.y);
-		max.x = fmaxf(max.x, point.x);
-		max.y = fmaxf(max.y, point.y);
+		min = utils::min(min, point);
+		max = utils::max(max, point);
 	}
 	
 	void ShapeAABB::combine(const ShapeAABB& aabb)

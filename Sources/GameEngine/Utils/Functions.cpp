@@ -13,6 +13,15 @@ namespace utils
         return (a > num) ? a : (b < num) ? b : num; 
     }
 
+    sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return { fminf(A.x, B.x), fminf(A.y, B.y) };
+    }
+    sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return { fmaxf(A.x, B.x), fmaxf(A.y, B.y) };
+    }
+
     bool in(int a, int num, int b)
     {
         return (num >= a && num <= b);

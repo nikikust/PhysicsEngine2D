@@ -41,6 +41,9 @@ namespace utils
     int   minmax (int a, int num, int b);       // equal to: min(max(num, a), b);
     float minmax (float a, float num, float b);
 
+    sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B);
+    sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B);
+
     bool in(int a, int num, int b);       // true if: a <= num <= b
 
     int   randi(int   start, int   end);
