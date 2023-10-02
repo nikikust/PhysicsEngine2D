@@ -59,6 +59,7 @@ add_executable(${PROJECT_NAME}
     Sources/GameEngine/PhysicsEngine/PhysMath.cpp
     Sources/GameEngine/PhysicsEngine/Rotation.cpp
     Sources/GameEngine/PhysicsEngine/ShapeAABB.cpp
+    Sources/GameEngine/PhysicsEngine/DAABBTree.cpp
     Sources/GameEngine/PhysicsEngine/RigidBody.cpp
     Sources/GameEngine/PhysicsEngine/CollisionSolver.cpp
 

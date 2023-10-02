@@ -7,6 +7,9 @@ namespace physics
 		: min({ std::numeric_limits<float>::max   (), std::numeric_limits<float>::max   () }),
 	 	  max({ std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() }) {}
 
+	ShapeAABB::ShapeAABB(const sf::Vector2f& min, const sf::Vector2f& max)
+		: min(min), max(max) {}
+
 
 	bool ShapeAABB::collides(const ShapeAABB& aabb) const
 	{
@@ -41,5 +44,21 @@ namespace physics
 	{
 		min = { std::numeric_limits<float>::max   (), std::numeric_limits<float>::max   () };
 		max = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() };
+	}
+
+	float ShapeAABB::get_perimeter() const
+	{
+		return (max.x - min.x) * (max.y - min.y);
+	}
+
+
+	ShapeAABB union_of(const ShapeAABB& AABB_A, const ShapeAABB& AABB_B)
+	{
+		ShapeAABB AABB_C{
+			utils::min(AABB_A.min, AABB_B.min),
+			utils::max(AABB_A.max, AABB_B.max)
+		};
+
+		return AABB_C;
 	}
 } // namespace physics

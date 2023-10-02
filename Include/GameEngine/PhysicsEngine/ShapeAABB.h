@@ -8,7 +8,7 @@ namespace physics
 	{
 	public:
 		ShapeAABB();
-
+		ShapeAABB(const sf::Vector2f& min, const sf::Vector2f& max);
 
 		/// Returns true if two AABBs collided
 		bool collides(const ShapeAABB& aabb) const;
@@ -25,7 +25,12 @@ namespace physics
 		/// Resets min and max to default values
 		void reset();
 
+		/// Returns perimeter of the AABB
+		float get_perimeter() const;
+
 		sf::Vector2f min;
 		sf::Vector2f max;
 	};
+
+	ShapeAABB union_of(const ShapeAABB& AABB_A, const ShapeAABB& AABB_B);
 } // namespace physics
