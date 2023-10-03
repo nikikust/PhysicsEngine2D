@@ -15,6 +15,7 @@ namespace physics
 
 		std::weak_ptr<Fixture> fixture;
 		int32_t id;
+		bool is_sleeping;
 
 		ShapeAABB aabb;
 		int32_t node_id;
@@ -42,6 +43,8 @@ namespace physics
 
 		const PhysicalData& get_physical_data() const;
 		PhysicalData        get_physical_data(const sf::Vector2f axis) const;
+
+		RigidBody* get_body() const;
 
 		bool has_shape();
 

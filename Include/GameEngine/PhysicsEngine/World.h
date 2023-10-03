@@ -40,6 +40,7 @@ namespace physics
 
         void update_contacts();
         void add_contact(void* data);
+        void add_contact(void* data_1, void* data_2);
         
 
         /// Iterates throught fixtures of both bodies and resolves their collisions

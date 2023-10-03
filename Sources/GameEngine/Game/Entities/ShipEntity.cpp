@@ -55,13 +55,19 @@ namespace game
 
         std::vector<sf::Vector2f> rotated_vertices;
 
+        sf::Color color = color_;
+
         for (auto& fixture : fixtures)
         {
             auto shape = std::dynamic_pointer_cast<physics::PolygonShape>(fixture->get_shape());
 
-            painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color_);
-        }
+            if (fixture->get_node_data()->is_sleeping)
+                color = color_;
+            else
+                color = sf::Color::Green;
 
+            painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color);
+        }
     }
 
     const std::shared_ptr<physics::RigidBody>& ShipEntity::get_body() const

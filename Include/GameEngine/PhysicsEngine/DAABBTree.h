@@ -50,7 +50,10 @@ namespace physics
         bool move(int32_t node_id, const ShapeAABB& aabb);
 
         template <typename Callback>
-        void query(Callback* callback, const ShapeAABB& aabb);
+        void query(Callback* callback, const ShapeAABB& aabb) const;
+
+        template <typename Callback>
+        void query(Callback* callback, const DAABBTree& tree) const;
 
         void shift_origin(sf::Vector2f offset);
 
@@ -87,7 +90,7 @@ namespace physics
 
 
     template<typename Callback>
-    inline void DAABBTree::query(Callback* callback, const ShapeAABB& aabb)
+    inline void DAABBTree::query(Callback* callback, const ShapeAABB& aabb) const
     {
         std::stack<int32_t> stack;
 
@@ -115,6 +118,49 @@ namespace physics
                 }
             }
         }
+    }
 
+    template<typename Callback>
+    inline void DAABBTree::query(Callback* callback, const DAABBTree& tree) const
+    {
+        std::stack<std::pair<int32_t, int32_t>> stack;
+
+        stack.push({ m_root_id, tree.m_root_id });
+
+        while (!stack.empty())
+        {
+            auto [node_id_1, node_id_2] = stack.top(); stack.pop();
+
+            if (node_id_1 == nullnode || node_id_2 == nullnode)
+                continue;
+
+            auto& node_1 = this->m_nodes[node_id_1];
+            auto& node_2 = tree .m_nodes[node_id_2];
+
+            if (node_1.aabb.collides(node_2.aabb))
+            {
+                if (node_1.is_leaf() && node_2.is_leaf())
+                {
+                    callback->add_contact(node_1.user_data, node_2.user_data);
+                }
+                else if (node_1.is_leaf())
+                {
+                    stack.push({ node_id_1, node_2.child_1 });
+                    stack.push({ node_id_1, node_2.child_2 });
+                }
+                else if (node_2.is_leaf())
+                {
+                    stack.push({ node_1.child_1, node_id_2 });
+                    stack.push({ node_1.child_2, node_id_2 });
+                }
+                else
+                {
+                    stack.push({ node_1.child_1, node_2.child_1 });
+                    stack.push({ node_1.child_1, node_2.child_2 });
+                    stack.push({ node_1.child_2, node_2.child_1 });
+                    stack.push({ node_1.child_2, node_2.child_2 });
+                }
+            }
+        }
     }
 } // namespace physics

@@ -81,9 +81,9 @@ namespace physics
         std::shared_ptr<physics::Fixture> get_fixture    (uint32_t id) const;
         void                              remove_fixture (uint32_t id);
 
-        
-
         const std::vector<std::shared_ptr<physics::Fixture>>& get_fixtures() const;
+
+        const DAABBTree& get_tree() const;
 
         // --- //
 		int32_t get_id() const;

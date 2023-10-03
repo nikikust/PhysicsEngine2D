@@ -5,7 +5,7 @@
 namespace physics
 {
     FixtureNodeData::FixtureNodeData(std::shared_ptr<Fixture> fixture_in, const ShapeAABB& aabb_in, int32_t id_in)
-        : fixture(fixture_in), aabb(aabb_in), id(id_in), node_id(nullnode) {}
+        : fixture(fixture_in), aabb(aabb_in), is_sleeping(false), id(id_in), node_id(nullnode) {}
 
     Fixture::Fixture(std::shared_ptr<Shape> shape, RigidBody* body)
         : shape_(shape), body_(body), node_data_(nullptr)
@@ -143,6 +143,11 @@ namespace physics
         return relative_physical_data;
     }
 
+    RigidBody* Fixture::get_body() const
+    {
+        return body_;
+    }
+
     bool Fixture::has_shape()
     {
         return shape_ != nullptr;
@@ -156,6 +161,9 @@ namespace physics
     Fixture& Fixture::set_sleeping(bool flag)
     {
         sleeping_ = flag;
+
+        if (node_data_ != nullptr)
+            node_data_->is_sleeping = flag;
 
         return *this;
     }

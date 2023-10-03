@@ -13,7 +13,7 @@ int DataLoader::init()
 {
     srand((unsigned int)time(NULL));
 
-    load_scene_3();
+    load_scene_2();
 
     return 0;
 }

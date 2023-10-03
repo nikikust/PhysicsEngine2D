@@ -433,7 +433,7 @@ namespace physics
 
 
     // --- Collision resolution
-    void CollisionSolver::separate_bodies(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
+    void CollisionSolver::separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const
     {
         auto fixated_A = body_A->get_linear_fixation();
         auto fixated_B = body_B->get_linear_fixation();
@@ -470,7 +470,7 @@ namespace physics
         body_B->move( normal_B * collision.depth);
     }
 
-    void CollisionSolver::resolve_collision_basic(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
+    void CollisionSolver::resolve_collision_basic(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const
     {
         auto speed_A = body_A->get_linear_speed();
         auto speed_B = body_B->get_linear_speed();
@@ -508,7 +508,7 @@ namespace physics
         body_B->set_linear_speed(speed_B);
     }
 
-    void CollisionSolver::resolve_collision_with_rotation(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
+    void CollisionSolver::resolve_collision_with_rotation(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const
     {
         auto speed_A = body_A->get_linear_speed();
         auto speed_B = body_B->get_linear_speed();

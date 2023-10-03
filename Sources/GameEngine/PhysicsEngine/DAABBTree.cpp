@@ -211,7 +211,7 @@ namespace physics
 			auto corner{ node.aabb.max - node.aabb.min };
 
 			debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Border, node.aabb.min, sf::Color(0, 55 + 24 * node.height, 0), 0, 0,
-				{ { 0.f, 0.f }, { corner.x, 0.f }, { corner.x, corner.y }, { 0.f, corner.y } }, 2.f + node.height});
+				{ { 0.f, 0.f }, { corner.x, 0.f }, { corner.x, corner.y }, { 0.f, corner.y } }, 2.f});
 
 			if (node.is_leaf())
 				continue;

@@ -25,8 +25,9 @@
 #define PI2 (3.14159265 / 2)
 #define PI4 (3.14159265 / 4)
 
-//#define DEBUG
+#define DEBUG
 //#define DEBUGTree
+//#define DEBUGBodyTree
 #define USE_GRAVITY
 
 namespace utils

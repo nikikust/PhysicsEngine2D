@@ -229,6 +229,8 @@ namespace physics
             auto data = fixture->get_node_data();
 
             data->aabb = fixture->get_AABB();
+            data->fixture = fixture;
+            data->is_sleeping = fixture->is_sleeping();
 
             fixture->set_node_data(data);
 
@@ -282,6 +284,7 @@ namespace physics
         fixtures_.push_back(fixture);
 
         FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_shape()->get_id());
+
         fixture->set_node_data(data);
 
         data->node_id = internal_tree_.insert(fixture->get_AABB(), data);
@@ -318,6 +321,11 @@ namespace physics
     const std::vector<std::shared_ptr<physics::Fixture>>& RigidBody::get_fixtures() const
     {
         return fixtures_;
+    }
+
+    const DAABBTree& RigidBody::get_tree() const
+    {
+        return internal_tree_;
     }
 
     // --- //

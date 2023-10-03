@@ -55,7 +55,7 @@ namespace physics
         debug_entities.clear();
 
         tree_.draw_boxes();
-        debug_entities = tree_.debug_entities;
+        debug_entities.insert(debug_entities.begin(), tree_.debug_entities.begin(), tree_.debug_entities.end());
 
         // for (auto& [k, body] : bodies_)
         // {
@@ -64,7 +64,21 @@ namespace physics
         //     debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Border, body->get_AABB().min, sf::Color::Green, 0, 0,
         //         { { 0.f, 0.f }, { corner.x, 0.f }, { corner.x, corner.y }, { 0.f, corner.y } } });
         // }
-#endif // DEBUG
+#endif // DEBUGTree
+
+#ifdef DEBUGBodyTree
+
+        for (auto& [k, body] : bodies_)
+        {
+            auto& tree = body->get_tree();
+
+            tree.debug_entities.clear();
+            tree.draw_boxes();
+
+            debug_entities.insert(debug_entities.begin(), tree.debug_entities.begin(), tree.debug_entities.end());
+        }
+#endif // DEBUGBodyTree
+
 	}
 
     std::shared_ptr<physics::RigidBody> World::get_body(int32_t id) const
@@ -96,24 +110,7 @@ namespace physics
     void World::update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A,
                                  const std::shared_ptr<physics::RigidBody>& body_B)
     {
-        for (auto& fixture_A : body_A->get_fixtures())
-        {
-            if (fixture_A->is_sleeping())
-                continue;
-
-            for (auto& fixture_B : body_B->get_fixtures())
-            {
-                if (fixture_B->is_sleeping())
-                    continue;
-
-                if (auto collision = collision_solver_.collide(fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()))
-                {
-                    collision_solver_.separate_bodies                 (*collision, body_A, body_B);
-                    collision_solver_.write_collision_points          (*collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
-                    collision_solver_.resolve_collision_with_rotation (*collision, body_A, body_B);
-                }
-            }
-        }
+        body_A->get_tree().query(this, body_B->get_tree());
     }
 
     void World::update_contacts()
@@ -135,6 +132,28 @@ namespace physics
             return;
 
         contacts.push_back({ contact_1, body->body.lock() });
+    }
+
+    void World::add_contact(void* data_1, void* data_2)
+    {
+        auto fixture_1 = (FixtureNodeData*)data_1;
+        auto fixture_2 = (FixtureNodeData*)data_2;
+
+        if (fixture_1->is_sleeping || fixture_2->is_sleeping)
+            return;
+
+        auto fixture_A = fixture_1->fixture.lock();
+        auto fixture_B = fixture_2->fixture.lock();
+
+        auto body_A = fixture_A->get_body();
+        auto body_B = fixture_B->get_body();
+
+        if (auto collision = collision_solver_.collide(fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()))
+        {
+            collision_solver_.separate_bodies(*collision, body_A, body_B);
+            collision_solver_.write_collision_points(*collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
+            collision_solver_.resolve_collision_with_rotation(*collision, body_A, body_B);
+        }
     }
 
 #ifdef DEBUG

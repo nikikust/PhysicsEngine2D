@@ -34,14 +34,14 @@ namespace physics
         std::optional<CollisionInfo> collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
                                              const Transform& transform_A, const Transform& transform_B);
         
-        void separate_bodies(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
+        void separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 
         void write_collision_points(CollisionInfo& collision, std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
                                     const Transform& transform_A, const Transform& transform_B);
 
-        void resolve_collision_basic(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
+        void resolve_collision_basic(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 
-        void resolve_collision_with_rotation(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const;
+        void resolve_collision_with_rotation(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 
 #ifdef DEBUG
         static std::vector<graphics::DebugDraw> debug_entities;
