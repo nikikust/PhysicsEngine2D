@@ -21,24 +21,9 @@ namespace physics
 	void World::update(float delta_time)
 	{
 #ifdef DEBUG
+        debug_entities.clear();
         collision_solver_.debug_entities.clear();
-        tree_.debug_entities.clear();
 #endif // DEBUG
-
-
-        //for (auto& [k_A, body_A] : bodies_)
-        //{
-        //    for (auto& [k_B, body_B] : bodies_)
-        //    {
-        //        if (body_A->get_id() >= body_B->get_id())
-        //            continue;
-        //
-        //        if (!body_A->get_AABB().collides(body_B->get_AABB()))
-        //            continue;
-        //
-        //        update_body_pair(body_A, body_B);
-        //    }
-        //}
 
         update_contacts();
          
@@ -51,19 +36,11 @@ namespace physics
 
             tree_.move(body->get_node_data()->node_id, body->get_AABB());
         }
-#ifdef DEBUG
-        debug_entities.clear();
 
+#ifdef DEBUGTree
+        tree_.debug_entities.clear();
         tree_.draw_boxes();
         debug_entities.insert(debug_entities.begin(), tree_.debug_entities.begin(), tree_.debug_entities.end());
-
-        // for (auto& [k, body] : bodies_)
-        // {
-        //     auto corner{ body->get_AABB().max - body->get_AABB().min };
-        // 
-        //     debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Border, body->get_AABB().min, sf::Color::Green, 0, 0,
-        //         { { 0.f, 0.f }, { corner.x, 0.f }, { corner.x, corner.y }, { 0.f, corner.y } } });
-        // }
 #endif // DEBUGTree
 
 #ifdef DEBUGBodyTree

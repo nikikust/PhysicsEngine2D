@@ -55,12 +55,12 @@ namespace physics
 
 		insert_leaf(node_id);
 
-#ifdef DEBUGTree
+#ifdef DEBUGPrintTree
 		std::cout << "Inserted node with id: " << node_id << std::endl;
 
 		std::cout << "o" << std::endl;
 		print_tree("", m_root_id);
-#endif
+#endif // DEBUGPrintTree
 
 		return node_id;
 	}
@@ -154,7 +154,7 @@ namespace physics
 		m_free_node = 0;
 	}
 
-#ifdef DEBUGTree
+#ifdef DEBUGPrintTree
 	void DAABBTree::print_tree(const std::string& tree_part, int32_t id) const
 	{
 		if (id == nullnode)
@@ -192,9 +192,9 @@ namespace physics
 		print_tree(tree_part + "    ", m_nodes[id].child_2);
 #endif
 	}
-#endif // DEBUGTree
+#endif // DEBUGPrintTree
 
-#ifdef DEBUG
+#ifdef DEBUGTree
 	void DAABBTree::draw_boxes() const
 	{
 		if (m_root_id == nullnode)
@@ -220,7 +220,7 @@ namespace physics
 			stack.push(node.child_2);
 		}
 	}
-#endif // DEBUG
+#endif // DEBUGTree
 
 	int32_t DAABBTree::allocate_node()
 	{
@@ -444,7 +444,7 @@ namespace physics
 			float inheritance_cost = combined_area - area;
 
 
-			// Cost of descending into child1
+			// Cost of descending into child_1
 			float cost_1;
 			if (m_nodes[child_1].is_leaf())
 			{
@@ -462,7 +462,7 @@ namespace physics
 				cost_1 = (newArea - oldArea) + inheritance_cost;
 			}
 
-			// Cost of descending into child2
+			// Cost of descending into child_2
 			float cost_2;
 			if (m_nodes[child_2].is_leaf())
 			{

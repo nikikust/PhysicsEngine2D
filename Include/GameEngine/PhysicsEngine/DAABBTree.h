@@ -3,9 +3,9 @@
 
 #include <GameEngine/PhysicsEngine/ShapeAABB.h>
 
-#ifdef DEBUG
+#ifdef DEBUGTree
 #include <GameEngine/GUIEngine/Painter.h>
-#endif // DEBUG
+#endif // DEBUGTree
 
 
 namespace physics
@@ -61,15 +61,15 @@ namespace physics
 
         void reset();
 
-#ifdef DEBUGTree
+#ifdef DEBUGPrintTree
         void print_tree(const std::string& tree_part, int32_t id = nullnode) const;
-#endif // DEBUGTree
+#endif // DEBUGPrintTree
 
-#ifdef DEBUG
+#ifdef DEBUGTree
         void draw_boxes() const;
 
         static std::vector<graphics::DebugDraw> debug_entities;
-#endif // DEBUG
+#endif // DEBUGTree
 
     private:
         int32_t allocate_node();
