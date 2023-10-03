@@ -2,17 +2,33 @@
 #include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/Fixture.h>
 #include <GameEngine/PhysicsEngine/PhysMath.h>
+#include <GameEngine/PhysicsEngine/DAABBTree.h>
 #include <GameEngine/PhysicsEngine/Shapes/CircleShape.h>
 #include <GameEngine/PhysicsEngine/Shapes/PolygonShape.h>
 
 
 namespace physics
 {
+    class RigidBody;
+
+    struct RigidBodyNodeData
+    {
+        RigidBodyNodeData(std::shared_ptr<RigidBody> body_in, const ShapeAABB& aabb_in, int32_t id_in);
+
+        std::weak_ptr<RigidBody> body;
+        int32_t id;
+
+        ShapeAABB aabb;
+        int32_t node_id;
+    };
+
 	class RigidBody
 	{
 	public:
 		RigidBody();
-
+        RigidBody(RigidBody&) = delete;
+        RigidBody(RigidBody&&) noexcept;
+        ~RigidBody();
 
         // --- Physics
         RigidBody& set_position             (const sf::Vector2f& position            );
@@ -50,9 +66,13 @@ namespace physics
         // --- //
         void update(float delta_time, const sf::Vector2f& gravity);
 
-        void update_AABB();
-        void update_AABB(const sf::Vector2f offset);
-        const ShapeAABB& get_AABB() const;
+        void update_internal_AABB();
+        void update_internal_AABB(const sf::Vector2f offset);
+
+        ShapeAABB get_AABB() const;
+
+        RigidBodyNodeData* get_node_data() const;
+        void set_node_data(RigidBodyNodeData* data);
 
         // --- Shapes
         std::shared_ptr<physics::Fixture> add_shape (const physics::CircleShape&  circle );
@@ -70,8 +90,8 @@ namespace physics
 
 	private:
         void update_physical_data();
-        void update_physical_data_append(physics::Fixture& fixture);
-        void update_physical_data_remove(physics::Fixture& fixture);
+        void update_physical_data_append(std::shared_ptr<physics::Fixture> fixture);
+        void update_physical_data_remove(std::shared_ptr<physics::Fixture> fixture);
 
         // --- Data
         Transform    transform_             = {};
@@ -92,7 +112,9 @@ namespace physics
 		
         // --- Shapes
         std::vector<std::shared_ptr<physics::Fixture>> fixtures_;
-        ShapeAABB aabb_;
+        DAABBTree internal_tree_;
+
+        RigidBodyNodeData* node_data_;
 
         // --- //
 
@@ -100,4 +122,6 @@ namespace physics
 
         static int32_t max_body_id_;
 	};
+
+    using RigidBodyPtrPair = std::pair<std::shared_ptr<RigidBody>, std::shared_ptr<RigidBody>>;
 } // namespace physics

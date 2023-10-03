@@ -26,6 +26,8 @@ namespace graphics
         
         polygon_brush.setPosition(position);
         
+        polygon_brush.setOutlineThickness(0.f);
+        polygon_brush.setOutlineColor(color);
         polygon_brush.setFillColor(color);
         
         window_.get_render_area().draw(polygon_brush);
@@ -52,6 +54,23 @@ namespace graphics
         }
     }
 
+    void Painter::draw_border(const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color, float outline_thickness)
+    {
+        polygon_brush.setPointCount(vertices.size());
+
+        int32_t cnt = 0;
+        for (auto& vertex : vertices)
+            polygon_brush.setPoint(cnt++, vertex);
+
+        polygon_brush.setPosition(position);
+
+        polygon_brush.setOutlineThickness(outline_thickness);
+        polygon_brush.setOutlineColor(color);
+        polygon_brush.setFillColor({ 0, 0, 0, 0 });
+
+        window_.get_render_area().draw(polygon_brush);
+    }
+
 #ifdef DEBUG
     void Painter::draw_debug(const std::vector<DebugDraw>& debug_entities)
     {
@@ -59,8 +78,9 @@ namespace graphics
         {
             switch (entity.type)
             {
-            case DebugDraw::Circle:  draw_circle (entity.position, entity.radius, entity.angle, entity.color, false); break;
-            case DebugDraw::Polygon: draw_polygon(entity.position, entity.vertices,             entity.color);        break;
+            case DebugDraw::Circle:  draw_circle  (entity.position, entity.radius, entity.angle, entity.color, false);                    break;
+            case DebugDraw::Polygon: draw_polygon (entity.position, entity.vertices,             entity.color);                           break;
+            case DebugDraw::Border:  draw_border  (entity.position, entity.vertices,             entity.color, entity.outline_thickness); break;
             default: break;
             }
         }

@@ -24,7 +24,7 @@ namespace physics
         std::shared_ptr<physics::RigidBody> get_body(int32_t id) const;
         std::shared_ptr<physics::RigidBody> get_body(int32_t id, int32_t world_id) const;
 
-        std::shared_ptr<physics::RigidBody> add_body(const physics::RigidBody& body);
+        void add_body(std::shared_ptr<physics::RigidBody> body);
 
         std::shared_ptr<World> get_world();
 

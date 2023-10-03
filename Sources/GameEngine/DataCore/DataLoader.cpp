@@ -13,7 +13,7 @@ int DataLoader::init()
 {
     srand((unsigned int)time(NULL));
 
-    load_scene_2();
+    load_scene_3();
 
     return 0;
 }
@@ -23,17 +23,17 @@ void DataLoader::load_scene_1()
     auto  world = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
 
-    game::ComplexEntity complex_1{ world, {500, 500}, 0 };
-    game::PolygonEntity polygon_1{ world, {100, 100}, 0 };
-    game::CircleEntity  circle_1 { world, {400, 100}, 0 };
-    game::CircleEntity  circle_2 { world, {100, 300}, 0 };
-    game::PolygonEntity polygon_2{ world, {400, 300}, 0 };
+    game::ComplexEntity complex_1{ world, {1500, 1000}, 0 };
+    game::PolygonEntity polygon_1{ world, {1100,  600}, 0 };
+    game::CircleEntity  circle_1 { world, {1400,  600}, 0 };
+    game::CircleEntity  circle_2 { world, {1100,  800}, 0 };
+    game::PolygonEntity polygon_2{ world, {1400,  800}, 0 };
 
-    storage.add_entity(complex_1);
-    storage.add_entity(polygon_1);
-    storage.add_entity(circle_1 );
-    storage.add_entity(circle_2 );
-    storage.add_entity(polygon_2);
+    storage.add_entity(std::move(complex_1));
+    storage.add_entity(std::move(polygon_1));
+    storage.add_entity(std::move(circle_1 ));
+    storage.add_entity(std::move(circle_2 ));
+    storage.add_entity(std::move(polygon_2));
 }
 void DataLoader::load_scene_2()
 {
@@ -44,12 +44,12 @@ void DataLoader::load_scene_2()
     {
         game::ShipEntity ship{ world, { i * 750.f, 100.f }, 0 };
 
-        storage.add_entity(ship);
+        storage.add_entity(std::move(ship));
     }
 
     game::GroundEntity ground_1{ world, {1280, 1200}, 0 };
 
-    storage.add_entity(ground_1);
+    storage.add_entity(std::move(ground_1));
 }
 void DataLoader::load_scene_3()
 {
@@ -63,12 +63,12 @@ void DataLoader::load_scene_3()
     game::PolygonEntity polygon_2 { world, { 700,  300}, 0 };
     game::GroundEntity  ground_1  { world, {1280, 1200}, 0 };
     
-    storage.add_entity(complex_1);
-    storage.add_entity(polygon_1);
-    storage.add_entity(circle_1 );
-    storage.add_entity(circle_2 );
-    storage.add_entity(polygon_2);
-    storage.add_entity(ground_1 );
+    storage.add_entity(std::move(complex_1));
+    storage.add_entity(std::move(polygon_1));
+    storage.add_entity(std::move(circle_1 ));
+    storage.add_entity(std::move(circle_2 ));
+    storage.add_entity(std::move(polygon_2));
+    storage.add_entity(std::move(ground_1 ));
 
 
     for (int32_t i = 0; i < 25; ++i)
@@ -76,8 +76,8 @@ void DataLoader::load_scene_3()
         game::CircleEntity  circle { world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) }, utils::randf(0.f, (float)PI * 2.f, 360)};
         game::PolygonEntity polygon{ world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) }, utils::randf(0.f, (float)PI * 2.f, 360)};
 
-        storage.add_entity(circle );
-        storage.add_entity(polygon);
+        storage.add_entity(std::move(circle ));
+        storage.add_entity(std::move(polygon));
     }
 }
 void DataLoader::load_scene_4()

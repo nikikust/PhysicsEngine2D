@@ -6,49 +6,87 @@ namespace physics
     int32_t RigidBody::max_body_id_ = 0;
 
 
+    RigidBodyNodeData::RigidBodyNodeData(std::shared_ptr<RigidBody> body_in, const ShapeAABB& aabb_in, int32_t id_in)
+        : body(body_in), aabb(aabb_in), id(id_in), node_id(nullnode) {}
+
     RigidBody::RigidBody()
+        : node_data_(nullptr)
     {
         id_ = ++max_body_id_;
+    }
+
+    RigidBody::RigidBody(RigidBody&& body) noexcept
+        : transform_            (std::move(body.transform_                                )),
+          linear_speed_         (std::move(body.linear_speed_                             )),
+          angular_speed_        (std::move(body.angular_speed_                            )),
+          linear_acceleration_  (std::move(body.linear_acceleration_                      )),
+          angular_acceleration_ (std::move(body.angular_acceleration_                     )),
+          force_                (std::move(body.force_                                    )),
+          physical_data_        (std::move(body.physical_data_                            )),
+          fixed_linear_         (std::move(body.fixed_linear_                             )),
+          fixed_angle_          (std::move(body.fixed_angle_                              )),
+          fixtures_             (std::move(body.fixtures_                                 )),
+          internal_tree_        (std::move(body.internal_tree_                            )),
+          node_data_            (std::move(body.node_data_                                )),
+          id_                   (std::move(body.id_                                       ))
+    {}
+
+    RigidBody::~RigidBody()
+    {
+        if (node_data_ != nullptr)
+            free(node_data_);
     }
 
     // --- //
 
     RigidBody& RigidBody::set_position(const sf::Vector2f& position)
     {
+        auto delta = position - transform_.position;
+
         transform_.position = position;
+
+        update_internal_AABB(delta);
 
         return *this;
     }
+
     RigidBody& RigidBody::set_angle(float angle)
     {
         transform_.rotation.set_angle(angle);
 
+        update_internal_AABB();
+
         return *this;
     }
+
     RigidBody& RigidBody::set_linear_speed(const sf::Vector2f& linear_speed)
     {
         linear_speed_ = linear_speed;
 
         return *this;
     }
+
     RigidBody& RigidBody::set_angular_speed(float angular_speed)
     {
         angular_speed_ = angular_speed;
 
         return *this;
     }
+
     RigidBody& RigidBody::set_linear_acceleration(const sf::Vector2f& linear_acceleration)
     {
         linear_acceleration_ = linear_acceleration;
 
         return *this;
     }
+
     RigidBody& RigidBody::set_angular_acceleration(float angular_acceleration)
     {
         angular_acceleration_ = angular_acceleration;
 
         return *this;
     }
+
     RigidBody& RigidBody::set_force(const sf::Vector2f& force)
     {
         force_ = force;
@@ -62,6 +100,7 @@ namespace physics
 
         return *this;
     }
+
     RigidBody& RigidBody::set_angular_fixation(bool a)
     {
         fixed_angle_ = a;
@@ -73,30 +112,37 @@ namespace physics
     {
         return transform_.position;
     }
+
     float RigidBody::get_angle() const
     {
         return transform_.rotation.get_angle();
     }
+
     const Transform& RigidBody::get_transform() const
     {
         return transform_;
     }
+
     const sf::Vector2f& RigidBody::get_linear_speed() const
     {
         return linear_speed_;
     }
+
     float RigidBody::get_angular_speed() const
     {
         return angular_speed_;
     }
+
     const sf::Vector2f& RigidBody::get_linear_acceleration() const
     {
         return linear_acceleration_;
     }
+
     float RigidBody::get_angular_acceleration() const
     {
         return angular_acceleration_;
     }
+
     const sf::Vector2f& RigidBody::get_force() const
     {
         return force_;
@@ -116,6 +162,7 @@ namespace physics
     {
         return fixed_linear_;
     }
+
     bool RigidBody::get_angular_fixation()
     {
         return fixed_angle_;
@@ -125,20 +172,27 @@ namespace physics
     {
         transform_.position += delta;
 
+        update_internal_AABB(delta);
+
         return *this;
     }
+
     RigidBody& RigidBody::accelerate(const sf::Vector2f& delta)
     {
         linear_speed_ += delta;
 
         return *this;
     }
+
     RigidBody& RigidBody::rotate(float angle)
     {
         transform_.rotation.rotate(angle);
 
+        update_internal_AABB();
+
         return *this;
     }
+
     RigidBody& RigidBody::spin(float angle)
     {
         angular_speed_ += angle;
@@ -161,58 +215,78 @@ namespace physics
         if (fixed_angle_)
             angular_speed_ = 0;
 
-        transform_.position += linear_speed_  * delta_time;
 
-        transform_.rotation.rotate(angular_speed_ * delta_time);
+        move   (linear_speed_  * delta_time);
+        rotate (angular_speed_ * delta_time);
 
         force_ = { 0,0 };
-
-        update_AABB();
     }
 
-    void RigidBody::update_AABB()
+    void RigidBody::update_internal_AABB()
     {
-        aabb_.reset();
-
         for (auto& fixture : fixtures_)
-            if (!fixture->is_sleeping())
-                aabb_.combine(fixture->get_AABB(transform_));
+        {
+            auto data = fixture->get_node_data();
+
+            data->aabb = fixture->get_AABB();
+
+            fixture->set_node_data(data);
+
+            internal_tree_.move(data->node_id, fixture->get_AABB());
+        }
     }
 
-    void RigidBody::update_AABB(const sf::Vector2f offset)
+    void RigidBody::update_internal_AABB(const sf::Vector2f offset)
     {
-        aabb_.move(offset);
+        internal_tree_.shift_origin(offset);
     }
 
-    const ShapeAABB& RigidBody::get_AABB() const
+    ShapeAABB RigidBody::get_AABB() const
     {
-        return aabb_;
+        return internal_tree_.get_root_AABB();
     }
     
+    RigidBodyNodeData* RigidBody::get_node_data() const
+    {
+        return node_data_;
+    }
+
+    void RigidBody::set_node_data(RigidBodyNodeData* data)
+    {
+        node_data_ = data;
+    }
+
     // --- Shapes
     std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::CircleShape& circle)
     {
-        Fixture fixture{ std::make_shared<physics::CircleShape>(circle) };
+        auto fixture = std::make_shared<Fixture>(std::make_shared<physics::CircleShape>(circle), this);
 
         update_physical_data_append(fixture);
 
-        fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
+        fixtures_.push_back(fixture);
 
-        update_AABB();
+        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_shape()->get_id());
+        fixture->set_node_data(data);
 
-        return fixtures_.back();
+        data->node_id = internal_tree_.insert(fixture->get_AABB(), data);
+
+        return fixture;
     }
+
     std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::PolygonShape& polygon)
     {
-        Fixture fixture{ std::make_shared<physics::PolygonShape>(polygon) };
+        auto fixture = std::make_shared<Fixture>(std::make_shared<physics::PolygonShape>(polygon), this);
 
         update_physical_data_append(fixture);
 
-        fixtures_.push_back(std::make_shared<physics::Fixture>(fixture));
+        fixtures_.push_back(fixture);
 
-        update_AABB();
+        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_shape()->get_id());
+        fixture->set_node_data(data);
 
-        return fixtures_.back();
+        data->node_id = internal_tree_.insert(fixture->get_AABB(), data);
+
+        return fixture;
     }
 
     std::shared_ptr<physics::Fixture> RigidBody::get_fixture(uint32_t id) const
@@ -223,15 +297,18 @@ namespace physics
 
         return nullptr;
     }
+
     void RigidBody::remove_fixture(uint32_t id)
     {
         for (auto it = fixtures_.begin(); it != fixtures_.end(); ++it)
         {
             if ((*it)->get_shape()->get_id() == id)
             {
-                fixtures_.erase(it);
+                int32_t node_id = ((FixtureNodeData*)((*it)->get_node_data()))->node_id;
 
-                update_AABB();
+                internal_tree_.remove(node_id);
+
+                fixtures_.erase(it);
 
                 return;
             }
@@ -305,14 +382,14 @@ namespace physics
         transform_.centroid = physical_data_.centroid;
     }
 
-    void RigidBody::update_physical_data_append(physics::Fixture& fixture)
+    void RigidBody::update_physical_data_append(std::shared_ptr<physics::Fixture> fixture)
     {
-        if (!fixture.update_physical_data())
+        if (!fixture->update_physical_data())
             return;
 
-        auto physical_data_to_add = fixture.get_physical_data();
+        auto physical_data_to_add = fixture->get_physical_data();
 
-        physical_data_to_add.centroid += fixture.get_shape()->get_position();
+        physical_data_to_add.centroid += fixture->get_shape()->get_position();
 
         if (physical_data_to_add.mass == 0.f)
             return;
@@ -337,7 +414,7 @@ namespace physics
         physical_data_.area += physical_data_to_add.area;
 
 
-        physical_data_to_add = fixture.get_physical_data(physical_data_.centroid);
+        physical_data_to_add = fixture->get_physical_data(physical_data_.centroid);
 
         physical_data_.mmoi = physical_data_to_add.mmoi;
 
@@ -361,7 +438,7 @@ namespace physics
         physical_data_.inv_mmoi = fixed_angle_ ? 0.f : physical_data_.inv_mmoi;
     }
 
-    void RigidBody::update_physical_data_remove(physics::Fixture& fixture)
+    void RigidBody::update_physical_data_remove(std::shared_ptr<physics::Fixture> fixture)
     {
         // TO DO: implement.
     }

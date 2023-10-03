@@ -7,15 +7,32 @@ namespace physics
 {
 	class RigidBody;
 
+	class Fixture;
+
+	struct FixtureNodeData
+	{
+		FixtureNodeData(std::shared_ptr<Fixture> fixture_in, const ShapeAABB& aabb_in, int32_t id_in);
+
+		std::weak_ptr<Fixture> fixture;
+		int32_t id;
+
+		ShapeAABB aabb;
+		int32_t node_id;
+	};
+
 	class Fixture
 	{
 	public:
-		Fixture(std::shared_ptr<Shape> shape);
+		Fixture(std::shared_ptr<Shape> shape, RigidBody* body);
+		~Fixture();
 
 
 		// --- //
 		const std::shared_ptr<Shape>& get_shape() const;
-		ShapeAABB get_AABB(const Transform& transform);
+		ShapeAABB get_AABB();
+
+		FixtureNodeData* get_node_data() const;
+		void set_node_data(FixtureNodeData* data);
 
 		float    get_restitution() const;
 		Fixture& set_restitution(float restitution);
@@ -33,6 +50,7 @@ namespace physics
 
 	private:
 		std::shared_ptr<Shape> shape_;
+		RigidBody* body_;
 
 		PhysicalData physical_data_;
 
@@ -43,7 +61,11 @@ namespace physics
 		bool sleeping_;
 
 		// --- Cached values
+		ShapeAABB base_AABB_;
+		std::optional<ShapeAABB> cached_AABB_;
 		std::optional<Transform> cached_transform_;
-		std::optional<ShapeAABB> cached_AABB;
+		FixtureNodeData* node_data_;
 	};
+
+	using FixturePtrPair = std::pair<std::shared_ptr<Fixture>, std::shared_ptr<Fixture>>;
 } // namespace physics

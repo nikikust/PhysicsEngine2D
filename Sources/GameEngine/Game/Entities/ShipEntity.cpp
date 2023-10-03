@@ -4,15 +4,13 @@
 namespace game
 {
     ShipEntity::ShipEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-        : Entity(sf::Color::Red)
+        : Entity(sf::Color::Red), body_(std::make_shared<physics::RigidBody>())
     {
         const float half_length = 15;
         const float half_width  = 5;
 
         std::vector<sf::Vector2f> box{ {-half_length, -half_width}, { half_length, -half_width}, 
                                        { half_length,  half_width}, {-half_length,  half_width} };
-
-        physics::RigidBody body;
 
         int32_t max_x = 20, max_y = 20;
 
@@ -28,14 +26,14 @@ namespace game
 
                 if (x < max_x - 1)
                 {
-                    auto fixture = body.add_shape(bar_hor);
+                    auto fixture = body_->add_shape(bar_hor);
 
                     if (utils::in(1, y, max_y - 2))
                         fixture->set_sleeping(true);
                 }
                 if (y < max_y - 1)
                 {
-                    auto fixture = body.add_shape(bar_ver);
+                    auto fixture = body_->add_shape(bar_ver);
 
                     if (utils::in(1, x, max_x - 2))
                         fixture->set_sleeping(true);
@@ -43,10 +41,10 @@ namespace game
             }
         }
 
-        body_ = world->add_body(body);
-
         body_->set_position(position);
         body_->set_angle(angle);
+
+        world->add_body(body_);
     }
 
 

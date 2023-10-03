@@ -8,7 +8,7 @@ namespace graphics
 
     struct DebugDraw
     {
-        enum { Circle, Polygon } type;
+        enum { Circle, Polygon, Border } type;
 
         sf::Vector2f position;
         sf::Color    color;
@@ -19,6 +19,7 @@ namespace graphics
 
         // Polygon part
         std::vector<sf::Vector2f> vertices;
+        float outline_thickness;
     };
 
     class Painter
@@ -34,6 +35,8 @@ namespace graphics
 
         void draw_polygon (const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color);
         void draw_circle  (const sf::Vector2f& position, float radius, float angle,                 const sf::Color& color, bool draw_rotation_line = true);
+
+        void draw_border  (const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color, float outline_thickness);
 
 #ifdef DEBUG
         void draw_debug(const std::vector<DebugDraw>& debug_entities);

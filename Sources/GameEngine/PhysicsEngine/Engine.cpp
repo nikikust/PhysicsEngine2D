@@ -34,7 +34,7 @@ namespace physics
         return selected_world_->get_body(id);
     }
 
-    std::shared_ptr<physics::RigidBody> Engine::add_body(const physics::RigidBody& body)
+    void Engine::add_body(std::shared_ptr<physics::RigidBody> body)
     {
         return selected_world_->add_body(body);
     }

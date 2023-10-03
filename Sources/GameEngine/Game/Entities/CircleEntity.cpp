@@ -4,21 +4,19 @@
 namespace game
 {
 	CircleEntity::CircleEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-		: Entity(sf::Color::Green)
+		: Entity(sf::Color::Green), body_(std::make_shared<physics::RigidBody>())
 	{
 		physics::CircleShape circle{
 			50,    // Radius
 			{0, 0} // Position
 		};
 
-		physics::RigidBody body;
-
-		body.add_shape(circle)->set_restitution(0.6f);
-
-		body_ = world->add_body(body);
+		body_->add_shape(circle)->set_restitution(0.6f);
 
 		body_->set_position(position);
 		body_->set_angle(angle);
+		
+		world->add_body(body_);
 	}
 
 	

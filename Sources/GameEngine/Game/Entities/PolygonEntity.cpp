@@ -4,21 +4,19 @@
 namespace game
 {
 	PolygonEntity::PolygonEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-		: Entity(sf::Color::Red)
+		: Entity(sf::Color::Red), body_(std::make_shared<physics::RigidBody>())
 	{
 		physics::PolygonShape polygon{
 			{ {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
 			{0, 0} // Position
 		};
 
-		physics::RigidBody body;
-
-		body.add_shape(polygon)->set_restitution(0.6f);
-
-		body_ = world->add_body(body);
+		body_->add_shape(polygon)->set_restitution(0.6f);
 
 		body_->set_position(position);
 		body_->set_angle(angle);
+
+		world->add_body(body_);
 	}
 
 

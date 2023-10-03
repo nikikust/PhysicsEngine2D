@@ -16,7 +16,7 @@ namespace physics
     std::optional<CollisionInfo> CollisionSolver::collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
                                                           const Transform& transform_A, const Transform& transform_B)
     {
-        if (!fixture_A->get_AABB(transform_A).collides(fixture_B->get_AABB(transform_B)))
+        if (!fixture_A->get_AABB().collides(fixture_B->get_AABB()))
             return std::nullopt;
 
         auto& shape_A = fixture_A->get_shape();
@@ -316,7 +316,7 @@ namespace physics
         // --- //
 
         float min_distance = std::numeric_limits<float>::max();
-        ContacstInfo contacts{};
+        ContactsInfo contacts{};
 
         auto count_A = (int32_t)vertices_A.size();
         auto count_B = (int32_t)vertices_B.size();
@@ -468,9 +468,6 @@ namespace physics
 
         body_A->move(-normal_A * collision.depth);
         body_B->move( normal_B * collision.depth);
-
-        body_A->update_AABB(-normal_A * collision.depth);
-        body_B->update_AABB( normal_B * collision.depth);
     }
 
     void CollisionSolver::resolve_collision_basic(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const
@@ -509,13 +506,6 @@ namespace physics
 
         body_A->set_linear_speed(speed_A);
         body_B->set_linear_speed(speed_B);
-
-
-#ifdef DEBUG
-        // auto corner{ body_A->get_AABB().max - body_A->get_AABB().min };
-        // debug_entities.push_back(graphics::DebugDraw{ graphics::DebugDraw::Polygon, body_A->get_AABB().min, sf::Color::White, 0, 0,
-        //     { { 0.f, 0.f }, { corner.x, 0.f }, { corner.x, corner.y }, { 0.f, corner.y } } });
-#endif // DEBUG
     }
 
     void CollisionSolver::resolve_collision_with_rotation(const CollisionInfo& collision, std::shared_ptr<RigidBody> body_A, std::shared_ptr<RigidBody> body_B) const

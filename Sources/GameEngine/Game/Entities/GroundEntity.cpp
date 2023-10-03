@@ -4,7 +4,7 @@
 namespace game
 {
 	GroundEntity::GroundEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-		: Entity({ 127, 127, 127 })
+		: Entity({ 127, 127, 127 }), body_(std::make_shared<physics::RigidBody>())
 	{
 		std::vector<sf::Vector2f> base_vector{ {-700, -25}, {700, -25}, {700, 25}, {-700, 25} };
 		
@@ -18,18 +18,15 @@ namespace game
 			{ 600, 0}													 // Position
 		};
 
-		physics::RigidBody body;
-
-		body.add_shape(polygon_1)->set_restitution(0.6f);
-		body.add_shape(polygon_2)->set_restitution(0.6f);
-
-
-		body_ = world->add_body(body);
+		body_->add_shape(polygon_1)->set_restitution(0.6f);
+		body_->add_shape(polygon_2)->set_restitution(0.6f);
 
 		body_->set_position(position)
 			  .set_angle(angle)
 			  .set_angular_fixation(true)
 			  .set_linear_fixation(true, true);
+
+		world->add_body(body_);
 	}
 
 

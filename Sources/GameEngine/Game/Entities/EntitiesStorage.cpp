@@ -8,33 +8,33 @@ namespace game
     }
 
 
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::CircleEntity entity)
+    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::CircleEntity&& entity)
     {
-        entities_.insert({ entity.get_id(), std::make_shared<game::CircleEntity>(entity) });
+        entities_.insert({ entity.get_id(), std::make_shared<game::CircleEntity>(std::move(entity)) });
 
         return entities_.at(entity.get_id());
     }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::PolygonEntity entity)
+    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::PolygonEntity&& entity)
     {
-        entities_.insert({ entity.get_id(), std::make_shared<game::PolygonEntity>(entity) });
+        entities_.insert({ entity.get_id(), std::make_shared<game::PolygonEntity>(std::move(entity)) });
 
         return entities_.at(entity.get_id());
     }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::ComplexEntity entity)
+    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::ComplexEntity&& entity)
     {
-        entities_.insert({ entity.get_id(), std::make_shared<game::ComplexEntity>(entity) });
+        entities_.insert({ entity.get_id(), std::make_shared<game::ComplexEntity>(std::move(entity)) });
 
         return entities_.at(entity.get_id());
     }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::GroundEntity entity)
+    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::GroundEntity&& entity)
     {
-        entities_.insert({ entity.get_id(), std::make_shared<game::GroundEntity>(entity) });
+        entities_.insert({ entity.get_id(), std::make_shared<game::GroundEntity>(std::move(entity)) });
 
         return entities_.at(entity.get_id());
     }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::ShipEntity entity)
+    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::ShipEntity&& entity)
     {
-        entities_.insert({ entity.get_id(), std::make_shared<game::ShipEntity>(entity) });
+        entities_.insert({ entity.get_id(), std::make_shared<game::ShipEntity>(std::move(entity)) });
 
         return entities_.at(entity.get_id());
     }
