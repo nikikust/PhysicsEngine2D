@@ -118,6 +118,9 @@ namespace physics
 	{
 		for (int32_t i = 0; i < m_capacity; ++i)
 		{
+			if (m_nodes[i].height == -1)
+				continue;
+
 			m_nodes[i].aabb.min += offset;
 			m_nodes[i].aabb.max += offset;
 		}

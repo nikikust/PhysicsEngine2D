@@ -92,7 +92,7 @@ namespace physics
     template<typename Callback>
     inline void DAABBTree::query(Callback* callback, const ShapeAABB& aabb) const
     {
-        std::stack<int32_t> stack;
+        std::stack<int32_t, std::vector<int32_t>> stack;
 
         stack.push(m_root_id);
 
@@ -123,7 +123,7 @@ namespace physics
     template<typename Callback>
     inline void DAABBTree::query(Callback* callback, const DAABBTree& tree) const
     {
-        std::stack<std::pair<int32_t, int32_t>> stack;
+        std::stack<std::pair<int32_t, int32_t>, std::vector<std::pair<int32_t, int32_t>>> stack;
 
         stack.push({ m_root_id, tree.m_root_id });
 
