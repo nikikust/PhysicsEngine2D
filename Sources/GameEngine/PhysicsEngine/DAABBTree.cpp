@@ -3,9 +3,9 @@
 
 namespace physics
 {
-#ifdef DEBUG
+#ifdef DEBUGTree
 	std::vector<graphics::DebugDraw> DAABBTree::debug_entities{};
-#endif // DEBUG
+#endif // DEBUGTree
 
 	DAABBTree::DAABBTree()
 	{
