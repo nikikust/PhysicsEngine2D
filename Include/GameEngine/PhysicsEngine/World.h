@@ -37,14 +37,22 @@ namespace physics
     private:
         friend class DAABBTree;
 
+        /// Update global DAABB tree collision points
         void update_contacts();
-        void add_contact(void* data);
-        void add_contact(void* data_1, void* data_2);
-        
 
-        /// Iterates throught fixtures of both bodies and resolves their collisions
+        /// Iterates throught fixtures of both bodies and resolves their collisions (called from query of update_contacts())
         void update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A, 
                               const std::shared_ptr<physics::RigidBody>& body_B);
+
+        /// @brief Callback method for global DAABB tree collisions
+        /// @param data - RigidBodyNodeData* - data about collided body
+        void add_contact(void* data);
+
+        /// @brief Callback method for local bodies DAABB tree collisions (called from query of update_body_pair())
+        /// @param data_1 FixtureNodeData* - data about 1st collided fixture
+        /// @param data_2 FixtureNodeData* - data about 2nd collided fixture
+        void add_contact(void* data_1, void* data_2);
+        
 
         // --- Data
 

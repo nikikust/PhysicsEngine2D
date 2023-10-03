@@ -83,13 +83,6 @@ namespace physics
         return bodies_;
     }
 
-
-    void World::update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A,
-                                 const std::shared_ptr<physics::RigidBody>& body_B)
-    {
-        body_A->get_tree().query(this, body_B->get_tree());
-    }
-
     void World::update_contacts()
     {
         contacts.clear();
@@ -99,6 +92,12 @@ namespace physics
             contact_1 = body;
             tree_.query(this, body->get_AABB());
         }
+    }
+
+    void World::update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A,
+                                 const std::shared_ptr<physics::RigidBody>& body_B)
+    {
+        body_A->get_tree().query(this, body_B->get_tree());
     }
 
     void World::add_contact(void* data)
