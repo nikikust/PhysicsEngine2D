@@ -59,7 +59,7 @@ namespace physics
 		std::cout << "Inserted node with id: " << node_id << std::endl;
 
 		std::cout << "o" << std::endl;
-		print_tree(" ", m_root_id);
+		print_tree("", m_root_id);
 #endif
 
 		return node_id;
@@ -160,6 +160,29 @@ namespace physics
 		if (id == nullnode)
 			return;
 
+#if 0
+		if (tree_part.empty())
+		{
+			std::cout << "binary_tree = TreeNode()" << std::endl;
+
+			if (m_nodes[id].is_leaf())
+				return;
+
+			print_tree("binary_tree.left", m_nodes[id].child_1);
+			print_tree("binary_tree.right", m_nodes[id].child_2);
+		}
+		else
+		{
+			std::cout << "temp = TreeNode()" << std::endl;
+			std::cout << tree_part << "= temp" << std::endl;
+
+			if (m_nodes[id].is_leaf())
+				return;
+
+			print_tree(tree_part + ".left",  m_nodes[id].child_1);
+			print_tree(tree_part + ".right", m_nodes[id].child_2);
+		}
+#else
 		std::cout << tree_part << "`- " << id << " (p: " << m_nodes[id].aabb.get_perimeter() << ", h: " << m_nodes[id].height << "):" << std::endl;
 
 		if (m_nodes[id].is_leaf())
@@ -167,6 +190,7 @@ namespace physics
 
 		print_tree(tree_part + "   |", m_nodes[id].child_1);
 		print_tree(tree_part + "    ", m_nodes[id].child_2);
+#endif
 	}
 #endif // DEBUGTree
 
