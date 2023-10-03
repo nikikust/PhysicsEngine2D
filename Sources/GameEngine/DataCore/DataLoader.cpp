@@ -58,25 +58,25 @@ void DataLoader::load_scene_3()
     
     game::ComplexEntity complex_1 { world, { 800,  500}, 0 };
     game::PolygonEntity polygon_1 { world, { 400,  100}, 0 };
-    game::CircleEntity  circle_1  { world, { 700,  100}, 0 };
-    game::CircleEntity  circle_2  { world, { 400,  300}, 0 };
+    // game::CircleEntity  circle_1  { world, { 700,  100}, 0 };
+    // game::CircleEntity  circle_2  { world, { 400,  300}, 0 };
     game::PolygonEntity polygon_2 { world, { 700,  300}, 0 };
     game::GroundEntity  ground_1  { world, {1280, 1200}, 0 };
     
     storage.add_entity(std::move(complex_1));
     storage.add_entity(std::move(polygon_1));
-    storage.add_entity(std::move(circle_1 ));
-    storage.add_entity(std::move(circle_2 ));
+    // storage.add_entity(std::move(circle_1 ));
+    // storage.add_entity(std::move(circle_2 ));
     storage.add_entity(std::move(polygon_2));
     storage.add_entity(std::move(ground_1 ));
 
 
-    for (int32_t i = 0; i < 25; ++i)
+    for (int32_t i = 0; i < 150; ++i)
     {
-        game::CircleEntity  circle { world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) }, utils::randf(0.f, (float)PI * 2.f, 360)};
+        // game::CircleEntity  circle { world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) }, utils::randf(0.f, (float)PI * 2.f, 360)};
         game::PolygonEntity polygon{ world, { utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) }, utils::randf(0.f, (float)PI * 2.f, 360)};
 
-        storage.add_entity(std::move(circle ));
+        // storage.add_entity(std::move(circle ));
         storage.add_entity(std::move(polygon));
     }
 }

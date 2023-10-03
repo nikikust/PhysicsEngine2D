@@ -25,8 +25,23 @@ namespace physics
         tree_.debug_entities.clear();
 #endif // DEBUG
 
-        update_contacts();
 
+        //for (auto& [k_A, body_A] : bodies_)
+        //{
+        //    for (auto& [k_B, body_B] : bodies_)
+        //    {
+        //        if (body_A->get_id() >= body_B->get_id())
+        //            continue;
+        //
+        //        if (!body_A->get_AABB().collides(body_B->get_AABB()))
+        //            continue;
+        //
+        //        update_body_pair(body_A, body_B);
+        //    }
+        //}
+
+        update_contacts();
+         
         for (auto& [body_A, body_B] : contacts)
             update_body_pair(body_A, body_B);
 

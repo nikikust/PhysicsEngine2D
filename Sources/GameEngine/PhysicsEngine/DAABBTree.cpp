@@ -414,10 +414,10 @@ namespace physics
 			float combined_area = combined_AABB.get_perimeter();
 
 			// Cost of creating a new parent for this node and the new leaf
-			float cost = 2.0f * combined_area;
+			float cost = combined_area;
 
 			// Minimum cost of pushing the leaf further down the tree
-			float inheritance_cost = 2.0f * (combined_area - area);
+			float inheritance_cost = combined_area - area;
 
 
 			// Cost of descending into child1
@@ -510,7 +510,7 @@ namespace physics
 		index = m_nodes[node_id].parent;
 		while (index != nullnode)
 		{
-			index = balance(index);
+			//index = balance(index);
 
 			int32_t child_1 = m_nodes[index].child_1;
 			int32_t child_2 = m_nodes[index].child_2;
@@ -564,7 +564,7 @@ namespace physics
 			int32_t index = grand_parent;
 			while (index != nullnode)
 			{
-				index = balance(index);
+				//index = balance(index);
 
 				int32_t child_1 = m_nodes[index].child_1;
 				int32_t child_2 = m_nodes[index].child_2;
