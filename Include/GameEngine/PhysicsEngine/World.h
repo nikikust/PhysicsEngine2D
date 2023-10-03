@@ -2,7 +2,6 @@
 #include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
 #include <GameEngine/PhysicsEngine/DAABBTree.h>
-#include <GameEngine/PhysicsEngine/ContactsManager.h>
 #include <GameEngine/PhysicsEngine/CollisionSolver.h>
 
 #ifdef DEBUG
