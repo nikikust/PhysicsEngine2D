@@ -234,7 +234,7 @@ namespace physics
 
             fixture->set_node_data(data);
 
-            internal_tree_.move(data->node_id, fixture->get_AABB());
+            internal_tree_.move(data->node_id, data->aabb);
         }
     }
 

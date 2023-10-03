@@ -99,9 +99,11 @@ namespace physics
         return node_data_;
     }
 
-    void Fixture::set_node_data(FixtureNodeData* data)
+    Fixture& Fixture::set_node_data(FixtureNodeData* data)
     {
         node_data_ = data;
+
+        return *this;
     }
 
     float Fixture::get_restitution() const

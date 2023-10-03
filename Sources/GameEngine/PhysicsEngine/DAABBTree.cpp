@@ -85,12 +85,15 @@ namespace physics
 
 		if (tree_AABB.contains(aabb))
 		{
+			return false;
+
 			// The tree AABB still contains the object, but it might be too large.
 			// Perhaps the object was moving fast but has since gone to sleep.
 			// The huge AABB is larger than the new fat AABB.
-			ShapeAABB huge_AABB;
-			huge_AABB.min = fat_AABB.min - 4.0f * r;
-			huge_AABB.max = fat_AABB.max + 4.0f * r;
+			ShapeAABB huge_AABB{
+				fat_AABB.min - 4.0f * r,
+				fat_AABB.max + 4.0f * r
+			};
 
 			if (huge_AABB.contains(tree_AABB))
 			{
@@ -98,7 +101,7 @@ namespace physics
 				// not too large. No tree update needed.
 				return false;
 			}
-
+			
 			// Otherwise the tree AABB is huge and needs to be shrunk
 		}
 

@@ -33,7 +33,7 @@ namespace physics
 		ShapeAABB get_AABB();
 
 		FixtureNodeData* get_node_data() const;
-		void set_node_data(FixtureNodeData* data);
+		Fixture& set_node_data(FixtureNodeData* data);
 
 		float    get_restitution() const;
 		Fixture& set_restitution(float restitution);
