@@ -6,8 +6,11 @@ namespace game
 	PolygonEntity::PolygonEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
 		: Entity(sf::Color::Red), body_(std::make_shared<physics::RigidBody>())
 	{
+		float half_size = 50;
+
 		physics::PolygonShape polygon{
-			{ {-50, -50}, {50, -50}, {50, 50}, {-50, 50} }, // Vertices
+			{ {-half_size, -half_size}, { half_size, -half_size}, 
+			  { half_size,  half_size}, {-half_size,  half_size} }, // Vertices
 			{0, 0} // Position
 		};
 
