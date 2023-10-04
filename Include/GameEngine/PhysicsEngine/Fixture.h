@@ -66,7 +66,6 @@ namespace physics
 		// --- Cached values
 		ShapeAABB base_AABB_;
 		ShapeAABB cached_AABB_;
-		Transform cached_transform_;
 		FixtureNodeData* node_data_;
 	};
 

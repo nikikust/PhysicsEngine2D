@@ -78,17 +78,10 @@ namespace physics
 
     const ShapeAABB& Fixture::get_AABB()
     {
-        if (cached_transform_ == body_->get_transform())
-            return cached_AABB_;
-
-        cached_transform_ = body_->get_transform();
         cached_AABB_ = base_AABB_;
 
-        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), cached_transform_);
+        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), body_->get_transform());
         cached_AABB_.move(position_rotated);
-        
-        if (node_data_ != nullptr)
-            node_data_->aabb = cached_AABB_;
 
         return cached_AABB_;
     }

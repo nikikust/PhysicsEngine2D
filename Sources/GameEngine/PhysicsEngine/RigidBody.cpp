@@ -172,7 +172,7 @@ namespace physics
     {
         transform_.position += delta;
 
-        update_internal_AABB(delta);
+        //update_internal_AABB(delta);
 
         return *this;
     }
