@@ -87,18 +87,20 @@ namespace physics
 
 	bool operator==(const Transform& left, const Transform& right)
 	{
-		return 
-			physics::almost_equal(left.position,             right.position            ) &&
+		return
 			physics::almost_equal(left.rotation.get_angle(), right.rotation.get_angle()) &&
+			physics::almost_equal(left.position,             right.position            ) &&
 			physics::almost_equal(left.centroid,             right.centroid            );
 	}
+
 	bool operator!=(const Transform& left, const Transform& right)
 	{
-		return 
-			!physics::almost_equal(left.position,             right.position            ) ||
+		return
 			!physics::almost_equal(left.rotation.get_angle(), right.rotation.get_angle()) ||
+			!physics::almost_equal(left.position,             right.position            ) ||
 			!physics::almost_equal(left.centroid,             right.centroid            );
 	}
+
 	Transform& Transform::operator=(const Transform& b)
 	{
 		this->position = b.position;

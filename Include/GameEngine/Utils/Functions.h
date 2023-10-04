@@ -29,7 +29,7 @@
 //#define DEBUGTree
 //#define DEBUGBodyTree
 //#define DEBUGPrintTree
-#define USE_GRAVITY
+//#define USE_GRAVITY
 
 namespace utils
 {

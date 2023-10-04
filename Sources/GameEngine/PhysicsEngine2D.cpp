@@ -269,25 +269,25 @@ void PhysicsEngine2D::process_inputs()
     {
         if (data_editor_.keyboard_io_is_released())
             if (auto body = engine_.get_body(1))
-                body->accelerate({0.f, -0.35f});
+                body->accelerate(sf::Vector2f{ 0.f, -2500.f } * (data_storage_.status.delta_time / 16.f));
     }
     if (utils::key_down(sf::Keyboard::A))
     {
         if (data_editor_.keyboard_io_is_released())
             if (auto body = engine_.get_body(1))
-                body->accelerate({ -0.35f, 0.f });
+                body->accelerate(sf::Vector2f{ -2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
     }
     if (utils::key_down(sf::Keyboard::S))
     {
         if (data_editor_.keyboard_io_is_released())
             if (auto body = engine_.get_body(1))
-                body->accelerate({ 0.f, 0.35f });
+                body->accelerate(sf::Vector2f{ 0.f, 2500.f } * (data_storage_.status.delta_time / 16.f));
     }
     if (utils::key_down(sf::Keyboard::D))
     {
         if (data_editor_.keyboard_io_is_released())
             if (auto body = engine_.get_body(1))
-                body->accelerate({ 0.35f, 0.f });
+                body->accelerate(sf::Vector2f{ 2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
     }
 
     // --- //

@@ -229,12 +229,21 @@ namespace physics
             auto data = fixture->get_node_data();
 
             data->aabb = fixture->get_AABB();
-            data->fixture = fixture;
             data->is_sleeping = fixture->is_sleeping();
 
-            fixture->set_node_data(data);
-
-            internal_tree_.move(data->node_id, data->aabb);
+            if (data->is_sleeping && data->node_id != nullnode)
+            {
+                internal_tree_.remove(data->node_id);
+                data->node_id = nullnode;
+            }
+            else if (!data->is_sleeping && data->node_id == nullnode)
+            {
+                data->node_id = internal_tree_.insert(data->aabb, data);
+            }
+            else if (data->node_id != nullnode)
+            {
+                internal_tree_.move(data->node_id, data->aabb);
+            }
         }
     }
 
