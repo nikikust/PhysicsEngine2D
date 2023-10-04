@@ -30,7 +30,7 @@ namespace physics
 
 		// --- //
 		const std::shared_ptr<Shape>& get_shape() const;
-		ShapeAABB get_AABB();
+		const ShapeAABB& get_AABB();
 
 		FixtureNodeData* get_node_data() const;
 		Fixture& set_node_data(FixtureNodeData* data);
@@ -65,8 +65,8 @@ namespace physics
 
 		// --- Cached values
 		ShapeAABB base_AABB_;
-		std::optional<ShapeAABB> cached_AABB_;
-		std::optional<Transform> cached_transform_;
+		ShapeAABB cached_AABB_;
+		Transform cached_transform_;
 		FixtureNodeData* node_data_;
 	};
 

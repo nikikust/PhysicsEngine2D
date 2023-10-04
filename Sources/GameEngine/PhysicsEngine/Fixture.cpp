@@ -52,11 +52,11 @@ namespace physics
             throw("Unknown shape type to calculate AABB!");
         }
 
-        *cached_transform_ = body_->get_transform();
+        cached_transform_ = body->get_transform();
         cached_AABB_ = base_AABB_;
 
-        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), *cached_transform_);
-        cached_AABB_->move(position_rotated);
+        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), cached_transform_);
+        cached_AABB_.move(position_rotated);
 
         update_physical_data();
     }
@@ -76,22 +76,21 @@ namespace physics
         return shape_;
     }
 
-    ShapeAABB Fixture::get_AABB()
+    const ShapeAABB& Fixture::get_AABB()
     {
-        if (cached_transform_.has_value() && cached_AABB_.has_value() &&
-            *cached_transform_ == body_->get_transform())
-            return *cached_AABB_;
+        if (cached_transform_ == body_->get_transform())
+            return cached_AABB_;
 
-        *cached_transform_ = body_->get_transform();
+        cached_transform_ = body_->get_transform();
         cached_AABB_ = base_AABB_;
 
-        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), *cached_transform_);
-        cached_AABB_->move(position_rotated);
+        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), cached_transform_);
+        cached_AABB_.move(position_rotated);
         
         if (node_data_ != nullptr)
-            node_data_->aabb = *cached_AABB_;
+            node_data_->aabb = cached_AABB_;
 
-        return *cached_AABB_;
+        return cached_AABB_;
     }
 
     FixtureNodeData* Fixture::get_node_data() const

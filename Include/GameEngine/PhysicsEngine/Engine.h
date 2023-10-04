@@ -28,6 +28,9 @@ namespace physics
 
         std::shared_ptr<World> get_world();
 
+        void set_pause(bool flag);
+        bool get_pause_state();
+
 #ifdef DEBUG
         const std::vector<graphics::DebugDraw>& get_debug_entities();
 #endif // DEBUG
@@ -40,5 +43,7 @@ namespace physics
 
         // Config
         static int32_t steps_amount;
+
+        bool paused_;
     };
 } // namespace physics

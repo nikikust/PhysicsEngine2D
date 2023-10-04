@@ -42,14 +42,14 @@ void DataLoader::load_scene_2()
 
     for (int32_t i = 0; i < 2; ++i)
     {
-        game::ShipEntity ship{ world, { 100.f + i * 1050.f, 100.f }, 0 };
+        game::ShipEntity ship{ world, { 100.f + i * 1050.f, 10.f }, 0 };
 
         storage.add_entity(std::move(ship));
     }
 
-    //game::GroundEntity ground_1{ world, {1280, 1200}, 0 };
-    //
-    //storage.add_entity(std::move(ground_1));
+    game::GroundEntity ground_1{ world, {1280, 1200}, 0 };
+    
+    storage.add_entity(std::move(ground_1));
 }
 void DataLoader::load_scene_3()
 {

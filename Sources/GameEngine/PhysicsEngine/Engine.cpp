@@ -9,6 +9,8 @@ namespace physics
     Engine::Engine()
     {
         selected_world_ = std::make_shared<physics::World>();
+
+        paused_ = true;
     }
     Engine::~Engine()
     {
@@ -17,6 +19,9 @@ namespace physics
 
     void Engine::update(float delta_time, const sf::Vector2i& window_size)
     {
+        if (paused_)
+            return;
+
         for (int step_cnt = 0; step_cnt < steps_amount; ++step_cnt)
             selected_world_->update(delta_time / steps_amount);
 
@@ -43,6 +48,16 @@ namespace physics
     {
         // TO DO: world selection
         return selected_world_;
+    }
+
+    void Engine::set_pause(bool flag)
+    {
+        paused_ = flag;
+    }
+
+    bool Engine::get_pause_state()
+    {
+        return paused_;
     }
 
 #ifdef DEBUG

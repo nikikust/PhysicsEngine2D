@@ -234,6 +234,11 @@ void PhysicsEngine2D::process_inputs()
         else
             data_editor_.flip_exit_popup_state();
     }
+    if (utils::key_pressed(sf::Keyboard::Space))
+    {
+        if (data_editor_.keyboard_io_is_released())
+            engine_.set_pause(!engine_.get_pause_state());
+    }
 
     if (utils::key_down(sf::Keyboard::LControl))
     {
