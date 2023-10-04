@@ -12,7 +12,7 @@ namespace game
         std::vector<sf::Vector2f> box{ {-half_length, -half_width}, { half_length, -half_width}, 
                                        { half_length,  half_width}, {-half_length,  half_width} };
 
-        int32_t max_x = 30, max_y = 30;
+        int32_t max_x = 75, max_y = 75;
 
         for (int32_t x = 0; x < max_x; ++x)
         {
@@ -59,6 +59,9 @@ namespace game
 
         for (auto& fixture : fixtures)
         {
+            if (fixture->is_sleeping())
+                continue;
+
             auto shape = std::dynamic_pointer_cast<physics::PolygonShape>(fixture->get_shape());
 
             if (fixture->get_node_data()->is_sleeping)

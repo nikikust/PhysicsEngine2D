@@ -40,9 +40,9 @@ void DataLoader::load_scene_2()
     auto  world = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
 
-    for (int32_t i = 0; i < 5; ++i)
+    for (int32_t i = 0; i < 2; ++i)
     {
-        game::ShipEntity ship{ world, { 100.f + i * 350.f, 100.f }, 0 };
+        game::ShipEntity ship{ world, { 100.f + i * 1050.f, 100.f }, 0 };
 
         storage.add_entity(std::move(ship));
     }

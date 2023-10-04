@@ -26,9 +26,9 @@
 #define PI4 (3.14159265 / 4)
 
 //#define DEBUG
-//#define DEBUGTree
-//#define DEBUGBodyTree
-//#define DEBUGPrintTree
+//#define DEBUGTree       // requires DEBUG
+//#define DEBUGBodyTree   // requires DEBUGTree
+//#define DEBUGPrintTree  // requires DEBUGTree
 //#define USE_GRAVITY
 
 namespace utils

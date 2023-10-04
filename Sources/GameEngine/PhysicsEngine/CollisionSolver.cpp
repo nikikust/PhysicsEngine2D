@@ -612,7 +612,7 @@ namespace physics
     }
 
 
-    sf::Vector2f CollisionSolver::circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, Transform transform_A, Transform transform_B) const
+    sf::Vector2f CollisionSolver::circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, const Transform& transform_A, const Transform& transform_B) const
     {
         sf::Vector2f closest_point{};
         float min_distance = std::numeric_limits<float>::max();

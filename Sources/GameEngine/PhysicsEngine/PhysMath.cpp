@@ -101,12 +101,23 @@ namespace physics
 			!physics::almost_equal(left.centroid,             right.centroid            );
 	}
 
+	Transform::Transform() {}
+
+	Transform::Transform(Transform& transform)
+		: position(transform.position), centroid(transform.centroid), rotation(transform.rotation)
+	{
+	}
+
+	Transform::Transform(Transform&& transform) noexcept
+		: position(std::move(transform.position)), centroid(std::move(transform.centroid)), rotation(std::move(transform.rotation))
+	{
+	}
+
 	Transform& Transform::operator=(const Transform& b)
 	{
 		this->position = b.position;
 		this->centroid = b.centroid;
-
-		this->rotation.set_angle(b.rotation.get_angle());
+		this->rotation = b.rotation;
 
 		return *this;
 	}

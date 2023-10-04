@@ -56,7 +56,7 @@ namespace physics
         std::pair<float, float> polygon_projection (std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, const Transform& transform) const;
         std::pair<float, float> circle_projection  (std::shared_ptr<CircleShape>  circle,  const sf::Vector2f& axis, const Transform& transform) const;
 
-        sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, Transform transform_A, Transform transform_B) const;
+        sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, const Transform& transform_A, const Transform& transform_B) const;
 
         sf::Vector2f circles_collision_points        (std::shared_ptr<Shape> circle_A_raw,  std::shared_ptr<Shape> circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
         sf::Vector2f circle_polygon_collision_points (std::shared_ptr<Shape> polygon_raw,   std::shared_ptr<Shape> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;

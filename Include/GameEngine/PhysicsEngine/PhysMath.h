@@ -12,6 +12,9 @@ namespace physics
 		sf::Vector2f centroid{};
 		Rotation     rotation{};
 
+		Transform();
+		Transform(Transform&);
+		Transform(Transform&&) noexcept;
 		Transform& operator=(const Transform& b);
 	};
 	bool operator== (const Transform& left, const Transform& right);

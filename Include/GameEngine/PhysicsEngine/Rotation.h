@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdlib>
+#include <memory>
 
 
 namespace physics
@@ -9,6 +10,9 @@ namespace physics
 	public:
 		Rotation();
 		Rotation(float angle);
+		Rotation(Rotation&);
+		Rotation(Rotation&&) noexcept;
+		Rotation& operator=(const Rotation& b);
 
 
 		void set_angle(float angle);
