@@ -18,11 +18,7 @@ namespace game
 
         // --- //
 
-        std::shared_ptr<game::Entity> add_entity(game::CircleEntity&&  entity);
-        std::shared_ptr<game::Entity> add_entity(game::PolygonEntity&& entity);
-        std::shared_ptr<game::Entity> add_entity(game::ComplexEntity&& entity);
-        std::shared_ptr<game::Entity> add_entity(game::GroundEntity&&  entity);
-        std::shared_ptr<game::Entity> add_entity(game::ShipEntity&&    entity);
+        void add_entity(const std::shared_ptr<Entity>& entity);
 
         void remove_entity(int32_t id);
 

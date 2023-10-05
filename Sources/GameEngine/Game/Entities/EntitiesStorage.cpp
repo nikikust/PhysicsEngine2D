@@ -8,37 +8,10 @@ namespace game
     }
 
 
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::CircleEntity&& entity)
+    void EntitiesStorage::add_entity(const std::shared_ptr<Entity>& entity)
     {
-        entities_.insert({ entity.get_id(), std::make_shared<game::CircleEntity>(std::move(entity)) });
-
-        return entities_.at(entity.get_id());
+        entities_.insert({ entity->get_id(), entity });
     }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::PolygonEntity&& entity)
-    {
-        entities_.insert({ entity.get_id(), std::make_shared<game::PolygonEntity>(std::move(entity)) });
-
-        return entities_.at(entity.get_id());
-    }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::ComplexEntity&& entity)
-    {
-        entities_.insert({ entity.get_id(), std::make_shared<game::ComplexEntity>(std::move(entity)) });
-
-        return entities_.at(entity.get_id());
-    }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::GroundEntity&& entity)
-    {
-        entities_.insert({ entity.get_id(), std::make_shared<game::GroundEntity>(std::move(entity)) });
-
-        return entities_.at(entity.get_id());
-    }
-    std::shared_ptr<game::Entity> EntitiesStorage::add_entity(game::ShipEntity&& entity)
-    {
-        entities_.insert({ entity.get_id(), std::make_shared<game::ShipEntity>(std::move(entity)) });
-
-        return entities_.at(entity.get_id());
-    }
-    
 
     void EntitiesStorage::remove_entity(int32_t id)
     {
