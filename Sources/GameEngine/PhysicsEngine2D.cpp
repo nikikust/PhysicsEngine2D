@@ -125,199 +125,206 @@ void PhysicsEngine2D::poll_events()
 }
 void PhysicsEngine2D::process_inputs()
 {
-    // --- Camera movement
-
-    if (utils::mouse_pressed  (sf::Mouse::Left)  && data_editor_.mouse_io_is_released())
-    {
-        data_editor_.save_mouse_position_on_click();
-
-        data_editor_.start_moving_camera();
-    }
-    if (utils::mouse_down     (sf::Mouse::Left))
-    {
-        auto mouse_diff = window_.get_cursor_position() - data_storage_.status.mouse_position_on_click;
-
-        mouse_diff.x = int(mouse_diff.x / data_storage_.camera.scale_modifier_as_pow2);
-        mouse_diff.y = int(mouse_diff.y / data_storage_.camera.scale_modifier_as_pow2);
-
-        if (data_editor_.is_camera_moving_mode())
-        {
-            data_editor_.move_camera(mouse_diff);
-
-            if (!data_editor_.mouse_io_is_released())
-                data_editor_.restore_camera_position();
-        }
-    }
-    if (utils::mouse_released (sf::Mouse::Left)  && data_editor_.mouse_io_is_released())
-    {
-        if (data_editor_.is_camera_moving_mode())
-        {
-            data_editor_.stop_moving_camera();
-        }
-    }
-                              
-    if (utils::mouse_pressed  (sf::Mouse::Right) && data_editor_.mouse_io_is_released())
-    {
-
-    }
-    if (utils::mouse_down     (sf::Mouse::Right))
-    {
-
-    }
-    if (utils::mouse_released (sf::Mouse::Right) && data_editor_.mouse_io_is_released())
-    {
-
-    }
-
-    if (utils::key_pressed(sf::Keyboard::Left ) && data_editor_.keyboard_io_is_released())
-    {
-        if (data_editor_.is_idle_mode())
-            data_storage_.camera.position.x -= int(data_storage_.screen_size.x / data_storage_.camera.scale_modifier_as_pow2);
-    }
-    if (utils::key_pressed(sf::Keyboard::Right) && data_editor_.keyboard_io_is_released())
-    {
-        if (data_editor_.is_idle_mode())
-            data_storage_.camera.position.x += int(data_storage_.screen_size.x / data_storage_.camera.scale_modifier_as_pow2);
-    }
-    if (utils::key_pressed(sf::Keyboard::Up)    && data_editor_.keyboard_io_is_released())
-    {
-        if (data_editor_.is_idle_mode())
-            data_storage_.camera.position.y -= int(data_storage_.screen_size.y / data_storage_.camera.scale_modifier_as_pow2);
-    }
-    if (utils::key_pressed(sf::Keyboard::Down)  && data_editor_.keyboard_io_is_released())
-    {
-        if (data_editor_.is_idle_mode())
-            data_storage_.camera.position.y += int(data_storage_.screen_size.y / data_storage_.camera.scale_modifier_as_pow2);
-    }
-
-    // --- Zooming
-    if (utils::key_pressed(sf::Keyboard::Subtract))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.zoom_out();
-    }
-    if (utils::key_pressed(sf::Keyboard::Add))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.zoom_in();
-    }
-    if (utils::key_pressed(sf::Keyboard::LBracket))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.zoom_out();
-    }
-    if (utils::key_pressed(sf::Keyboard::RBracket))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.zoom_in();
-    }
-
-    // --- Hotkeys
-    if (utils::key_pressed(sf::Keyboard::P))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (data_storage_.settings.disable_interface_on_screenshot)
-                data_editor_.screenshot_without_interface();
-            else
-                data_editor_.screenshot_with_interface();
-    }
-
-    if (utils::key_pressed(sf::Keyboard::Escape))
-    {
-        if (data_editor_.message_is_opened())
-            data_editor_.close_message();
-        else if (utils::mouse_down(sf::Mouse::Left))
-        {
-            if (data_editor_.is_camera_moving_mode())
-                data_editor_.restore_camera_position();
-        }
-        else
-            data_editor_.flip_exit_popup_state();
-    }
-    if (utils::key_pressed(sf::Keyboard::Space))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            engine_.set_pause(!engine_.get_pause_state());
-    }
-
     if (utils::key_down(sf::Keyboard::LControl))
     {
         if (data_editor_.keyboard_io_is_released())
         {
-            if (utils::key_pressed(sf::Keyboard::S)) 
+            if (utils::key_pressed(sf::Keyboard::S))
             {
                 // TO DO: data_loader_.save_data();
             }
+
+            if (utils::key_pressed(sf::Keyboard::Space))
+            {
+                engine_.do_step();
+            }
         }
     }
+    else
+    {
+        // --- Camera movement
 
-    auto entity = data_storage_.entities_storage.get_selected_entity();
-    auto body = (entity == nullptr ? nullptr : entity->get_main_body());
+        if (utils::mouse_pressed  (sf::Mouse::Left)  && data_editor_.mouse_io_is_released())
+        {
+            data_editor_.save_mouse_position_on_click();
 
-    if (utils::key_down(sf::Keyboard::Q))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (body != nullptr)
-                body->set_angular_speed(-(float)PI4);
-    }
-    if (utils::key_down(sf::Keyboard::E))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (body != nullptr)
-                body->set_angular_speed((float)PI4);
-    }
-    if (utils::key_down(sf::Keyboard::R))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (body != nullptr)
-                body->set_angular_speed(0);
-    }
+            data_editor_.start_moving_camera();
+        }
+        if (utils::mouse_down     (sf::Mouse::Left))
+        {
+            auto mouse_diff = window_.get_cursor_position() - data_storage_.status.mouse_position_on_click;
 
-    if (utils::key_down(sf::Keyboard::W))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (body != nullptr)
-                body->accelerate(sf::Vector2f{ 0.f, -2500.f } * (data_storage_.status.delta_time / 16.f));
-    }
-    if (utils::key_down(sf::Keyboard::A))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (body != nullptr)
-                body->accelerate(sf::Vector2f{ -2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
-    }
-    if (utils::key_down(sf::Keyboard::S))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (body != nullptr)
-                body->accelerate(sf::Vector2f{ 0.f, 2500.f } * (data_storage_.status.delta_time / 16.f));
-    }
-    if (utils::key_down(sf::Keyboard::D))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            if (body != nullptr)
-                body->accelerate(sf::Vector2f{ 2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
-    }
+            mouse_diff.x = int(mouse_diff.x / data_storage_.camera.scale_modifier_as_pow2);
+            mouse_diff.y = int(mouse_diff.y / data_storage_.camera.scale_modifier_as_pow2);
 
-    if (utils::key_pressed(sf::Keyboard::Num1))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.load_scene(1);
-    }
-    if (utils::key_pressed(sf::Keyboard::Num2))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.load_scene(2);
-    }
-    if (utils::key_pressed(sf::Keyboard::Num3))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.load_scene(3);
-    }
-    if (utils::key_pressed(sf::Keyboard::Num4))
-    {
-        if (data_editor_.keyboard_io_is_released())
-            data_editor_.load_scene(4);
-    }
+            if (data_editor_.is_camera_moving_mode())
+            {
+                data_editor_.move_camera(mouse_diff);
 
-    // --- //
+                if (!data_editor_.mouse_io_is_released())
+                    data_editor_.restore_camera_position();
+            }
+        }
+        if (utils::mouse_released (sf::Mouse::Left)  && data_editor_.mouse_io_is_released())
+        {
+            if (data_editor_.is_camera_moving_mode())
+            {
+                data_editor_.stop_moving_camera();
+            }
+        }
+                              
+        if (utils::mouse_pressed  (sf::Mouse::Right) && data_editor_.mouse_io_is_released())
+        {
+
+        }
+        if (utils::mouse_down     (sf::Mouse::Right))
+        {
+
+        }
+        if (utils::mouse_released (sf::Mouse::Right) && data_editor_.mouse_io_is_released())
+        {
+
+        }
+
+        if (utils::key_pressed(sf::Keyboard::Left ) && data_editor_.keyboard_io_is_released())
+        {
+            if (data_editor_.is_idle_mode())
+                data_storage_.camera.position.x -= int(data_storage_.screen_size.x / data_storage_.camera.scale_modifier_as_pow2);
+        }
+        if (utils::key_pressed(sf::Keyboard::Right) && data_editor_.keyboard_io_is_released())
+        {
+            if (data_editor_.is_idle_mode())
+                data_storage_.camera.position.x += int(data_storage_.screen_size.x / data_storage_.camera.scale_modifier_as_pow2);
+        }
+        if (utils::key_pressed(sf::Keyboard::Up)    && data_editor_.keyboard_io_is_released())
+        {
+            if (data_editor_.is_idle_mode())
+                data_storage_.camera.position.y -= int(data_storage_.screen_size.y / data_storage_.camera.scale_modifier_as_pow2);
+        }
+        if (utils::key_pressed(sf::Keyboard::Down)  && data_editor_.keyboard_io_is_released())
+        {
+            if (data_editor_.is_idle_mode())
+                data_storage_.camera.position.y += int(data_storage_.screen_size.y / data_storage_.camera.scale_modifier_as_pow2);
+        }
+
+        // --- Zooming
+        if (utils::key_pressed(sf::Keyboard::Subtract))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.zoom_out();
+        }
+        if (utils::key_pressed(sf::Keyboard::Add))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.zoom_in();
+        }
+        if (utils::key_pressed(sf::Keyboard::LBracket))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.zoom_out();
+        }
+        if (utils::key_pressed(sf::Keyboard::RBracket))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.zoom_in();
+        }
+
+        // --- Hotkeys
+        if (utils::key_pressed(sf::Keyboard::P))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (data_storage_.settings.disable_interface_on_screenshot)
+                    data_editor_.screenshot_without_interface();
+                else
+                    data_editor_.screenshot_with_interface();
+        }
+
+        if (utils::key_pressed(sf::Keyboard::Escape))
+        {
+            if (data_editor_.message_is_opened())
+                data_editor_.close_message();
+            else if (utils::mouse_down(sf::Mouse::Left))
+            {
+                if (data_editor_.is_camera_moving_mode())
+                    data_editor_.restore_camera_position();
+            }
+            else
+                data_editor_.flip_exit_popup_state();
+        }
+        if (utils::key_pressed(sf::Keyboard::Space))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                engine_.set_pause(!engine_.get_pause_state());
+        }
+
+        auto entity = data_storage_.entities_storage.get_selected_entity();
+        auto body = (entity == nullptr ? nullptr : entity->get_main_body());
+
+        if (utils::key_down(sf::Keyboard::Q))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (body != nullptr)
+                    body->set_angular_speed(-(float)PI4);
+        }
+        if (utils::key_down(sf::Keyboard::E))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (body != nullptr)
+                    body->set_angular_speed((float)PI4);
+        }
+        if (utils::key_down(sf::Keyboard::R))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (body != nullptr)
+                    body->set_angular_speed(0);
+        }
+
+        if (utils::key_down(sf::Keyboard::W))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (body != nullptr)
+                    body->accelerate(sf::Vector2f{ 0.f, -2500.f } * (data_storage_.status.delta_time / 16.f));
+        }
+        if (utils::key_down(sf::Keyboard::A))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (body != nullptr)
+                    body->accelerate(sf::Vector2f{ -2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
+        }
+        if (utils::key_down(sf::Keyboard::S))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (body != nullptr)
+                    body->accelerate(sf::Vector2f{ 0.f, 2500.f } * (data_storage_.status.delta_time / 16.f));
+        }
+        if (utils::key_down(sf::Keyboard::D))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                if (body != nullptr)
+                    body->accelerate(sf::Vector2f{ 2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
+        }
+
+        if (utils::key_pressed(sf::Keyboard::Num1))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.load_scene(1);
+        }
+        if (utils::key_pressed(sf::Keyboard::Num2))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.load_scene(2);
+        }
+        if (utils::key_pressed(sf::Keyboard::Num3))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.load_scene(3);
+        }
+        if (utils::key_pressed(sf::Keyboard::Num4))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.load_scene(4);
+        }
+
+        // --- //
+    }
 }

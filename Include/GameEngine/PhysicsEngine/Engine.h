@@ -30,6 +30,7 @@ namespace physics
 
         void set_pause(bool flag);
         bool get_pause_state();
+        void do_step();
 
 #ifdef DEBUG
         const std::vector<graphics::DebugDraw>& get_debug_entities();
@@ -45,5 +46,6 @@ namespace physics
         static int32_t steps_amount;
 
         bool paused_;
+        bool do_step_;
     };
 } // namespace physics
