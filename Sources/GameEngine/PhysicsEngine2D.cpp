@@ -20,7 +20,7 @@
 PhysicsEngine2D::PhysicsEngine2D(const std::string& app_title)
     : window_      (data_storage_, app_title),
       data_loader_ (data_storage_, window_, engine_),
-      data_editor_ (data_storage_, window_),
+      data_editor_ (data_storage_, window_, engine_),
       renderer_    (data_storage_, data_loader_, window_),
       interface_   (data_storage_, data_loader_, window_)
 {
@@ -251,48 +251,72 @@ void PhysicsEngine2D::process_inputs()
         }
     }
 
+    auto entity = data_storage_.entities_storage.get_selected_entity();
+    auto body = (entity == nullptr ? nullptr : entity->get_main_body());
+
     if (utils::key_down(sf::Keyboard::Q))
     {
         if (data_editor_.keyboard_io_is_released())
-            if (auto body = engine_.get_body(1))
+            if (body != nullptr)
                 body->set_angular_speed(-(float)PI4);
     }
     if (utils::key_down(sf::Keyboard::E))
     {
         if (data_editor_.keyboard_io_is_released())
-            if (auto body = engine_.get_body(1))
+            if (body != nullptr)
                 body->set_angular_speed((float)PI4);
     }
     if (utils::key_down(sf::Keyboard::R))
     {
         if (data_editor_.keyboard_io_is_released())
-            if (auto body = engine_.get_body(1))
+            if (body != nullptr)
                 body->set_angular_speed(0);
     }
 
     if (utils::key_down(sf::Keyboard::W))
     {
         if (data_editor_.keyboard_io_is_released())
-            if (auto body = engine_.get_body(1))
+            if (body != nullptr)
                 body->accelerate(sf::Vector2f{ 0.f, -2500.f } * (data_storage_.status.delta_time / 16.f));
     }
     if (utils::key_down(sf::Keyboard::A))
     {
         if (data_editor_.keyboard_io_is_released())
-            if (auto body = engine_.get_body(1))
+            if (body != nullptr)
                 body->accelerate(sf::Vector2f{ -2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
     }
     if (utils::key_down(sf::Keyboard::S))
     {
         if (data_editor_.keyboard_io_is_released())
-            if (auto body = engine_.get_body(1))
+            if (body != nullptr)
                 body->accelerate(sf::Vector2f{ 0.f, 2500.f } * (data_storage_.status.delta_time / 16.f));
     }
     if (utils::key_down(sf::Keyboard::D))
     {
         if (data_editor_.keyboard_io_is_released())
-            if (auto body = engine_.get_body(1))
+            if (body != nullptr)
                 body->accelerate(sf::Vector2f{ 2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
+    }
+
+    if (utils::key_pressed(sf::Keyboard::Num1))
+    {
+        if (data_editor_.keyboard_io_is_released())
+            data_editor_.load_scene(1);
+    }
+    if (utils::key_pressed(sf::Keyboard::Num2))
+    {
+        if (data_editor_.keyboard_io_is_released())
+            data_editor_.load_scene(2);
+    }
+    if (utils::key_pressed(sf::Keyboard::Num3))
+    {
+        if (data_editor_.keyboard_io_is_released())
+            data_editor_.load_scene(3);
+    }
+    if (utils::key_pressed(sf::Keyboard::Num4))
+    {
+        if (data_editor_.keyboard_io_is_released())
+            data_editor_.load_scene(4);
     }
 
     // --- //

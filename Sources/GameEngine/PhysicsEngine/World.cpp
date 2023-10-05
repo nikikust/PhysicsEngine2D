@@ -1,12 +1,6 @@
 #include <GameEngine/PhysicsEngine/World.h>
 
 
-#ifdef USE_GRAVITY
-sf::Vector2f physics::World::gravity_{ 0.f, 980.f };
-#else
-sf::Vector2f physics::World::gravity_{ 0.f, 0.f };
-#endif
-
 namespace physics
 {
 	int32_t World::max_world_id = 0;
@@ -81,6 +75,21 @@ namespace physics
     const std::unordered_map<int32_t, std::shared_ptr<physics::RigidBody>>& World::get_bodies()
     {
         return bodies_;
+    }
+
+    void World::set_gravity(const sf::Vector2f acceleration)
+    {
+        gravity_ = acceleration;
+    }
+
+    void World::clear()
+    {
+        gravity_ = { 0.f, 0.f };
+
+        contact_1.reset();
+        contacts.clear();
+        tree_.reset();
+        bodies_.clear();
     }
 
     void World::update_contacts()

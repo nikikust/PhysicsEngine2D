@@ -30,6 +30,12 @@ namespace physics
         /// Get reference to the map of all bodies in this world stored under their IDs
         const std::unordered_map<int32_t, std::shared_ptr<physics::RigidBody>>& get_bodies();
 
+        /// Set gravity in this world
+        void set_gravity(const sf::Vector2f acceleration);
+
+        /// Removes all bodies from this world
+        void clear();
+
 #ifdef DEBUG
         const std::vector<graphics::DebugDraw>& get_debug_entities();
 #endif // DEBUG
@@ -56,7 +62,7 @@ namespace physics
 
         // --- Data
 
-        static sf::Vector2f gravity_;
+        sf::Vector2f gravity_;
 
         std::unordered_map<int32_t, std::shared_ptr<physics::RigidBody>> bodies_{};
 

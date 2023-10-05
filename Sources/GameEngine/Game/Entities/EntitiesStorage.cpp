@@ -58,4 +58,19 @@ namespace game
     {
         return entities_;
     }
+
+    void EntitiesStorage::select_entity(const std::shared_ptr<game::Entity>& entity)
+    {
+        selected_entity_ = entity;
+    }
+
+    std::shared_ptr<game::Entity> EntitiesStorage::get_selected_entity() const
+    {
+        return selected_entity_;
+    }
+
+    void EntitiesStorage::clear()
+    {
+        entities_.clear();
+    }
 } // namespace game

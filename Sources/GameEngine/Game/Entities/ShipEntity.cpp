@@ -4,7 +4,7 @@
 namespace game
 {
     ShipEntity::ShipEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-        : Entity(sf::Color::Red), body_(std::make_shared<physics::RigidBody>())
+        : Entity(sf::Color::Red, std::make_shared<physics::RigidBody>())
     {
         const float half_length = 5;
         const float half_width  = 2;
@@ -26,14 +26,14 @@ namespace game
 
                 if (x < max_x - 1)
                 {
-                    auto fixture = body_->add_shape(bar_hor);
+                    auto fixture = main_body_->add_shape(bar_hor);
 
                     if (utils::in(1, y, max_y - 2))
                         fixture->set_sleeping(true);
                 }
                 if (y < max_y - 1)
                 {
-                    auto fixture = body_->add_shape(bar_ver);
+                    auto fixture = main_body_->add_shape(bar_ver);
 
                     if (utils::in(1, x, max_x - 2))
                         fixture->set_sleeping(true);
@@ -41,17 +41,17 @@ namespace game
             }
         }
 
-        body_->set_position(position);
-        body_->set_angle(angle);
+        main_body_->set_position(position);
+        main_body_->set_angle(angle);
 
-        world->add_body(body_);
+        world->add_body(main_body_);
     }
 
 
     void ShipEntity::render(graphics::Painter& painter)
     {
-        auto& transform = body_->get_transform();
-        auto& fixtures  = body_->get_fixtures();
+        auto& transform = main_body_->get_transform();
+        auto& fixtures  = main_body_->get_fixtures();
 
         std::vector<sf::Vector2f> rotated_vertices;
 
@@ -71,10 +71,5 @@ namespace game
 
             painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color);
         }
-    }
-
-    const std::shared_ptr<physics::RigidBody>& ShipEntity::get_body() const
-    {
-        return body_;
     }
 } // namespace game

@@ -30,8 +30,14 @@ namespace game
 
         const std::unordered_map<int32_t, std::shared_ptr<game::Entity>>& get_entities() const;
 
+        void select_entity(const std::shared_ptr<game::Entity>& entity);
+        std::shared_ptr<game::Entity> get_selected_entity() const;
+
+        void clear();
+
     private:
         std::unordered_map<int32_t, std::shared_ptr<game::Entity>> entities_;
 
+        std::shared_ptr<game::Entity> selected_entity_;
     };
 } // namespace game

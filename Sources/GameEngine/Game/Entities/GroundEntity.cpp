@@ -4,7 +4,7 @@
 namespace game
 {
     GroundEntity::GroundEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-        : Entity({ 127, 127, 127 }), body_(std::make_shared<physics::RigidBody>())
+        : Entity({ 127, 127, 127 }, std::make_shared<physics::RigidBody>())
     {
         const float half_length = 25;
         const float half_width = 25;
@@ -31,23 +31,23 @@ namespace game
                 offset_right * (i + 0.5f)                                    // Position
             };
 
-            body_->add_shape(polygon_1)->set_restitution(0.6f);
-            body_->add_shape(polygon_2)->set_restitution(0.6f);
+            main_body_->add_shape(polygon_1)->set_restitution(0.6f);
+            main_body_->add_shape(polygon_2)->set_restitution(0.6f);
         }
 
-        body_->set_position(position)
-              .set_angle(angle)
-              .set_angular_fixation(true)
-              .set_linear_fixation(true, true);
+        main_body_->set_position(position)
+                   .set_angle(angle)
+                   .set_angular_fixation(true)
+                   .set_linear_fixation(true, true);
 
-        world->add_body(body_);
+        world->add_body(main_body_);
     }
 
 
     void GroundEntity::render(graphics::Painter& painter)
     {
-        auto& transform = body_->get_transform();
-        auto& fixtures = body_->get_fixtures();
+        auto& transform = main_body_->get_transform();
+        auto& fixtures  = main_body_->get_fixtures();
 
         std::vector<sf::Vector2f> rotated_vertices;
 
@@ -57,10 +57,5 @@ namespace game
 
             painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color_);
         }
-    }
-
-    const std::shared_ptr<physics::RigidBody>& GroundEntity::get_body() const
-    {
-        return body_;
     }
 } // namespace game

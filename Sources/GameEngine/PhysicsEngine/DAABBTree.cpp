@@ -440,7 +440,7 @@ namespace physics
 
 			float area = m_nodes[index].aabb.get_perimeter();
 
-			ShapeAABB combined_AABB{ union_of(m_nodes[index].aabb, leaf_AABB) };
+			ShapeAABB combined_AABB{ m_nodes[index].aabb, leaf_AABB };
 			float combined_area = combined_AABB.get_perimeter();
 
 			// Cost of creating a new parent for this node and the new leaf
@@ -454,13 +454,13 @@ namespace physics
 			float cost_1;
 			if (m_nodes[child_1].is_leaf())
 			{
-				ShapeAABB aabb{ union_of(leaf_AABB, m_nodes[child_1].aabb) };
+				ShapeAABB aabb{ leaf_AABB, m_nodes[child_1].aabb };
 
 				cost_1 = aabb.get_perimeter() + inheritance_cost;
 			}
 			else
 			{
-				ShapeAABB aabb{ union_of(leaf_AABB, m_nodes[child_1].aabb) };
+				ShapeAABB aabb{ leaf_AABB, m_nodes[child_1].aabb };
 
 				float oldArea = m_nodes[child_1].aabb.get_perimeter();
 				float newArea = aabb.get_perimeter();
@@ -472,13 +472,13 @@ namespace physics
 			float cost_2;
 			if (m_nodes[child_2].is_leaf())
 			{
-				ShapeAABB aabb{ union_of(leaf_AABB, m_nodes[child_2].aabb) };
+				ShapeAABB aabb{ leaf_AABB, m_nodes[child_2].aabb };
 
 				cost_2 = aabb.get_perimeter() + inheritance_cost;
 			}
 			else
 			{
-				ShapeAABB aabb{ union_of(leaf_AABB, m_nodes[child_2].aabb) };
+				ShapeAABB aabb{ leaf_AABB, m_nodes[child_2].aabb };
 
 				float oldArea = m_nodes[child_2].aabb.get_perimeter();
 				float newArea = aabb.get_perimeter();

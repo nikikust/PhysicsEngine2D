@@ -11,6 +11,7 @@ namespace physics
 		ShapeAABB(ShapeAABB&);
 		ShapeAABB(const ShapeAABB&);
 		ShapeAABB(const sf::Vector2f& min, const sf::Vector2f& max);
+		ShapeAABB(const ShapeAABB& aabb_A, const ShapeAABB& aabb_B);
 
 		/// Returns true if two AABBs collided
 		bool collides(const ShapeAABB& aabb) const;

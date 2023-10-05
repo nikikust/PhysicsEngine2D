@@ -9,7 +9,7 @@ namespace game
 	class Entity
 	{
 	public:
-		Entity(const sf::Color& color = sf::Color::White);
+		Entity(const sf::Color& color, std::shared_ptr<physics::RigidBody> main_body);
 
 		void      set_color(const sf::Color& color);
 		sf::Color get_color() const;
@@ -18,10 +18,12 @@ namespace game
 
 		virtual void render(graphics::Painter& painter) = 0;
 
+		std::shared_ptr<physics::RigidBody>& get_main_body();
+
 	protected:
 		sf::Color color_;
 
-		
+		std::shared_ptr<physics::RigidBody> main_body_;
 
 		// --- //
 

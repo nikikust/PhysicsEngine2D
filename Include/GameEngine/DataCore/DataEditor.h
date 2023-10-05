@@ -1,12 +1,13 @@
 #pragma once
 #include <GameEngine/GUIEngine/Window.h>
 #include <GameEngine/DataCore/DataStorage.h>
+#include <GameEngine/PhysicsEngine/Engine.h>
 
 
 class DataEditor
 {
 public:
-    DataEditor(DataStorage& data_storage, graphics::Window& window);
+    DataEditor(DataStorage& data_storage, graphics::Window& window, physics::Engine& engine);
     DataEditor() = delete;
     DataEditor(DataEditor&) = delete;
     DataEditor(DataEditor&&) = delete;
@@ -42,12 +43,19 @@ public:
 
     void flip_exit_popup_state();
 
+    void load_scene(int32_t id);
+
 private:
     void make_screenshot();
+
+    void load_scene_1(); // specified entities
+    void load_scene_2(); // random entities with ground
+    void load_scene_3(); // scene with ships
+    void load_scene_4(); // bullets test
 
 private:
     DataStorage& data_storage_;
 
     graphics::Window& window_;
-
+    physics::Engine&  engine_;
 };

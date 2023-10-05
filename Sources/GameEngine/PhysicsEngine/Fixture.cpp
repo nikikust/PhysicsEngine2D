@@ -52,10 +52,9 @@ namespace physics
             throw("Unknown shape type to calculate AABB!");
         }
 
-        cached_transform_ = body->get_transform();
         cached_AABB_ = base_AABB_;
 
-        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), cached_transform_);
+        auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), body->get_transform());
         cached_AABB_.move(position_rotated);
 
         update_physical_data();
