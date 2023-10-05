@@ -70,44 +70,17 @@ namespace physics
     }
 
 
-    const std::shared_ptr<Shape>& Fixture::get_shape() const
-    {
-        return shape_;
-    }
-
     const ShapeAABB& Fixture::get_AABB()
     {
         cached_AABB_ = base_AABB_;
+
+        ShapeAABB new_AABB{ base_AABB_ };
 
         auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), body_->get_transform());
         cached_AABB_.move(position_rotated);
 
         return cached_AABB_;
     }
-
-    FixtureNodeData* Fixture::get_node_data() const
-    {
-        return node_data_;
-    }
-
-    Fixture& Fixture::set_node_data(FixtureNodeData* data)
-    {
-        node_data_ = data;
-
-        return *this;
-    }
-
-    float Fixture::get_restitution() const
-    {
-        return restitution_;
-    }
-    Fixture& Fixture::set_restitution(float restitution)
-    {
-        restitution_ = restitution;
-
-        return *this;
-    }
-
 
     bool Fixture::update_physical_data()
     {
@@ -122,43 +95,4 @@ namespace physics
 
         return false;
     }
-
-    const PhysicalData& Fixture::get_physical_data() const
-    {
-        return physical_data_;
-    }
-    PhysicalData Fixture::get_physical_data(const sf::Vector2f axis) const
-    {
-        auto relative_physical_data = physical_data_;
-
-        relative_physical_data.mmoi += relative_physical_data.mass * utils::dot(axis, axis);
-
-        return relative_physical_data;
-    }
-
-    RigidBody* Fixture::get_body() const
-    {
-        return body_;
-    }
-
-    bool Fixture::has_shape()
-    {
-        return shape_ != nullptr;
-    }
-
-    bool Fixture::is_sleeping()
-    {
-        return sleeping_;
-    }
-
-    Fixture& Fixture::set_sleeping(bool flag)
-    {
-        sleeping_ = flag;
-
-        if (node_data_ != nullptr)
-            node_data_->is_sleeping = flag;
-
-        return *this;
-    }
-
 } // namespace physics

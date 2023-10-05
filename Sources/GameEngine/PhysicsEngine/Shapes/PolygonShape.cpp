@@ -45,15 +45,6 @@ namespace physics
         return PhysicalData{ area, mass, (mass > 0.f) ? 1.f / mass : 0.f, center, mmoi };
     }
 
-    void PolygonShape::set_vertices(const std::vector<sf::Vector2f>& vertices)
-    {
-        vertices_ = vertices;
-    }
-    const std::vector<sf::Vector2f>& PolygonShape::get_vertices() const
-    {
-        return vertices_;
-    }
-
     PolygonShape PolygonShape::generate_polygon(const sf::Vector2u& window_size)
     {
         // Vertices

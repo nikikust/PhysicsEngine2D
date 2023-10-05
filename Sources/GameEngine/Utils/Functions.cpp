@@ -13,15 +13,6 @@ namespace utils
         return (a > num) ? a : (b < num) ? b : num; 
     }
 
-    sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return { fminf(A.x, B.x), fminf(A.y, B.y) };
-    }
-    sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return { fmaxf(A.x, B.x), fmaxf(A.y, B.y) };
-    }
-
     bool in(int a, int num, int b)
     {
         return (num >= a && num <= b);
@@ -58,15 +49,6 @@ namespace utils
         return diff.x * diff.x + diff.y * diff.y;
     }
 
-    float dot(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return A.x * B.x + A.y * B.y;
-    }
-    float cross(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return A.x * B.y - B.x * A.y;
-    }
-
     sf::Vector2f normalize(const sf::Vector2f& vector)
     {
         return vector / utils::length(vector);
@@ -79,14 +61,6 @@ namespace utils
     bool is_horizontal_move(const sf::Vector2i& delta)
     {
         return (abs(delta.x) >= abs(delta.y));
-    }
-
-    sf::Vector2f rotate_point(const sf::Vector2f& point, float angle)
-    {
-        return {
-            point.x * cosf(angle) - point.y * sinf(angle),
-            point.x * sinf(angle) + point.y * cosf(angle)
-        };
     }
 
     bool file_exists(const std::string& path)

@@ -58,6 +58,7 @@ namespace physics
         void shift_origin(sf::Vector2f offset);
 
         ShapeAABB get_root_AABB() const;
+        int32_t get_height() const;
 
         void reset();
 
@@ -89,6 +90,7 @@ namespace physics
     };
 
 
+    // Inline section
     template<typename Callback>
     inline void DAABBTree::query(Callback* callback, const ShapeAABB& aabb) const
     {
@@ -162,5 +164,13 @@ namespace physics
                 }
             }
         }
+    }
+
+    inline int32_t DAABBTree::get_height() const
+    {
+        if (m_root_id == nullnode)
+            return 0;
+
+        return m_nodes[m_root_id].height;
     }
 } // namespace physics

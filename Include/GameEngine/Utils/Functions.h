@@ -116,4 +116,31 @@ namespace utils
     bool mouse_down     (const sf::Mouse::Button& button);
     bool mouse_released (const sf::Mouse::Button& button);
 
+
+    // Inline section
+    inline sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return { fminf(A.x, B.x), fminf(A.y, B.y) };
+    }
+    inline sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return { fmaxf(A.x, B.x), fmaxf(A.y, B.y) };
+    }
+
+    inline float dot(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return A.x * B.x + A.y * B.y;
+    }
+    inline float cross(const sf::Vector2f& A, const sf::Vector2f& B)
+    {
+        return A.x * B.y - B.x * A.y;
+    }
+
+    inline sf::Vector2f rotate_point(const sf::Vector2f& point, float angle)
+    {
+        return {
+            point.x * cosf(angle) - point.y * sinf(angle),
+            point.x * sinf(angle) + point.y * cosf(angle)
+        };
+    }
 } // namespace utils

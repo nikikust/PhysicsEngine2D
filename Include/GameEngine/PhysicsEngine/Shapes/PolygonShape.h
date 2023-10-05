@@ -20,4 +20,16 @@ namespace physics
     private:
         std::vector<sf::Vector2f> vertices_;
     };
+
+
+    // Inline section
+    inline void PolygonShape::set_vertices(const std::vector<sf::Vector2f>& vertices)
+    {
+        vertices_ = vertices;
+    }
+
+    inline const std::vector<sf::Vector2f>& PolygonShape::get_vertices() const
+    {
+        return vertices_;
+    }
 } // namespace physics

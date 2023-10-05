@@ -41,4 +41,26 @@ namespace physics
         // --- Config
         static int32_t      max_object_id;
     };
+
+
+    // Inline section
+    inline sf::Vector2f Shape::get_position() const
+    {
+        return position_;
+    }
+
+    inline void Shape::set_position(const sf::Vector2f& position)
+    {
+        position_ = position;
+    }
+
+    inline ShapeType Shape::get_shape() const
+    {
+        return shape_type_;
+    }
+
+    inline int32_t Shape::get_id() const
+    {
+        return id_;
+    }
 } // namespace physics

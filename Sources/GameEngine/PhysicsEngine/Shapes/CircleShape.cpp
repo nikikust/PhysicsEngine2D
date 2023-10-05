@@ -19,15 +19,6 @@ namespace physics
         return { area , mass, (mass > 0.f) ? 1.f / mass : 0.f, {}, mmoi };
     }
 
-    void CircleShape::set_radius(float radius)
-    {
-        radius_ = radius;
-    }
-    float CircleShape::get_radius() const
-    {
-        return radius_;
-    }
-
     CircleShape CircleShape::generate_circle(const sf::Vector2u& window_size)
     {
         // Radius
