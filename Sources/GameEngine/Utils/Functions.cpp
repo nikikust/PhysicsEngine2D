@@ -51,7 +51,12 @@ namespace utils
 
     sf::Vector2f normalize(const sf::Vector2f& vector)
     {
-        return vector / utils::length(vector);
+        auto length = utils::length(vector);
+
+        if (length == 0.f)
+            return { 1.f, 0.f };
+
+        return vector / length;
     }
 
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B)
