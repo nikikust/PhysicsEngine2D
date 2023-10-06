@@ -27,38 +27,6 @@ namespace utils
         return start + (rand() % amount) / float(amount) * (end - start);
     }
 
-    float length(const sf::Vector2f& x)
-    {
-        return sqrt(x.x * x.x + x.y * x.y);
-    }
-    float distance(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        sf::Vector2f diff = B - A;
-
-        return sqrt(diff.x * diff.x + diff.y * diff.y);
-    }
-
-    float length_squared(const sf::Vector2f& x)
-    {
-        return x.x * x.x + x.y * x.y;
-    }
-    float distance_squared(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        sf::Vector2f diff = B - A;
-
-        return diff.x * diff.x + diff.y * diff.y;
-    }
-
-    sf::Vector2f normalize(const sf::Vector2f& vector)
-    {
-        auto length = utils::length(vector);
-
-        if (length == 0.f)
-            return { 1.f, 0.f };
-
-        return vector / length;
-    }
-
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B)
     {
         return (abs(B.x - A.x) >= abs(B.y - A.y));

@@ -312,6 +312,11 @@ namespace physics
         return nullptr;
     }
 
+    inline const std::vector<std::shared_ptr<physics::Fixture>>& RigidBody::get_fixtures() const
+    {
+        return fixtures_;
+    }
+
     inline const DAABBTree& RigidBody::get_tree() const
     {
         return internal_tree_;

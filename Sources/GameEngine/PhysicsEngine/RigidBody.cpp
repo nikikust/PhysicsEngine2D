@@ -140,11 +140,6 @@ namespace physics
         }
     }
 
-    const std::vector<std::shared_ptr<physics::Fixture>>& RigidBody::get_fixtures() const
-    {
-        return fixtures_;
-    }
-
     // --- //
     void RigidBody::update_physical_data()
     {
