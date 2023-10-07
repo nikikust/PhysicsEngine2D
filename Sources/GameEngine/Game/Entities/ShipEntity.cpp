@@ -9,7 +9,7 @@ namespace game
         const float half_length = 5;
         const float half_width  = 2;
 
-        std::vector<sf::Vector2f> box{ {-half_length, -half_width}, { half_length, -half_width}, 
+        std::vector<sf::Vector2f> box{ {-half_length, -half_width}, { half_length, -half_width},
                                        { half_length,  half_width}, {-half_length,  half_width} };
 
         int32_t max_x = 75, max_y = 75;

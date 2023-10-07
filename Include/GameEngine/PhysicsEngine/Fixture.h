@@ -6,7 +6,6 @@
 namespace physics
 {
 	class RigidBody;
-
 	class Fixture;
 
 	struct FixtureNodeData
@@ -45,6 +44,7 @@ namespace physics
 		PhysicalData        get_physical_data(const sf::Vector2f axis) const;
 
 		RigidBody* get_body() const;
+		int32_t    get_id() const;
 
 		bool has_shape();
 
@@ -121,6 +121,11 @@ namespace physics
 		return body_;
 	}
 
+	inline int32_t Fixture::get_id() const
+	{
+		return shape_->get_id();
+	}
+
 	inline bool Fixture::has_shape()
 	{
 		return shape_ != nullptr;
@@ -129,16 +134,6 @@ namespace physics
 	inline bool Fixture::is_sleeping()
 	{
 		return sleeping_;
-	}
-
-	inline Fixture& Fixture::set_sleeping(bool flag)
-	{
-		sleeping_ = flag;
-
-		if (node_data_ != nullptr)
-			node_data_->is_sleeping = flag;
-
-		return *this;
 	}
 
 } // namespace physics

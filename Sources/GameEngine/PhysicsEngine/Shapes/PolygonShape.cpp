@@ -21,17 +21,27 @@ namespace physics
 
         // Take each vertex pair starting from the last-first vertex in order to consider all sides.
         auto count = (int32_t)vertices_.size();
+
+        auto& point = vertices_.front();
+
         for (int32_t i = 0; i < count; ++i)
         {
-            int32_t i_and_one = (i == count - 1) ? 0 : i + 1;
+            int32_t i_and_one = (i + 1 == count) ? 0 : i + 1;
+
             sf::Vector2f A = vertices_.at(i);
             sf::Vector2f B = vertices_.at(i_and_one);
 
-            float area_step = physics::triangle_area(A, B);
-            float mass_step = density * area_step;
-            sf::Vector2f center_step = physics::triangle_center(A, B);
+            sf::Vector2f edge_A = A - point;
+            sf::Vector2f edge_B = B - point;
 
-            float mmoi_step = physics::triangle_mmoi(A, B, mass_step);
+            float area_step = physics::triangle_area(edge_A, edge_B);
+            float mass_step = density * area_step;
+            sf::Vector2f center_step = physics::triangle_center(edge_A, edge_B);
+
+            float mmoi_step = physics::triangle_mmoi(edge_A, edge_B, mass_step);
+
+            if (mass_step == 0.f)
+                continue;
 
             area += area_step;
             center = (mass * center + mass_step * center_step) / (mass + mass_step);

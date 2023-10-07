@@ -61,26 +61,15 @@ namespace physics
 
     void RigidBody::update_internal_AABB()
     {
-        for (auto& fixture : fixtures_)
+        for (auto& fixture : active_fixtures_)
         {
             auto data = fixture->get_node_data();
 
             data->aabb = fixture->get_AABB();
-            data->is_sleeping = fixture->is_sleeping();
 
-            if (data->is_sleeping && data->node_id != nullnode)
-            {
-                internal_tree_.remove(data->node_id);
-                data->node_id = nullnode;
-            }
-            else if (!data->is_sleeping && data->node_id == nullnode)
-            {
-                data->node_id = internal_tree_.insert(data->aabb, data);
-            }
-            else if (data->node_id != nullnode)
-            {
-                internal_tree_.move(data->node_id, data->aabb);
-            }
+            assert(data->node_id != nullnode);
+
+            internal_tree_.move(data->node_id, data->aabb);
         }
     }
 
@@ -97,11 +86,12 @@ namespace physics
         update_physical_data_append(fixture);
 
         fixtures_.push_back(fixture);
+        active_fixtures_.push_back(fixture);
 
-        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_shape()->get_id());
+        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_id());
         fixture->set_node_data(data);
 
-        data->node_id = internal_tree_.insert(fixture->get_AABB(), data);
+        data->node_id = internal_tree_.insert(data->aabb, data);
 
         return fixture;
     }
@@ -113,12 +103,12 @@ namespace physics
         update_physical_data_append(fixture);
 
         fixtures_.push_back(fixture);
+        active_fixtures_.push_back(fixture);
 
-        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_shape()->get_id());
-
+        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_id());
         fixture->set_node_data(data);
 
-        data->node_id = internal_tree_.insert(fixture->get_AABB(), data);
+        data->node_id = internal_tree_.insert(data->aabb, data);
 
         return fixture;
     }
@@ -127,16 +117,69 @@ namespace physics
     {
         for (auto it = fixtures_.begin(); it != fixtures_.end(); ++it)
         {
-            if ((*it)->get_shape()->get_id() == id)
+            if ((*it)->get_id() == id)
             {
                 int32_t node_id = ((FixtureNodeData*)((*it)->get_node_data()))->node_id;
 
-                internal_tree_.remove(node_id);
+                set_active_fixture(id, false);
 
                 fixtures_.erase(it);
 
                 return;
             }
+        }
+    }
+
+    void RigidBody::set_active_fixture(uint32_t id, bool flag)
+    {
+        bool is_active = false;
+        std::vector<std::shared_ptr<Fixture>>::iterator search_for;
+
+        for (search_for = active_fixtures_.begin(); search_for != active_fixtures_.end(); ++search_for)
+        {
+            if ((*search_for)->get_id() == id)
+            {
+                is_active = true;
+
+                break;
+            }
+        }
+
+        if (flag == true) // need to make active
+        {
+            if (is_active == false)
+            {
+                for (const auto& fixture : fixtures_)
+                {
+                    if (fixture->get_id() == id)
+                    {
+                        auto data = fixture->get_node_data();
+
+                        active_fixtures_.push_back(fixture);
+
+                        data->node_id = internal_tree_.insert(data->aabb, data);
+
+                        return;
+                    }
+                }
+            }
+            else // already added
+                return; 
+        }
+        else // need to make inactive
+        {
+            if (is_active == true)
+            {
+                auto data = (*search_for)->get_node_data();
+
+                internal_tree_.remove(data->node_id);
+
+                active_fixtures_.erase(search_for);
+
+                return;
+            }
+            else // already removed
+                return;
         }
     }
 

@@ -95,4 +95,21 @@ namespace physics
 
         return false;
     }
+
+    Fixture& Fixture::set_sleeping(bool flag)
+    {
+        sleeping_ = flag;
+
+        assert(node_data_ != nullptr);
+
+        if (flag == true)
+            node_data_->aabb = get_AABB();
+        node_data_->is_sleeping = flag;
+
+        assert(body_ != nullptr);
+
+        body_->set_active_fixture(shape_->get_id(), !flag);
+
+        return *this;
+    }
 } // namespace physics

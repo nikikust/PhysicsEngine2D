@@ -81,6 +81,8 @@ namespace physics
         std::shared_ptr<physics::Fixture> get_fixture    (uint32_t id) const;
         void                              remove_fixture (uint32_t id);
 
+        void set_active_fixture(uint32_t id, bool flag);
+
         const std::vector<std::shared_ptr<physics::Fixture>>& get_fixtures() const;
 
         const DAABBTree& get_tree() const;
@@ -112,6 +114,7 @@ namespace physics
 		
         // --- Shapes
         std::vector<std::shared_ptr<physics::Fixture>> fixtures_;
+        std::vector<std::shared_ptr<physics::Fixture>> active_fixtures_;
         DAABBTree internal_tree_;
 
         RigidBodyNodeData* node_data_;
@@ -306,7 +309,7 @@ namespace physics
     inline std::shared_ptr<physics::Fixture> RigidBody::get_fixture(uint32_t id) const
     {
         for (auto& fixture : fixtures_)
-            if (fixture->get_shape()->get_id() == id)
+            if (fixture->get_id() == id)
                 return fixture;
 
         return nullptr;
