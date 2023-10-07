@@ -57,7 +57,7 @@ namespace game
 
         sf::Color color = color_;
 
-        for (auto& fixture : fixtures)
+        for (const auto& fixture : fixtures)
         {
             if (fixture->is_sleeping())
                 continue;

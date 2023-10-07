@@ -38,7 +38,7 @@ namespace physics
         return std::nullopt;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::circles_collision(std::shared_ptr<Fixture> circle_A_raw, std::shared_ptr<Fixture> circle_B_raw, 
+    std::optional<CollisionInfo> CollisionSolver::circles_collision(const std::shared_ptr<Fixture>& circle_A_raw, const std::shared_ptr<Fixture>& circle_B_raw, 
                                                                     const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -67,7 +67,7 @@ namespace physics
             return std::nullopt;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::polygons_collision(std::shared_ptr<Fixture> polygon_A_raw, std::shared_ptr<Fixture> polygon_B_raw, 
+    std::optional<CollisionInfo> CollisionSolver::polygons_collision(const std::shared_ptr<Fixture>& polygon_A_raw, const std::shared_ptr<Fixture>& polygon_B_raw, 
                                                                      const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -141,7 +141,7 @@ namespace physics
         } };
     }
 
-    std::optional<CollisionInfo> CollisionSolver::polygon_circle_collision(std::shared_ptr<Fixture> polygon_raw, std::shared_ptr<Fixture> circle_raw, 
+    std::optional<CollisionInfo> CollisionSolver::polygon_circle_collision(const std::shared_ptr<Fixture>& polygon_raw, const std::shared_ptr<Fixture>& circle_raw, 
                                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -213,7 +213,7 @@ namespace physics
         } };
     }
 
-    std::optional<CollisionInfo> CollisionSolver::circle_polygon_collision(std::shared_ptr<Fixture> circle_raw, std::shared_ptr<Fixture> polygon_raw, 
+    std::optional<CollisionInfo> CollisionSolver::circle_polygon_collision(const std::shared_ptr<Fixture>& circle_raw, const std::shared_ptr<Fixture>& polygon_raw, 
                                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         auto result = polygon_circle_collision(polygon_raw, circle_raw, transform_B, transform_A);
@@ -248,8 +248,8 @@ namespace physics
         }
     }
 
-    sf::Vector2f CollisionSolver::circles_collision_points(std::shared_ptr<Shape> circle_A_raw, std::shared_ptr<Shape> circle_B_raw,
-                                                          const Transform& transform_A, const Transform& transform_B) const
+    sf::Vector2f CollisionSolver::circles_collision_points(const std::shared_ptr<Shape>& circle_A_raw, const std::shared_ptr<Shape>& circle_B_raw,
+                                                           const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
         auto circle_A = std::dynamic_pointer_cast<CircleShape>(circle_A_raw);
@@ -275,8 +275,8 @@ namespace physics
         return contact;
     }
 
-    sf::Vector2f CollisionSolver::polygons_collision_points(std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw,
-                                                           const Transform& transform_A, const Transform& transform_B) const
+    sf::Vector2f CollisionSolver::polygons_collision_points(const std::shared_ptr<Shape>& polygon_A_raw, const std::shared_ptr<Shape>& polygon_B_raw,
+                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
         auto polygon_A = std::dynamic_pointer_cast<PolygonShape>(polygon_A_raw);
@@ -366,8 +366,8 @@ namespace physics
             return (contacts.collision_point_1 + contacts.collision_point_2) / 2.f;
     }
 
-    sf::Vector2f CollisionSolver::circle_polygon_collision_points(std::shared_ptr<Shape> polygon_raw, std::shared_ptr<Shape> circle_raw,
-                                                                 const Transform& transform_A, const Transform& transform_B) const
+    sf::Vector2f CollisionSolver::circle_polygon_collision_points(const std::shared_ptr<Shape>& polygon_raw, const std::shared_ptr<Shape>& circle_raw,
+                                                                  const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
         auto polygon = std::dynamic_pointer_cast<PolygonShape>(polygon_raw);
@@ -563,7 +563,7 @@ namespace physics
 
 
     // --- Aditional methods
-    std::pair<float, float> CollisionSolver::polygon_projection(std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, const Transform& transform) const
+    std::pair<float, float> CollisionSolver::polygon_projection(const std::shared_ptr<PolygonShape>& polygon, const sf::Vector2f& axis, const Transform& transform) const
     {
         float min_projection = std::numeric_limits<float>::max();
         float max_projection = std::numeric_limits<float>::lowest();
@@ -583,7 +583,7 @@ namespace physics
         return { min_projection, max_projection };
     }
 
-    std::pair<float, float> CollisionSolver::circle_projection(std::shared_ptr<CircleShape> circle, const sf::Vector2f& axis, const Transform& transform) const
+    std::pair<float, float> CollisionSolver::circle_projection(const std::shared_ptr<CircleShape>& circle, const sf::Vector2f& axis, const Transform& transform) const
     {
         float central = utils::dot(physics::rotate_and_move_point(circle->get_position(), transform), axis);
 
@@ -594,7 +594,7 @@ namespace physics
     }
 
 
-    sf::Vector2f CollisionSolver::circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, const Transform& transform_A, const Transform& transform_B) const
+    sf::Vector2f CollisionSolver::circle_polygon_closest_point(const std::shared_ptr<PolygonShape>& polygon, const std::shared_ptr<CircleShape>& circle, const Transform& transform_A, const Transform& transform_B) const
     {
         sf::Vector2f closest_point{};
         float min_distance = std::numeric_limits<float>::max();

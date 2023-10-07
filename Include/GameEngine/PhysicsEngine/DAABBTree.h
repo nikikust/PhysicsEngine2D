@@ -131,13 +131,18 @@ namespace physics
 
         while (!stack.empty())
         {
-            auto [node_id_1, node_id_2] = stack.top(); stack.pop();
+            auto& [node_id_1, node_id_2] = stack.top();
 
             if (node_id_1 == nullnode || node_id_2 == nullnode)
+            {
+                stack.pop();
                 continue;
+            }
 
             auto& node_1 = this->m_nodes[node_id_1];
             auto& node_2 = tree .m_nodes[node_id_2];
+
+            stack.pop();
 
             if (node_1.aabb.collides(node_2.aabb))
             {

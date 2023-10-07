@@ -48,19 +48,19 @@ namespace physics
 #endif // DEBUG
 
     private:
-        std::optional<CollisionInfo> circles_collision        (std::shared_ptr<Fixture> circle_A_raw,  std::shared_ptr<Fixture> circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> polygons_collision       (std::shared_ptr<Fixture> polygon_A_raw, std::shared_ptr<Fixture> polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> polygon_circle_collision (std::shared_ptr<Fixture> polygon_raw,   std::shared_ptr<Fixture> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> circle_polygon_collision (std::shared_ptr<Fixture> circle_raw,    std::shared_ptr<Fixture> polygon_raw,   const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> circles_collision        (const std::shared_ptr<Fixture>& circle_A_raw,  const std::shared_ptr<Fixture>& circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> polygons_collision       (const std::shared_ptr<Fixture>& polygon_A_raw, const std::shared_ptr<Fixture>& polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> polygon_circle_collision (const std::shared_ptr<Fixture>& polygon_raw,   const std::shared_ptr<Fixture>& circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> circle_polygon_collision (const std::shared_ptr<Fixture>& circle_raw,    const std::shared_ptr<Fixture>& polygon_raw,   const Transform& transform_A, const Transform& transform_B) const;
 
-        std::pair<float, float> polygon_projection (std::shared_ptr<PolygonShape> polygon, const sf::Vector2f& axis, const Transform& transform) const;
-        std::pair<float, float> circle_projection  (std::shared_ptr<CircleShape>  circle,  const sf::Vector2f& axis, const Transform& transform) const;
+        std::pair<float, float> polygon_projection (const std::shared_ptr<PolygonShape>& polygon, const sf::Vector2f& axis, const Transform& transform) const;
+        std::pair<float, float> circle_projection  (const std::shared_ptr<CircleShape>&  circle,  const sf::Vector2f& axis, const Transform& transform) const;
 
-        sf::Vector2f circle_polygon_closest_point(std::shared_ptr<PolygonShape> polygon, std::shared_ptr<CircleShape> circle, const Transform& transform_A, const Transform& transform_B) const;
+        sf::Vector2f circle_polygon_closest_point(const std::shared_ptr<PolygonShape>& polygon, const std::shared_ptr<CircleShape>& circle, const Transform& transform_A, const Transform& transform_B) const;
 
-        sf::Vector2f circles_collision_points        (std::shared_ptr<Shape> circle_A_raw,  std::shared_ptr<Shape> circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
-        sf::Vector2f circle_polygon_collision_points (std::shared_ptr<Shape> polygon_raw,   std::shared_ptr<Shape> circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
-        sf::Vector2f polygons_collision_points       (std::shared_ptr<Shape> polygon_A_raw, std::shared_ptr<Shape> polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
+        sf::Vector2f circles_collision_points        (const std::shared_ptr<Shape>& circle_A_raw,  const std::shared_ptr<Shape>& circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
+        sf::Vector2f circle_polygon_collision_points (const std::shared_ptr<Shape>& polygon_raw,   const std::shared_ptr<Shape>& circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
+        sf::Vector2f polygons_collision_points       (const std::shared_ptr<Shape>& polygon_A_raw, const std::shared_ptr<Shape>& polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
 
     };
 } // namespace physics
