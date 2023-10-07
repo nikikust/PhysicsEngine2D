@@ -88,15 +88,9 @@ namespace physics
         float total_min_depth = std::numeric_limits<float>::max();
         sf::Vector2f normal{};
 
-        auto count = (int32_t)vertices_A.size();
-        for (int32_t i = 0; i < count; ++i)
+        for (const auto& normal_A : polygon_A->get_normals())
         {
-            int32_t i_and_one = (i == count - 1) ? 0 : i + 1;
-            auto point_A = physics::rotate_and_move_point(polygon_A_position + vertices_A.at(i), transform_A);
-            auto point_B = physics::rotate_and_move_point(polygon_A_position + vertices_A.at(i_and_one), transform_A);
-
-            auto edge = point_B - point_A;
-            auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
+            auto axis = physics::rotate_point(normal_A, transform_A.rotation);
 
             auto [projections_A_min, projections_A_max] = polygon_projection(polygon_A, axis, transform_A);
             auto [projections_B_min, projections_B_max] = polygon_projection(polygon_B, axis, transform_B);
@@ -117,15 +111,9 @@ namespace physics
             }
         }
 
-        count = (int32_t)vertices_B.size();
-        for (int32_t i = 0; i < count; ++i)
+        for (const auto& normal_B : polygon_B->get_normals())
         {
-            int32_t i_and_one = (i == count - 1) ? 0 : i + 1;
-            auto point_A = physics::rotate_and_move_point(polygon_B_position + vertices_B.at(i), transform_B);
-            auto point_B = physics::rotate_and_move_point(polygon_B_position + vertices_B.at(i_and_one), transform_B);
-
-            auto edge = point_B - point_A;
-            auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
+            auto axis = physics::rotate_point(normal_B, transform_B.rotation);
 
             auto [projections_A_min, projections_A_max] = polygon_projection(polygon_A, axis, transform_A);
             auto [projections_B_min, projections_B_max] = polygon_projection(polygon_B, axis, transform_B);
@@ -173,15 +161,9 @@ namespace physics
         float total_min_depth = std::numeric_limits<float>::max();
         sf::Vector2f normal{};
 
-        auto count = (int32_t)vertices.size();
-        for (int32_t i = 0; i < count; ++i)
+        for (const auto& normal_A : polygon->get_normals())
         {
-            auto i_and_one = (i == count - 1) ? 0 : i + 1;
-            auto point_A = physics::rotate_and_move_point(polygon_position + vertices.at(i),         transform_A);
-            auto point_B = physics::rotate_and_move_point(polygon_position + vertices.at(i_and_one), transform_A);
-
-            auto edge = point_B - point_A;
-            auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
+            auto axis = physics::rotate_point(normal_A, transform_A.rotation);
 
             auto [projections_A_min, projections_A_max] = polygon_projection(polygon, axis, transform_A);
             auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis, transform_B);

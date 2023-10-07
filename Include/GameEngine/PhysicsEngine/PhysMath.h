@@ -38,6 +38,12 @@ namespace physics
 	/// @return Rotated point
 	sf::Vector2f rotate_point(const sf::Vector2f& point, const Transform& transform);
 
+	/// @brief Rotates point around centroid, specified in transform
+	/// @param point - point to rotate
+	/// @param rotation - rotation rule
+	/// @return Rotated point
+	sf::Vector2f rotate_point(const sf::Vector2f& point, const Rotation& rotation);
+
 
 	/// @brief Rotates point around centroid, specified in transform, and offsets it after
 	/// @param point - point to rotate
@@ -130,6 +136,14 @@ namespace physics
 		return transform.centroid + sf::Vector2f{
 			shifted_point.x * transform.rotation.get_cos() - shifted_point.y * transform.rotation.get_sin(),
 			shifted_point.x * transform.rotation.get_sin() + shifted_point.y * transform.rotation.get_cos()
+		};
+	}
+
+	inline sf::Vector2f rotate_point(const sf::Vector2f& point, const Rotation& rotation)
+	{
+		return sf::Vector2f{
+			point.x * rotation.get_cos() - point.y * rotation.get_sin(),
+			point.x * rotation.get_sin() + point.y * rotation.get_cos()
 		};
 	}
 

@@ -4,8 +4,9 @@
 namespace physics
 {
     PolygonShape::PolygonShape(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& position)
-        : Shape(ShapeType::Polygon, position), vertices_(vertices)
+        : Shape(ShapeType::Polygon, position)
     {
+        set_vertices(vertices);
     }
 
     // --- //
