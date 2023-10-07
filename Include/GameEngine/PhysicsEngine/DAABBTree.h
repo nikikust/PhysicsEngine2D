@@ -50,10 +50,10 @@ namespace physics
         bool move(int32_t node_id, const ShapeAABB& aabb);
 
         template <typename Callback>
-        void query(Callback* callback, const ShapeAABB& aabb) const;
+        void query(Callback* callback, const ShapeAABB& aabb);
 
         template <typename Callback>
-        void query(Callback* callback, const DAABBTree& tree) const;
+        void query(Callback* callback, const DAABBTree& tree);
 
         void shift_origin(sf::Vector2f offset);
 
@@ -87,20 +87,23 @@ namespace physics
 
         int32_t m_capacity;
         int32_t m_size;
+
+
+        std::vector<int32_t> m_stack_;
+        std::vector<std::pair<int32_t, int32_t>> m_pairs_stack_;
     };
 
 
     // Inline section
+
     template<typename Callback>
-    inline void DAABBTree::query(Callback* callback, const ShapeAABB& aabb) const
+    inline void DAABBTree::query(Callback* callback, const ShapeAABB& aabb)
     {
-        std::stack<int32_t, std::vector<int32_t>> stack;
+        m_stack_.emplace_back(m_root_id);
 
-        stack.push(m_root_id);
-
-        while (!stack.empty())
+        while (!m_stack_.empty())
         {
-            int32_t node_id = stack.top(); stack.pop();
+            int32_t node_id = m_stack_.back(); m_stack_.pop_back();
 
             if (node_id == nullnode)
                 continue;
@@ -115,34 +118,32 @@ namespace physics
                 }
                 else
                 {
-                    stack.push(node.child_1);
-                    stack.push(node.child_2);
+                    m_stack_.emplace_back(node.child_1);
+                    m_stack_.emplace_back(node.child_2);
                 }
             }
         }
     }
 
     template<typename Callback>
-    inline void DAABBTree::query(Callback* callback, const DAABBTree& tree) const
+    inline void DAABBTree::query(Callback* callback, const DAABBTree& tree)
     {
-        std::stack<std::pair<int32_t, int32_t>, std::vector<std::pair<int32_t, int32_t>>> stack;
+        m_pairs_stack_.emplace_back(m_root_id, tree.m_root_id);
 
-        stack.push({ m_root_id, tree.m_root_id });
-
-        while (!stack.empty())
+        while (!m_pairs_stack_.empty())
         {
-            auto& [node_id_1, node_id_2] = stack.top();
+            auto& [node_id_1, node_id_2] = m_pairs_stack_.back();
 
             if (node_id_1 == nullnode || node_id_2 == nullnode)
             {
-                stack.pop();
+                m_pairs_stack_.pop_back();
                 continue;
             }
 
             auto& node_1 = this->m_nodes[node_id_1];
             auto& node_2 = tree .m_nodes[node_id_2];
 
-            stack.pop();
+            m_pairs_stack_.pop_back();
 
             if (node_1.aabb.collides(node_2.aabb))
             {
@@ -152,20 +153,20 @@ namespace physics
                 }
                 else if (node_1.is_leaf())
                 {
-                    stack.push({ node_id_1, node_2.child_1 });
-                    stack.push({ node_id_1, node_2.child_2 });
+                    m_pairs_stack_.emplace_back(node_id_1, node_2.child_1);
+                    m_pairs_stack_.emplace_back(node_id_1, node_2.child_2);
                 }
                 else if (node_2.is_leaf())
                 {
-                    stack.push({ node_1.child_1, node_id_2 });
-                    stack.push({ node_1.child_2, node_id_2 });
+                    m_pairs_stack_.emplace_back(node_1.child_1, node_id_2);
+                    m_pairs_stack_.emplace_back(node_1.child_2, node_id_2);
                 }
                 else
                 {
-                    stack.push({ node_1.child_1, node_2.child_1 });
-                    stack.push({ node_1.child_1, node_2.child_2 });
-                    stack.push({ node_1.child_2, node_2.child_1 });
-                    stack.push({ node_1.child_2, node_2.child_2 });
+                    m_pairs_stack_.emplace_back(node_1.child_1, node_2.child_1);
+                    m_pairs_stack_.emplace_back(node_1.child_1, node_2.child_2);
+                    m_pairs_stack_.emplace_back(node_1.child_2, node_2.child_1);
+                    m_pairs_stack_.emplace_back(node_1.child_2, node_2.child_2);
                 }
             }
         }

@@ -86,6 +86,7 @@ namespace physics
         const std::vector<std::shared_ptr<physics::Fixture>>& get_fixtures() const;
 
         const DAABBTree& get_tree() const;
+        DAABBTree& get_tree();
 
         // --- //
 		int32_t get_id() const;
@@ -321,6 +322,11 @@ namespace physics
     }
 
     inline const DAABBTree& RigidBody::get_tree() const
+    {
+        return internal_tree_;
+    }
+
+    inline DAABBTree& RigidBody::get_tree()
     {
         return internal_tree_;
     }

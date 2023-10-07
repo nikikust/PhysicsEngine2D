@@ -3,7 +3,7 @@
 
 namespace game
 {
-    ShipEntity::ShipEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
+    ShipEntity::ShipEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle, int32_t max_x, int32_t max_y)
         : Entity(sf::Color::Red, std::make_shared<physics::RigidBody>())
     {
         const float half_length = 5;
@@ -11,8 +11,6 @@ namespace game
 
         std::vector<sf::Vector2f> box{ {-half_length, -half_width}, { half_length, -half_width},
                                        { half_length,  half_width}, {-half_length,  half_width} };
-
-        int32_t max_x = 75, max_y = 75;
 
         for (int32_t x = 0; x < max_x; ++x)
         {
