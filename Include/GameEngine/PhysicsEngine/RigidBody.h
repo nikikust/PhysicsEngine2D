@@ -75,15 +75,15 @@ namespace physics
         void set_node_data(RigidBodyNodeData* data);
 
         // --- Shapes
-        std::shared_ptr<physics::Fixture> add_shape (const physics::CircleShape&  circle );
-        std::shared_ptr<physics::Fixture> add_shape (const physics::PolygonShape& polygon);
+        physics::Fixture* add_shape (const physics::CircleShape&  circle );
+        physics::Fixture* add_shape (const physics::PolygonShape& polygon);
 
-        std::shared_ptr<physics::Fixture> get_fixture    (uint32_t id) const;
-        void                              remove_fixture (uint32_t id);
+        physics::Fixture* get_fixture    (uint32_t id) const;
+        void              remove_fixture (uint32_t id);
 
         void set_active_fixture(uint32_t id, bool flag);
 
-        const std::vector<std::shared_ptr<physics::Fixture>>& get_fixtures() const;
+        const std::vector<physics::Fixture*>& get_fixtures() const;
 
         const DAABBTree& get_tree() const;
         DAABBTree& get_tree();
@@ -93,8 +93,8 @@ namespace physics
 
 	private:
         void update_physical_data();
-        void update_physical_data_append(std::shared_ptr<physics::Fixture> fixture);
-        void update_physical_data_remove(std::shared_ptr<physics::Fixture> fixture);
+        void update_physical_data_append(physics::Fixture* fixture);
+        void update_physical_data_remove(physics::Fixture* fixture);
 
         // --- Data
         Transform    transform_             = {};
@@ -114,8 +114,8 @@ namespace physics
         bool                  fixed_angle_  = false;
 		
         // --- Shapes
-        std::vector<std::shared_ptr<physics::Fixture>> fixtures_;
-        std::vector<std::shared_ptr<physics::Fixture>> active_fixtures_;
+        std::vector<physics::Fixture*> fixtures_;
+        std::vector<physics::Fixture*> active_fixtures_;
         DAABBTree internal_tree_;
 
         RigidBodyNodeData* node_data_;
@@ -307,7 +307,7 @@ namespace physics
         node_data_ = data;
     }
 
-    inline std::shared_ptr<physics::Fixture> RigidBody::get_fixture(uint32_t id) const
+    inline physics::Fixture* RigidBody::get_fixture(uint32_t id) const
     {
         for (auto& fixture : fixtures_)
             if (fixture->get_id() == id)
@@ -316,7 +316,7 @@ namespace physics
         return nullptr;
     }
 
-    inline const std::vector<std::shared_ptr<physics::Fixture>>& RigidBody::get_fixtures() const
+    inline const std::vector<physics::Fixture*>& RigidBody::get_fixtures() const
     {
         return fixtures_;
     }

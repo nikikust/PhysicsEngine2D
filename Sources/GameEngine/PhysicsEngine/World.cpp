@@ -127,8 +127,8 @@ namespace physics
         if (fixture_1->is_sleeping || fixture_2->is_sleeping)
             return;
 
-        auto fixture_A = fixture_1->fixture.lock();
-        auto fixture_B = fixture_2->fixture.lock();
+        auto fixture_A = fixture_1->fixture;
+        auto fixture_B = fixture_2->fixture;
 
         auto body_A = fixture_A->get_body();
         auto body_B = fixture_B->get_body();

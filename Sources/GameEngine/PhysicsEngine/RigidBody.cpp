@@ -79,35 +79,31 @@ namespace physics
     }
 
     // --- Shapes
-    std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::CircleShape& circle)
+    physics::Fixture* RigidBody::add_shape(const physics::CircleShape& circle)
     {
-        auto fixture = std::make_shared<Fixture>(std::make_shared<physics::CircleShape>(circle), this);
+        auto fixture = new Fixture(std::make_shared<physics::CircleShape>(circle), this);
 
         update_physical_data_append(fixture);
 
         fixtures_.push_back(fixture);
         active_fixtures_.push_back(fixture);
 
-        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_id());
-        fixture->set_node_data(data);
-
+        auto data = fixture->get_node_data();
         data->node_id = internal_tree_.insert(data->aabb, data);
 
         return fixture;
     }
 
-    std::shared_ptr<physics::Fixture> RigidBody::add_shape(const physics::PolygonShape& polygon)
+    physics::Fixture* RigidBody::add_shape(const physics::PolygonShape& polygon)
     {
-        auto fixture = std::make_shared<Fixture>(std::make_shared<physics::PolygonShape>(polygon), this);
+        auto fixture = new Fixture(std::make_shared<physics::PolygonShape>(polygon), this);
 
         update_physical_data_append(fixture);
 
         fixtures_.push_back(fixture);
         active_fixtures_.push_back(fixture);
 
-        FixtureNodeData* data = new FixtureNodeData(fixture, fixture->get_AABB(), fixture->get_id());
-        fixture->set_node_data(data);
-
+        auto data = fixture->get_node_data();
         data->node_id = internal_tree_.insert(data->aabb, data);
 
         return fixture;
@@ -133,7 +129,7 @@ namespace physics
     void RigidBody::set_active_fixture(uint32_t id, bool flag)
     {
         bool is_active = false;
-        std::vector<std::shared_ptr<Fixture>>::iterator search_for;
+        std::vector<Fixture*>::iterator search_for;
 
         for (search_for = active_fixtures_.begin(); search_for != active_fixtures_.end(); ++search_for)
         {
@@ -239,7 +235,7 @@ namespace physics
         transform_.centroid = physical_data_.centroid;
     }
 
-    void RigidBody::update_physical_data_append(std::shared_ptr<physics::Fixture> fixture)
+    void RigidBody::update_physical_data_append(physics::Fixture* fixture)
     {
         if (!fixture->update_physical_data())
             return;
@@ -295,7 +291,7 @@ namespace physics
         physical_data_.inv_mmoi = fixed_angle_ ? 0.f : physical_data_.inv_mmoi;
     }
 
-    void RigidBody::update_physical_data_remove(std::shared_ptr<physics::Fixture> fixture)
+    void RigidBody::update_physical_data_remove(physics::Fixture* fixture)
     {
         // TO DO: implement.
     }

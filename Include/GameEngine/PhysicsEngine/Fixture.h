@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/PhysicsEngine/Shapes/Shape.h>
 #include <GameEngine/PhysicsEngine/ShapeAABB.h>
+#include <GameEngine/PhysicsEngine/DAABBTree.h>
 
 
 namespace physics
@@ -10,14 +11,14 @@ namespace physics
 
 	struct FixtureNodeData
 	{
-		FixtureNodeData(std::shared_ptr<Fixture> fixture_in, const ShapeAABB& aabb_in, int32_t id_in);
+		FixtureNodeData(Fixture* fixture_in, int32_t id_in);
 
-		std::weak_ptr<Fixture> fixture;
+		Fixture* fixture;
 		int32_t id;
-		bool is_sleeping;
+		bool is_sleeping = false;
 
 		ShapeAABB aabb;
-		int32_t node_id;
+		int32_t node_id = nullnode;
 	};
 
 	class Fixture
@@ -61,11 +62,8 @@ namespace physics
 		float friction_;
 		float density_;
 
-		bool sleeping_;
-
 		// --- Cached values
 		ShapeAABB base_AABB_;
-		ShapeAABB cached_AABB_;
 		FixtureNodeData* node_data_;
 	};
 
@@ -133,7 +131,7 @@ namespace physics
 
 	inline bool Fixture::is_sleeping()
 	{
-		return sleeping_;
+		return node_data_->is_sleeping;
 	}
 
 } // namespace physics

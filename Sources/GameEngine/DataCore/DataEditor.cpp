@@ -196,9 +196,9 @@ void DataEditor::load_scene_2()
 
     std::shared_ptr<game::Entity> entity;
 
-    for (int32_t i = 0; i < 16; ++i)
+    for (int32_t i = 0; i < 2; ++i)
     {
-        auto ship = std::make_shared<game::ShipEntity>(world, sf::Vector2f{ 100.f + (i / 2) * 350.f, 10.f + 300.f * (i % 2)}, 0.f, 25, 25);
+        auto ship = std::make_shared<game::ShipEntity>(world, sf::Vector2f{ 100.f + i * 1050.f, 10.f }, 0.f, 75, 75);
 
         if (entity == nullptr)
             entity = ship;

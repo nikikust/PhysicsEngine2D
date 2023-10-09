@@ -13,7 +13,7 @@ namespace physics
 
     // --- Collision detection
 
-    std::optional<CollisionInfo> CollisionSolver::collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
+    std::optional<CollisionInfo> CollisionSolver::collide(Fixture* fixture_A, Fixture* fixture_B, 
                                                           const Transform& transform_A, const Transform& transform_B)
     {
         auto& shape_A = fixture_A->get_shape();
@@ -38,7 +38,7 @@ namespace physics
         return std::nullopt;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::circles_collision(const std::shared_ptr<Fixture>& circle_A_raw, const std::shared_ptr<Fixture>& circle_B_raw, 
+    std::optional<CollisionInfo> CollisionSolver::circles_collision(Fixture* circle_A_raw, Fixture* circle_B_raw, 
                                                                     const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -67,7 +67,7 @@ namespace physics
             return std::nullopt;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::polygons_collision(const std::shared_ptr<Fixture>& polygon_A_raw, const std::shared_ptr<Fixture>& polygon_B_raw, 
+    std::optional<CollisionInfo> CollisionSolver::polygons_collision(Fixture* polygon_A_raw, Fixture* polygon_B_raw, 
                                                                      const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -141,7 +141,7 @@ namespace physics
         } };
     }
 
-    std::optional<CollisionInfo> CollisionSolver::polygon_circle_collision(const std::shared_ptr<Fixture>& polygon_raw, const std::shared_ptr<Fixture>& circle_raw, 
+    std::optional<CollisionInfo> CollisionSolver::polygon_circle_collision(Fixture* polygon_raw, Fixture* circle_raw, 
                                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
@@ -213,7 +213,7 @@ namespace physics
         } };
     }
 
-    std::optional<CollisionInfo> CollisionSolver::circle_polygon_collision(const std::shared_ptr<Fixture>& circle_raw, const std::shared_ptr<Fixture>& polygon_raw, 
+    std::optional<CollisionInfo> CollisionSolver::circle_polygon_collision(Fixture* circle_raw, Fixture* polygon_raw, 
                                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         auto result = polygon_circle_collision(polygon_raw, circle_raw, transform_B, transform_A);
@@ -225,7 +225,7 @@ namespace physics
     }
 
     // --- Collision points
-    void CollisionSolver::write_collision_points(CollisionInfo& collision, std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B,
+    void CollisionSolver::write_collision_points(CollisionInfo& collision, Fixture* fixture_A, Fixture* fixture_B,
                                                  const Transform& transform_A, const Transform& transform_B)
     {
         auto& shape_A = fixture_A->get_shape();

@@ -31,12 +31,12 @@ namespace physics
         CollisionSolver();
 
 
-        std::optional<CollisionInfo> collide(std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
+        std::optional<CollisionInfo> collide(Fixture* fixture_A, Fixture* fixture_B, 
                                              const Transform& transform_A, const Transform& transform_B);
         
         void separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 
-        void write_collision_points(CollisionInfo& collision, std::shared_ptr<Fixture> fixture_A, std::shared_ptr<Fixture> fixture_B, 
+        void write_collision_points(CollisionInfo& collision, Fixture* fixture_A, Fixture* fixture_B, 
                                     const Transform& transform_A, const Transform& transform_B);
 
         void resolve_collision_basic(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
@@ -48,10 +48,10 @@ namespace physics
 #endif // DEBUG
 
     private:
-        std::optional<CollisionInfo> circles_collision        (const std::shared_ptr<Fixture>& circle_A_raw,  const std::shared_ptr<Fixture>& circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> polygons_collision       (const std::shared_ptr<Fixture>& polygon_A_raw, const std::shared_ptr<Fixture>& polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> polygon_circle_collision (const std::shared_ptr<Fixture>& polygon_raw,   const std::shared_ptr<Fixture>& circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> circle_polygon_collision (const std::shared_ptr<Fixture>& circle_raw,    const std::shared_ptr<Fixture>& polygon_raw,   const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> circles_collision        (Fixture* circle_A_raw,  Fixture* circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> polygons_collision       (Fixture* polygon_A_raw, Fixture* polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> polygon_circle_collision (Fixture* polygon_raw,   Fixture* circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
+        std::optional<CollisionInfo> circle_polygon_collision (Fixture* circle_raw,    Fixture* polygon_raw,   const Transform& transform_A, const Transform& transform_B) const;
 
         std::pair<float, float> polygon_projection (const std::shared_ptr<PolygonShape>& polygon, const sf::Vector2f& axis, const Transform& transform) const;
         std::pair<float, float> circle_projection  (const std::shared_ptr<CircleShape>&  circle,  const sf::Vector2f& axis, const Transform& transform) const;

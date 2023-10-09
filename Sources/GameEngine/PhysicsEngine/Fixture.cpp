@@ -4,17 +4,18 @@
 
 namespace physics
 {
-    FixtureNodeData::FixtureNodeData(std::shared_ptr<Fixture> fixture_in, const ShapeAABB& aabb_in, int32_t id_in)
-        : fixture(fixture_in), aabb(aabb_in), is_sleeping(false), id(id_in), node_id(nullnode) {}
+    FixtureNodeData::FixtureNodeData(Fixture* fixture_in, int32_t id_in)
+        : fixture(fixture_in), id(id_in), node_id(nullnode) {}
 
     Fixture::Fixture(std::shared_ptr<Shape> shape, RigidBody* body)
-        : shape_(shape), body_(body), node_data_(nullptr)
+        : shape_(shape), body_(body)
     {
         restitution_ = 0.6f;
         friction_    = 0.6f;
         density_     = 1.0f;
 
-        sleeping_ = false;
+        node_data_ = new FixtureNodeData(this, shape_->get_id());
+        node_data_->is_sleeping = false;
 
         // --- Calculate base AABB
         base_AABB_.reset();
@@ -52,12 +53,13 @@ namespace physics
             throw("Unknown shape type to calculate AABB!");
         }
 
-        cached_AABB_ = base_AABB_;
+        node_data_->aabb = base_AABB_;
 
         auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), body->get_transform());
-        cached_AABB_.move(position_rotated);
-
+        node_data_->aabb.move(position_rotated);
+        
         update_physical_data();
+
     }
 
     Fixture::~Fixture()
@@ -72,14 +74,14 @@ namespace physics
 
     const ShapeAABB& Fixture::get_AABB()
     {
-        cached_AABB_ = base_AABB_;
+        node_data_->aabb = base_AABB_;
 
         ShapeAABB new_AABB{ base_AABB_ };
 
         auto position_rotated = physics::rotate_and_move_point(shape_->get_position(), body_->get_transform());
-        cached_AABB_.move(position_rotated);
+        node_data_->aabb.move(position_rotated);
 
-        return cached_AABB_;
+        return node_data_->aabb;
     }
 
     bool Fixture::update_physical_data()
@@ -98,7 +100,7 @@ namespace physics
 
     Fixture& Fixture::set_sleeping(bool flag)
     {
-        sleeping_ = flag;
+        node_data_->is_sleeping = flag;
 
         assert(node_data_ != nullptr);
 
