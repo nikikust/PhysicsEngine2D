@@ -19,8 +19,8 @@ namespace game
                 sf::Vector2f hor_center{ half_length + half_length * 2 * x, half_length * 2 * y };
                 sf::Vector2f ver_center{ half_length * 2 * x, half_length + half_length * 2 * y };
 
-                physics::PolygonShape bar_hor{ physics::rotate_polygon(box, {},        0.f), hor_center };
-                physics::PolygonShape bar_ver{ physics::rotate_polygon(box, {}, (float)PI2), ver_center };
+                auto bar_hor = new physics::PolygonShape(physics::rotate_polygon(box, {},        0.f), hor_center);
+                auto bar_ver = new physics::PolygonShape(physics::rotate_polygon(box, {}, (float)PI2), ver_center);
 
                 if (x < max_x - 1)
                 {
@@ -65,7 +65,7 @@ namespace game
             if (fixture->is_sleeping())
                 continue;
 
-            auto shape = std::dynamic_pointer_cast<physics::PolygonShape>(fixture->get_shape());
+            auto shape = (physics::PolygonShape*)(fixture->get_shape());
 
             if (fixture->get_node_data()->is_sleeping)
                 color = color_;

@@ -8,11 +8,11 @@ namespace game
 	{
 		float half_size = 50;
 
-		physics::PolygonShape polygon{
+		auto polygon = new physics::PolygonShape(
 			{ {-half_size, -half_size}, { half_size, -half_size}, 
 			  { half_size,  half_size}, {-half_size,  half_size} }, // Vertices
 			{0, 0} // Position
-		};
+		);
 
 		main_body_->add_shape(polygon)->set_restitution(0.6f);
 
@@ -32,7 +32,7 @@ namespace game
 	{
 		auto& transform = main_body_->get_transform();
 
-		auto shape = std::dynamic_pointer_cast<physics::PolygonShape>(main_body_->get_fixtures().front()->get_shape());
+		auto shape = (physics::PolygonShape*)(main_body_->get_fixtures().front()->get_shape());
 
 		painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color_);
 	}

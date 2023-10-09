@@ -7,7 +7,7 @@ namespace physics
     FixtureNodeData::FixtureNodeData(Fixture* fixture_in, int32_t id_in)
         : fixture(fixture_in), id(id_in), node_id(nullnode) {}
 
-    Fixture::Fixture(std::shared_ptr<Shape> shape, RigidBody* body)
+    Fixture::Fixture(Shape* shape, RigidBody* body)
         : shape_(shape), body_(body)
     {
         restitution_ = 0.6f;
@@ -24,7 +24,7 @@ namespace physics
         {
         case ShapeType::Circle:
         {
-            auto circle = std::dynamic_pointer_cast<CircleShape>(shape_);
+            auto circle = (CircleShape*)shape_;
 
             auto radius = circle->get_radius();
 
@@ -34,7 +34,7 @@ namespace physics
         break;
         case ShapeType::Polygon:
         {
-            auto polygon = std::dynamic_pointer_cast<PolygonShape>(shape_);
+            auto polygon = (PolygonShape*)shape_;
 
             auto max_distance_squared = 0.f;
 
@@ -64,10 +64,9 @@ namespace physics
 
     Fixture::~Fixture()
     {
-        if (node_data_ != nullptr)
-            free(node_data_);
-
-        shape_ = nullptr;
+        free(node_data_);
+        free(shape_);
+        
         body_ = nullptr;
     }
 

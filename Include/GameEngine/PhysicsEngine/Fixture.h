@@ -24,12 +24,13 @@ namespace physics
 	class Fixture
 	{
 	public:
-		Fixture(std::shared_ptr<Shape> shape, RigidBody* body);
+		Fixture(Shape* shape, RigidBody* body);
 		~Fixture();
 
 
 		// --- //
-		const std::shared_ptr<Shape>& get_shape() const;
+		Shape* get_shape() const;
+
 		const ShapeAABB& get_AABB();
 
 		FixtureNodeData* get_node_data() const;
@@ -53,7 +54,7 @@ namespace physics
 		Fixture& set_sleeping(bool flag);
 
 	private:
-		std::shared_ptr<Shape> shape_;
+		Shape* shape_;
 		RigidBody* body_;
 
 		PhysicalData physical_data_;
@@ -71,7 +72,7 @@ namespace physics
 
 
 	// Inline section
-	inline const std::shared_ptr<Shape>& Fixture::get_shape() const
+	inline Shape* Fixture::get_shape() const
 	{
 		return shape_;
 	}

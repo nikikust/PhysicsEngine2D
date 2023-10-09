@@ -21,15 +21,15 @@ namespace game
 
         for (int32_t i = 0; i < count; ++i)
         {
-            physics::PolygonShape polygon_1{
+            auto polygon_1 = new physics::PolygonShape(
                 physics::rotate_polygon(base_vector, {},  (float)PI2 / 7.f), // Vertices
                 offset_left * (i + 0.5f)                                     // Position
-            };
+            );
 
-            physics::PolygonShape polygon_2{
+            auto polygon_2 = new physics::PolygonShape(
                 physics::rotate_polygon(base_vector, {}, -(float)PI2 / 7.f), // Vertices
                 offset_right * (i + 0.5f)                                    // Position
-            };
+            );
 
             main_body_->add_shape(polygon_1)->set_restitution(0.6f);
             main_body_->add_shape(polygon_2)->set_restitution(0.6f);
@@ -58,7 +58,7 @@ namespace game
 
         for (auto& fixture : fixtures)
         {
-            auto shape = std::dynamic_pointer_cast<physics::PolygonShape>(fixture->get_shape());
+            auto shape = (physics::PolygonShape*)(fixture->get_shape());
 
             painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color_);
         }

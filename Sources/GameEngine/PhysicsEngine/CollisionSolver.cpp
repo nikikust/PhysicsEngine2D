@@ -16,8 +16,8 @@ namespace physics
     std::optional<CollisionInfo> CollisionSolver::collide(Fixture* fixture_A, Fixture* fixture_B, 
                                                           const Transform& transform_A, const Transform& transform_B)
     {
-        auto& shape_A = fixture_A->get_shape();
-        auto& shape_B = fixture_B->get_shape();
+        auto shape_A = fixture_A->get_shape();
+        auto shape_B = fixture_B->get_shape();
 
         switch (shape_A->get_shape()) {
         case ShapeType::Polygon:
@@ -42,8 +42,8 @@ namespace physics
                                                                     const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
-        auto circle_A = std::dynamic_pointer_cast<CircleShape>(circle_A_raw->get_shape());
-        auto circle_B = std::dynamic_pointer_cast<CircleShape>(circle_B_raw->get_shape());
+        auto circle_A = (CircleShape*)(circle_A_raw->get_shape());
+        auto circle_B = (CircleShape*)(circle_B_raw->get_shape());
 
         // Prepare data
         auto position_A = physics::rotate_and_move_point(circle_A->get_position(), transform_A);
@@ -71,8 +71,8 @@ namespace physics
                                                                      const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
-        auto polygon_A = std::dynamic_pointer_cast<PolygonShape>(polygon_A_raw->get_shape());
-        auto polygon_B = std::dynamic_pointer_cast<PolygonShape>(polygon_B_raw->get_shape());
+        auto polygon_A = (PolygonShape*)(polygon_A_raw->get_shape());
+        auto polygon_B = (PolygonShape*)(polygon_B_raw->get_shape());
 
         // --- //
 
@@ -145,8 +145,8 @@ namespace physics
                                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
-        auto polygon = std::dynamic_pointer_cast<PolygonShape>(polygon_raw->get_shape());
-        auto circle  = std::dynamic_pointer_cast<CircleShape> (circle_raw ->get_shape());
+        auto polygon = (PolygonShape*)(polygon_raw->get_shape());
+        auto circle  = (CircleShape *)(circle_raw ->get_shape());
 
         // --- //
 
@@ -228,8 +228,8 @@ namespace physics
     void CollisionSolver::write_collision_points(CollisionInfo& collision, Fixture* fixture_A, Fixture* fixture_B,
                                                  const Transform& transform_A, const Transform& transform_B)
     {
-        auto& shape_A = fixture_A->get_shape();
-        auto& shape_B = fixture_B->get_shape();
+        auto shape_A = fixture_A->get_shape();
+        auto shape_B = fixture_B->get_shape();
 
         switch (shape_A->get_shape()) {
         case ShapeType::Polygon:
@@ -248,12 +248,12 @@ namespace physics
         }
     }
 
-    sf::Vector2f CollisionSolver::circles_collision_points(const std::shared_ptr<Shape>& circle_A_raw, const std::shared_ptr<Shape>& circle_B_raw,
+    sf::Vector2f CollisionSolver::circles_collision_points(Shape* circle_A_raw, Shape* circle_B_raw,
                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
-        auto circle_A = std::dynamic_pointer_cast<CircleShape>(circle_A_raw);
-        auto circle_B = std::dynamic_pointer_cast<CircleShape>(circle_B_raw);
+        auto circle_A = (CircleShape*)(circle_A_raw);
+        auto circle_B = (CircleShape*)(circle_B_raw);
 
         // Prepare data
         auto position_A = physics::rotate_and_move_point(circle_A->get_position(), transform_A);
@@ -275,12 +275,12 @@ namespace physics
         return contact;
     }
 
-    sf::Vector2f CollisionSolver::polygons_collision_points(const std::shared_ptr<Shape>& polygon_A_raw, const std::shared_ptr<Shape>& polygon_B_raw,
+    sf::Vector2f CollisionSolver::polygons_collision_points(Shape* polygon_A_raw, Shape* polygon_B_raw,
                                                             const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
-        auto polygon_A = std::dynamic_pointer_cast<PolygonShape>(polygon_A_raw);
-        auto polygon_B = std::dynamic_pointer_cast<PolygonShape>(polygon_B_raw);
+        auto polygon_A = (PolygonShape*)(polygon_A_raw);
+        auto polygon_B = (PolygonShape*)(polygon_B_raw);
 
         // --- //
         auto polygon_A_position = polygon_A->get_position();
@@ -366,12 +366,12 @@ namespace physics
             return (contacts.collision_point_1 + contacts.collision_point_2) / 2.f;
     }
 
-    sf::Vector2f CollisionSolver::circle_polygon_collision_points(const std::shared_ptr<Shape>& polygon_raw, const std::shared_ptr<Shape>& circle_raw,
+    sf::Vector2f CollisionSolver::circle_polygon_collision_points(Shape* polygon_raw, Shape* circle_raw,
                                                                   const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
-        auto polygon = std::dynamic_pointer_cast<PolygonShape>(polygon_raw);
-        auto circle  = std::dynamic_pointer_cast<CircleShape> (circle_raw );
+        auto polygon = (PolygonShape*)(polygon_raw);
+        auto circle  = (CircleShape *)(circle_raw );
 
         // --- //
         auto polygon_position = polygon->get_position();
@@ -563,7 +563,7 @@ namespace physics
 
 
     // --- Aditional methods
-    std::pair<float, float> CollisionSolver::polygon_projection(const std::shared_ptr<PolygonShape>& polygon, const sf::Vector2f& axis, const Transform& transform) const
+    std::pair<float, float> CollisionSolver::polygon_projection(PolygonShape* polygon, const sf::Vector2f& axis, const Transform& transform) const
     {
         float min_projection = std::numeric_limits<float>::max();
         float max_projection = std::numeric_limits<float>::lowest();
@@ -583,7 +583,7 @@ namespace physics
         return { min_projection, max_projection };
     }
 
-    std::pair<float, float> CollisionSolver::circle_projection(const std::shared_ptr<CircleShape>& circle, const sf::Vector2f& axis, const Transform& transform) const
+    std::pair<float, float> CollisionSolver::circle_projection(CircleShape* circle, const sf::Vector2f& axis, const Transform& transform) const
     {
         float central = utils::dot(physics::rotate_and_move_point(circle->get_position(), transform), axis);
 
@@ -594,7 +594,7 @@ namespace physics
     }
 
 
-    sf::Vector2f CollisionSolver::circle_polygon_closest_point(const std::shared_ptr<PolygonShape>& polygon, const std::shared_ptr<CircleShape>& circle, const Transform& transform_A, const Transform& transform_B) const
+    sf::Vector2f CollisionSolver::circle_polygon_closest_point(PolygonShape* polygon, CircleShape* circle, const Transform& transform_A, const Transform& transform_B) const
     {
         sf::Vector2f closest_point{};
         float min_distance = std::numeric_limits<float>::max();

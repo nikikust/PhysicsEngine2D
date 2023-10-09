@@ -81,24 +81,9 @@ namespace physics
     }
 
     // --- Shapes
-    physics::Fixture* RigidBody::add_shape(const physics::CircleShape& circle)
+    physics::Fixture* RigidBody::add_shape(physics::Shape* shape)
     {
-        auto fixture = new Fixture(std::make_shared<physics::CircleShape>(circle), this);
-
-        update_physical_data_append(fixture);
-
-        fixtures_.push_back(fixture);
-        active_fixtures_.push_back(fixture);
-
-        auto data = fixture->get_node_data();
-        data->node_id = internal_tree_.insert(data->aabb, data);
-
-        return fixture;
-    }
-
-    physics::Fixture* RigidBody::add_shape(const physics::PolygonShape& polygon)
-    {
-        auto fixture = new Fixture(std::make_shared<physics::PolygonShape>(polygon), this);
+        auto fixture = new Fixture(shape, this);
 
         update_physical_data_append(fixture);
 

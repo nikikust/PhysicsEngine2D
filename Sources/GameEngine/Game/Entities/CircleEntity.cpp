@@ -6,10 +6,10 @@ namespace game
 	CircleEntity::CircleEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
 		: Entity(sf::Color::Green, new physics::RigidBody())
 	{
-		physics::CircleShape circle{
+		auto circle = new physics::CircleShape(
 			50,    // Radius
 			{0, 0} // Position
-		};
+		);
 
 		main_body_->add_shape(circle)->set_restitution(0.6f);
 
@@ -29,7 +29,7 @@ namespace game
 	{
 		auto& transform = main_body_->get_transform();
 
-		auto shape = std::dynamic_pointer_cast<physics::CircleShape>(main_body_->get_fixtures().front()->get_shape());
+		auto shape = (physics::CircleShape*)(main_body_->get_fixtures().front()->get_shape());
 
 		auto rotated_center = physics::rotate_point(shape->get_position(), transform);
 

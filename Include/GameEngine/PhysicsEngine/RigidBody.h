@@ -75,8 +75,7 @@ namespace physics
         void set_node_data(RigidBodyNodeData* data);
 
         // --- Shapes
-        physics::Fixture* add_shape (const physics::CircleShape&  circle );
-        physics::Fixture* add_shape (const physics::PolygonShape& polygon);
+        physics::Fixture* add_shape (physics::Shape* shape);
 
         physics::Fixture* get_fixture    (uint32_t id) const;
         void              remove_fixture (uint32_t id);
