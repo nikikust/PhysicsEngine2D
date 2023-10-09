@@ -22,13 +22,13 @@ namespace physics
         void update(float delta_time);
 
         /// Get id of the body
-        std::shared_ptr<physics::RigidBody> get_body(int32_t id) const;
+        physics::RigidBody* get_body(int32_t id) const;
 
         /// Add body to this world
-        void add_body(std::shared_ptr<physics::RigidBody> body);
+        void add_body(physics::RigidBody* body);
 
         /// Get reference to the map of all bodies in this world stored under their IDs
-        const std::unordered_map<int32_t, std::shared_ptr<physics::RigidBody>>& get_bodies();
+        const std::unordered_map<int32_t, physics::RigidBody*>& get_bodies();
 
         /// Set gravity in this world
         void set_gravity(const sf::Vector2f acceleration);
@@ -47,8 +47,8 @@ namespace physics
         void update_contacts();
 
         /// Iterates throught fixtures of both bodies and resolves their collisions (called from query of update_contacts())
-        void update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A, 
-                              const std::shared_ptr<physics::RigidBody>& body_B);
+        void update_body_pair(physics::RigidBody* body_A, 
+                              physics::RigidBody* body_B);
 
         /// @brief Callback method for global DAABB tree collisions
         /// @param data - RigidBodyNodeData* - data about collided body
@@ -64,12 +64,12 @@ namespace physics
 
         sf::Vector2f gravity_;
 
-        std::unordered_map<int32_t, std::shared_ptr<physics::RigidBody>> bodies_{};
+        std::unordered_map<int32_t, physics::RigidBody*> bodies_{};
 
         DAABBTree tree_;
 
         std::vector<RigidBodyPtrPair> contacts;
-        std::shared_ptr<RigidBody> contact_1;
+        RigidBody* contact_1;
 
         // --- //
 

@@ -4,7 +4,7 @@
 namespace game
 {
     ShipEntity::ShipEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle, int32_t max_x, int32_t max_y)
-        : Entity(sf::Color::Red, std::make_shared<physics::RigidBody>())
+        : Entity(sf::Color::Red, new physics::RigidBody())
     {
         const float half_length = 5;
         const float half_width  = 2;
@@ -43,6 +43,11 @@ namespace game
         main_body_->set_angle(angle);
 
         world->add_body(main_body_);
+    }
+
+    ShipEntity::~ShipEntity()
+    {
+        free(main_body_);
     }
 
 

@@ -13,13 +13,13 @@ namespace physics
 
     struct RigidBodyNodeData
     {
-        RigidBodyNodeData(std::shared_ptr<RigidBody> body_in, const ShapeAABB& aabb_in, int32_t id_in);
+        RigidBodyNodeData(RigidBody* body_in);
 
-        std::weak_ptr<RigidBody> body;
+        RigidBody* body;
         int32_t id;
 
         ShapeAABB aabb;
-        int32_t node_id;
+        int32_t node_id = nullnode;
     };
 
 	class RigidBody
@@ -127,7 +127,7 @@ namespace physics
         static int32_t max_body_id_;
 	};
 
-    using RigidBodyPtrPair = std::pair<std::shared_ptr<RigidBody>, std::shared_ptr<RigidBody>>;
+    using RigidBodyPtrPair = std::pair<RigidBody*, RigidBody*>;
 
 
     // Inline section

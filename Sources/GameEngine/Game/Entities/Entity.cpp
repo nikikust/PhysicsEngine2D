@@ -6,8 +6,7 @@ namespace game
 	int32_t Entity::max_entity_id = 0;
 
 
-	Entity::Entity(const sf::Color& color,
-		           std::shared_ptr<physics::RigidBody> main_body)
+	Entity::Entity(const sf::Color& color, physics::RigidBody* main_body)
 		: color_(color), main_body_(main_body)
 	{
 		id_ = ++max_entity_id;
@@ -24,7 +23,7 @@ namespace game
 		return id_;
 	}
 
-	std::shared_ptr<physics::RigidBody>& Entity::get_main_body()
+	physics::RigidBody* Entity::get_main_body()
 	{
 		return main_body_;
 	}

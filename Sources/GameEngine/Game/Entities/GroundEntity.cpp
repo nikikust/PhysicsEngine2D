@@ -4,7 +4,7 @@
 namespace game
 {
     GroundEntity::GroundEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-        : Entity({ 127, 127, 127 }, std::make_shared<physics::RigidBody>())
+        : Entity({ 127, 127, 127 }, new physics::RigidBody())
     {
         const float half_length = 25;
         const float half_width = 25;
@@ -41,6 +41,11 @@ namespace game
                    .set_linear_fixation(true, true);
 
         world->add_body(main_body_);
+    }
+
+    GroundEntity::~GroundEntity()
+    {
+        free(main_body_);
     }
 
 

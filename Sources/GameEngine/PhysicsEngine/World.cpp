@@ -52,7 +52,7 @@ namespace physics
 
 	}
 
-    std::shared_ptr<physics::RigidBody> World::get_body(int32_t id) const
+    physics::RigidBody* World::get_body(int32_t id) const
     {
         if (bodies_.contains(id))
             return bodies_.at(id);
@@ -60,19 +60,17 @@ namespace physics
         return nullptr;
     }
 
-    void World::add_body(std::shared_ptr<physics::RigidBody> body)
+    void World::add_body(physics::RigidBody* body)
     {
         bodies_.insert({ body->get_id(), body});
 
-        RigidBodyNodeData* data = new RigidBodyNodeData(body, body->get_AABB(), body->get_id());
-        body->set_node_data(data);
-
+        auto data = body->get_node_data();
         data->node_id = tree_.insert(body->get_AABB(), data);
 
         return;
     }
 
-    const std::unordered_map<int32_t, std::shared_ptr<physics::RigidBody>>& World::get_bodies()
+    const std::unordered_map<int32_t, physics::RigidBody*>& World::get_bodies()
     {
         return bodies_;
     }
@@ -86,7 +84,7 @@ namespace physics
     {
         gravity_ = { 0.f, 0.f };
 
-        contact_1.reset();
+        contact_1 = nullptr;
         contacts.clear();
         tree_.reset();
         bodies_.clear();
@@ -103,8 +101,8 @@ namespace physics
         }
     }
 
-    void World::update_body_pair(const std::shared_ptr<physics::RigidBody>& body_A,
-                                 const std::shared_ptr<physics::RigidBody>& body_B)
+    void World::update_body_pair(physics::RigidBody* body_A,
+                                 physics::RigidBody* body_B)
     {
         body_A->get_tree().query(this, body_B->get_tree());
     }
@@ -116,7 +114,7 @@ namespace physics
         if (contact_1->get_id() >= body->id)
             return;
 
-        contacts.push_back({ contact_1, body->body.lock() });
+        contacts.push_back({ contact_1, body->body });
     }
 
     void World::add_contact(void* data_1, void* data_2)

@@ -4,7 +4,7 @@
 namespace game
 {
 	PolygonEntity::PolygonEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-		: Entity(sf::Color::Red, std::make_shared<physics::RigidBody>())
+		: Entity(sf::Color::Red, new physics::RigidBody())
 	{
 		float half_size = 50;
 
@@ -20,6 +20,11 @@ namespace game
 		main_body_->set_angle(angle);
 
 		world->add_body(main_body_);
+	}
+
+	PolygonEntity::~PolygonEntity()
+	{
+		free(main_body_);
 	}
 
 

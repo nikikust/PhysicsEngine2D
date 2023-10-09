@@ -9,6 +9,7 @@ namespace game
 	{
 	public:
 		GroundEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle);
+		~GroundEntity();
 
 		void render(graphics::Painter& painter) override;
 	};

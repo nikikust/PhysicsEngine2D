@@ -32,17 +32,17 @@ namespace physics
             wrap_to_screen(body, window_size);
     }
 
-    std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id) const
+    physics::RigidBody* Engine::get_body(int32_t id) const
     {
         return selected_world_->get_body(id);
     }
-    std::shared_ptr<physics::RigidBody> Engine::get_body(int32_t id, int32_t world_id) const
+    physics::RigidBody* Engine::get_body(int32_t id, int32_t world_id) const
     {
         // TO DO: world selection
         return selected_world_->get_body(id);
     }
 
-    void Engine::add_body(std::shared_ptr<physics::RigidBody> body)
+    void Engine::add_body(physics::RigidBody* body)
     {
         return selected_world_->add_body(body);
     }
@@ -76,7 +76,7 @@ namespace physics
 #endif // DEBUG
 
 
-    void Engine::wrap_to_screen(std::shared_ptr<RigidBody> body, const sf::Vector2i& window_size)
+    void Engine::wrap_to_screen(RigidBody* body, const sf::Vector2i& window_size)
     {
         auto& position = body->get_position();
 

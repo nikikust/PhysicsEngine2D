@@ -6,13 +6,15 @@ namespace physics
     int32_t RigidBody::max_body_id_ = 0;
 
 
-    RigidBodyNodeData::RigidBodyNodeData(std::shared_ptr<RigidBody> body_in, const ShapeAABB& aabb_in, int32_t id_in)
-        : body(body_in), aabb(aabb_in), id(id_in), node_id(nullnode) {}
+    RigidBodyNodeData::RigidBodyNodeData(RigidBody* body_in)
+        : body(body_in), id(body_in->get_id()) {}
 
     RigidBody::RigidBody()
         : node_data_(nullptr)
     {
         id_ = ++max_body_id_;
+
+        node_data_ = new RigidBodyNodeData(this);
     }
 
     RigidBody::RigidBody(RigidBody&& body) noexcept

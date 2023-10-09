@@ -9,6 +9,7 @@ namespace game
 	{
 	public:
 		CircleEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle);
+		~CircleEntity();
 
 		void render(graphics::Painter& painter) override;
 	};

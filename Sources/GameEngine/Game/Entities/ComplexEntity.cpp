@@ -4,7 +4,7 @@
 namespace game
 {
 	ComplexEntity::ComplexEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-		: Entity(sf::Color::Green, std::make_shared<physics::RigidBody>())
+		: Entity(sf::Color::Green, new physics::RigidBody())
 	{
 		physics::CircleShape circle_1{
 			50,      // Radius
@@ -35,6 +35,11 @@ namespace game
 		main_body_->set_angle(angle);
 
 		world->add_body(main_body_);
+	}
+
+	ComplexEntity::~ComplexEntity()
+	{
+		free(main_body_);
 	}
 
 	void ComplexEntity::render(graphics::Painter& painter)
