@@ -53,6 +53,8 @@ namespace physics
         // Transfer mass moment of inertia from the origin to the center of mass
         mmoi -= mass * utils::dot(center, center);
 
+        center += point;
+
         return PhysicalData{ area, mass, (mass > 0.f) ? 1.f / mass : 0.f, center, mmoi };
     }
 
