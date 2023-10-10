@@ -66,10 +66,11 @@ namespace physics
 
         std::unordered_map<int32_t, physics::RigidBody*> bodies_{};
 
-        DAABBTree tree_;
+        DAABBTree world_tree_;
 
-        std::vector<RigidBodyPtrPair> contacts;
-        RigidBody* contact_1;
+        RigidBody* contact_1_;
+        std::vector<RigidBodyPtrPair> body_contacts_;
+        std::vector<FixturePtrPair> fixture_contacts_;
 
         // --- //
 

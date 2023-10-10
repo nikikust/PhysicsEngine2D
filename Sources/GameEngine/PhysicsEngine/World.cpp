@@ -9,6 +9,8 @@ namespace physics
 	World::World()
 	{
 		id_ = ++max_world_id;
+
+        contact_1_ = nullptr;
 	}
 
 
@@ -21,20 +23,20 @@ namespace physics
 
         update_contacts();
          
-        for (auto& [body_A, body_B] : contacts)
+        for (auto& [body_A, body_B] : body_contacts_)
             update_body_pair(body_A, body_B);
 
         for (auto& [k, body] : bodies_)
         {
             body->update(delta_time, gravity_);
 
-            tree_.move(body->get_node_data()->node_id, body->get_AABB());
+            world_tree_.move(body->get_node_data()->node_id, body->get_AABB());
         }
 
 #ifdef DEBUGTree
-        tree_.debug_entities.clear();
-        tree_.draw_boxes();
-        debug_entities.insert(debug_entities.begin(), tree_.debug_entities.begin(), tree_.debug_entities.end());
+        world_tree_.debug_entities.clear();
+        world_tree_.draw_boxes();
+        debug_entities.insert(debug_entities.begin(), world_tree_.debug_entities.begin(), world_tree_.debug_entities.end());
 #endif // DEBUGTree
 
 #ifdef DEBUGBodyTree
@@ -65,7 +67,7 @@ namespace physics
         bodies_.insert({ body->get_id(), body});
 
         auto data = body->get_node_data();
-        data->node_id = tree_.insert(body->get_AABB(), data);
+        data->node_id = world_tree_.insert(body->get_AABB(), data);
 
         return;
     }
@@ -84,20 +86,20 @@ namespace physics
     {
         gravity_ = { 0.f, 0.f };
 
-        contact_1 = nullptr;
-        contacts.clear();
-        tree_.reset();
+        contact_1_ = nullptr;
+        body_contacts_.clear();
+        world_tree_.reset();
         bodies_.clear();
     }
 
     void World::update_contacts()
     {
-        contacts.clear();
+        body_contacts_.clear();
 
         for (auto& [k, body] : bodies_)
         {
-            contact_1 = body;
-            tree_.query(this, body->get_AABB());
+            contact_1_ = body;
+            world_tree_.query(this, body->get_AABB());
         }
     }
 
@@ -111,10 +113,10 @@ namespace physics
     {
         auto body = (RigidBodyNodeData*)data;
 
-        if (contact_1->get_id() >= body->id)
+        if (contact_1_->get_id() >= body->id)
             return;
 
-        contacts.push_back({ contact_1, body->body });
+        body_contacts_.push_back({ contact_1_, body->body });
     }
 
     void World::add_contact(void* data_1, void* data_2)

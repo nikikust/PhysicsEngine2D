@@ -68,7 +68,7 @@ namespace physics
 		FixtureNodeData* node_data_;
 	};
 
-	using FixturePtrPair = std::pair<std::shared_ptr<Fixture>, std::shared_ptr<Fixture>>;
+	using FixturePtrPair = std::pair<Fixture*, Fixture*>;
 
 
 	// Inline section
