@@ -21,17 +21,15 @@ namespace physics
         collision_solver_.debug_entities.clear();
 #endif // DEBUG
 
-        update_contacts();
-         
-        for (auto& [body_A, body_B] : body_contacts_)
-            update_body_pair(body_A, body_B);
+        update_bodies_contacts();
+        
+        update_fixtures_contacts();
 
-        for (auto& [k, body] : bodies_)
-        {
-            body->update(delta_time, gravity_);
+        collide_fixtures();
 
-            world_tree_.move(body->get_node_data()->node_id, body->get_AABB());
-        }
+        solve_contacts();
+
+        update_bodies(delta_time);
 
 #ifdef DEBUGTree
         world_tree_.debug_entities.clear();
@@ -40,7 +38,6 @@ namespace physics
 #endif // DEBUGTree
 
 #ifdef DEBUGBodyTree
-
         for (auto& [k, body] : bodies_)
         {
             auto& tree = body->get_tree();
@@ -92,7 +89,7 @@ namespace physics
         bodies_.clear();
     }
 
-    void World::update_contacts()
+    void World::update_bodies_contacts()
     {
         body_contacts_.clear();
 
@@ -103,10 +100,53 @@ namespace physics
         }
     }
 
-    void World::update_body_pair(physics::RigidBody* body_A,
-                                 physics::RigidBody* body_B)
+    void World::update_fixtures_contacts()
     {
-        body_A->get_tree().query(this, body_B->get_tree());
+        fixture_contacts_.clear();
+
+        for (auto& [body_A, body_B] : body_contacts_)
+        {
+            body_A->get_tree().query(this, body_B->get_tree());
+        }
+    }
+
+    void World::collide_fixtures()
+    {
+        auto it = fixture_contacts_.begin();
+
+        while (it != fixture_contacts_.end())
+        {
+            if (collision_solver_.collide(*it))
+                ++it;
+            else
+                it = fixture_contacts_.erase(it);
+        }
+    }
+
+    void World::solve_contacts()
+    {
+        for (auto& collision : fixture_contacts_)
+        {
+            auto fixture_A = collision.fixture_A;
+            auto fixture_B = collision.fixture_B;
+
+            auto body_A = fixture_A->get_body();
+            auto body_B = fixture_B->get_body();
+
+            collision_solver_.separate_bodies                 (collision, body_A, body_B);
+            collision_solver_.write_collision_points          (collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
+            collision_solver_.resolve_collision_with_rotation (collision, body_A, body_B);
+        }
+    }
+
+    void World::update_bodies(float delta_time)
+    {
+        for (auto& [k, body] : bodies_)
+        {
+            body->update(delta_time, gravity_);
+
+            world_tree_.move(body->get_node_data()->node_id, body->get_AABB());
+        }
     }
 
     void World::add_contact(void* data)
@@ -121,24 +161,19 @@ namespace physics
 
     void World::add_contact(void* data_1, void* data_2)
     {
-        auto fixture_1 = (FixtureNodeData*)data_1;
-        auto fixture_2 = (FixtureNodeData*)data_2;
+        auto fixture_node_data_1 = (FixtureNodeData*)data_1;
+        auto fixture_node_data_2 = (FixtureNodeData*)data_2;
 
-        if (fixture_1->is_sleeping || fixture_2->is_sleeping)
+        if (fixture_node_data_1->is_sleeping || fixture_node_data_2->is_sleeping)
             return;
 
-        auto fixture_A = fixture_1->fixture;
-        auto fixture_B = fixture_2->fixture;
+        auto fixture_A = fixture_node_data_1->fixture;
+        auto fixture_B = fixture_node_data_2->fixture;
 
-        auto body_A = fixture_A->get_body();
-        auto body_B = fixture_B->get_body();
+        if (fixture_A->get_id() >= fixture_B->get_id())
+            return;
 
-        if (auto collision = collision_solver_.collide(fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform()))
-        {
-            collision_solver_.separate_bodies(*collision, body_A, body_B);
-            collision_solver_.write_collision_points(*collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
-            collision_solver_.resolve_collision_with_rotation(*collision, body_A, body_B);
-        }
+        fixture_contacts_.push_back(CollisionInfo{ fixture_A, fixture_B });
     }
 
 #ifdef DEBUG

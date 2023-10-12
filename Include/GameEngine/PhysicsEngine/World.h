@@ -43,22 +43,29 @@ namespace physics
     private:
         friend class DAABBTree;
 
-        /// Update global DAABB tree collision points
-        void update_contacts();
+        /// Searches contacts in global DAABB tree
+        void update_bodies_contacts();
 
-        /// Iterates throught fixtures of both bodies and resolves their collisions (called from query of update_contacts())
-        void update_body_pair(physics::RigidBody* body_A, 
-                              physics::RigidBody* body_B);
+        /// Searches contacts in local DAABB trees of contacted bodies
+        void update_fixtures_contacts();
 
-        /// @brief Callback method for global DAABB tree collisions
+        /// Removes false contacts
+        void collide_fixtures();
+
+        /// Solve contacts
+        void solve_contacts();
+
+        /// Integrate position and rotation
+        void update_bodies(float delta_time);
+
+        /// @brief Callback method for global DAABB tree collisions (called from query of update_bodies_contacts())
         /// @param data - RigidBodyNodeData* - data about collided body
         void add_contact(void* data);
 
-        /// @brief Callback method for local bodies DAABB tree collisions (called from query of update_body_pair())
+        /// @brief Callback method for local bodies DAABB tree collisions (called from query of update_fixtures_contacts())
         /// @param data_1 FixtureNodeData* - data about 1st collided fixture
         /// @param data_2 FixtureNodeData* - data about 2nd collided fixture
         void add_contact(void* data_1, void* data_2);
-        
 
         // --- Data
 
@@ -70,7 +77,7 @@ namespace physics
 
         RigidBody* contact_1_;
         std::vector<RigidBodyPtrPair> body_contacts_;
-        std::vector<FixturePtrPair> fixture_contacts_;
+        std::vector<CollisionInfo> fixture_contacts_;
 
         // --- //
 

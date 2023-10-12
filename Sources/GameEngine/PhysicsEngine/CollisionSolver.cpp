@@ -13,41 +13,45 @@ namespace physics
 
     // --- Collision detection
 
-    std::optional<CollisionInfo> CollisionSolver::collide(Fixture* fixture_A, Fixture* fixture_B, 
-                                                          const Transform& transform_A, const Transform& transform_B)
+    bool CollisionSolver::collide(CollisionInfo& collision)
     {
-        auto shape_A = fixture_A->get_shape();
-        auto shape_B = fixture_B->get_shape();
+        auto shape_A = collision.fixture_A->get_shape();
+        auto shape_B = collision.fixture_B->get_shape();
 
         switch (shape_A->get_shape()) {
         case ShapeType::Polygon:
             switch (shape_B->get_shape()) {
-            case ShapeType::Polygon: return polygons_collision       (fixture_A, fixture_B, transform_A, transform_B); break;
-            case ShapeType::Circle:  return polygon_circle_collision (fixture_A, fixture_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: return polygons_collision       (collision); break;
+            case ShapeType::Circle:  return polygon_circle_collision (collision); break;
             default: break;
             } break;
         case ShapeType::Circle:
             switch (shape_B->get_shape()) {
-            case ShapeType::Polygon: return circle_polygon_collision (fixture_A, fixture_B, transform_A, transform_B); break;
-            case ShapeType::Circle:  return circles_collision        (fixture_A, fixture_B, transform_A, transform_B); break;
+            case ShapeType::Polygon: return circle_polygon_collision (collision); break;
+            case ShapeType::Circle:  return circles_collision        (collision); break;
             default: break;
             } break;
         default: break;
         }
 
-        return std::nullopt;
+        return false;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::circles_collision(Fixture* circle_A_raw, Fixture* circle_B_raw, 
-                                                                    const Transform& transform_A, const Transform& transform_B) const
+    bool CollisionSolver::circles_collision(CollisionInfo& collision) const
     {
-        // Convert pointers
-        auto circle_A = (CircleShape*)(circle_A_raw->get_shape());
-        auto circle_B = (CircleShape*)(circle_B_raw->get_shape());
+        // Extract data
+        auto fixture_A = collision.fixture_A;
+        auto fixture_B = collision.fixture_B;
+
+        auto body_A = fixture_A->get_body();
+        auto body_B = fixture_B->get_body();
+
+        auto circle_A = (CircleShape*)(fixture_A->get_shape());
+        auto circle_B = (CircleShape*)(fixture_B->get_shape());
 
         // Prepare data
-        auto position_A = physics::rotate_and_move_point(circle_A->get_position(), transform_A);
-        auto position_B = physics::rotate_and_move_point(circle_B->get_position(), transform_B);
+        auto position_A = physics::rotate_and_move_point(circle_A->get_position(), body_A->get_transform());
+        auto position_B = physics::rotate_and_move_point(circle_B->get_position(), body_B->get_transform());
 
         auto radius_A = circle_A->get_radius();
         auto radius_B = circle_B->get_radius();
@@ -56,23 +60,30 @@ namespace physics
 
         if (distance < radius_A + radius_B)
         {
-            return { { 
-                {},
-                utils::normalize(position_B - position_A),
-                radius_A + radius_B - distance,
-                fminf(circle_A_raw->get_restitution(), circle_B_raw->get_restitution()),
-            } };
+            collision.collision_normal = utils::normalize(position_B - position_A);
+            collision.depth = radius_A + radius_B - distance;
+            collision.elasticity = fminf(fixture_A->get_restitution(), fixture_B->get_restitution());
+
+            return true;
         }
         else
-            return std::nullopt;
+            return false;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::polygons_collision(Fixture* polygon_A_raw, Fixture* polygon_B_raw, 
-                                                                     const Transform& transform_A, const Transform& transform_B) const
+    bool CollisionSolver::polygons_collision(CollisionInfo& collision) const
     {
-        // Convert pointers
-        auto polygon_A = (PolygonShape*)(polygon_A_raw->get_shape());
-        auto polygon_B = (PolygonShape*)(polygon_B_raw->get_shape());
+        // Extract data
+        auto fixture_A = collision.fixture_A;
+        auto fixture_B = collision.fixture_B;
+
+        auto body_A = fixture_A->get_body();
+        auto body_B = fixture_B->get_body();
+
+        auto& transform_A = body_A->get_transform();
+        auto& transform_B = body_B->get_transform();
+
+        auto polygon_A = (PolygonShape*)(fixture_A->get_shape());
+        auto polygon_B = (PolygonShape*)(fixture_B->get_shape());
 
         // --- //
 
@@ -96,7 +107,7 @@ namespace physics
             auto [projections_B_min, projections_B_max] = polygon_projection(polygon_B, axis, transform_B);
 
             if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
-                return std::nullopt;
+                return false;
 
             float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
 
@@ -119,7 +130,7 @@ namespace physics
             auto [projections_B_min, projections_B_max] = polygon_projection(polygon_B, axis, transform_B);
 
             if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
-                return std::nullopt;
+                return false;
 
             float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
 
@@ -134,21 +145,29 @@ namespace physics
             }
         }
 
-        return { { 
-            {}, 
-            normal, total_min_depth,
-            fminf(polygon_A_raw->get_restitution(), polygon_B_raw->get_restitution())
-        } };
+        collision.collision_normal = normal;
+        collision.depth = total_min_depth;
+        collision.elasticity = fminf(fixture_A->get_restitution(), fixture_B->get_restitution());
+
+        return true;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::polygon_circle_collision(Fixture* polygon_raw, Fixture* circle_raw, 
-                                                                           const Transform& transform_A, const Transform& transform_B) const
+    bool CollisionSolver::polygon_circle_collision(CollisionInfo& collision) const
     {
-        // Convert pointers
-        auto polygon = (PolygonShape*)(polygon_raw->get_shape());
-        auto circle  = (CircleShape *)(circle_raw ->get_shape());
+        // Extract data
+        auto fixture_A = collision.fixture_A;
+        auto fixture_B = collision.fixture_B;
 
-        // --- //
+        auto body_A = fixture_A->get_body();
+        auto body_B = fixture_B->get_body();
+
+        auto& transform_A = body_A->get_transform();
+        auto& transform_B = body_B->get_transform();
+
+        auto polygon = (PolygonShape*)(fixture_A->get_shape());
+        auto circle  = (CircleShape *)(fixture_B->get_shape());
+
+        // Prepare data
 
         auto& vertices = polygon->get_vertices();
 
@@ -169,7 +188,7 @@ namespace physics
             auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis, transform_B);
 
             if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
-                return std::nullopt;
+                return false;
 
             float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
 
@@ -192,7 +211,7 @@ namespace physics
         auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis, transform_B);
 
         if (projections_A_max < projections_B_min || projections_B_max < projections_A_min)
-            return std::nullopt;
+            return false;
 
         float min_depth = std::min(projections_A_max - projections_B_min, projections_B_max - projections_A_min);
 
@@ -206,22 +225,21 @@ namespace physics
                 normal = axis;
         }
 
-        return { { 
-            {}, 
-            normal, total_min_depth,
-            fminf(polygon_raw->get_restitution(), circle_raw->get_restitution())
-        } };
+        collision.collision_normal = normal;
+        collision.depth = total_min_depth;
+        collision.elasticity = fminf(fixture_A->get_restitution(), fixture_B->get_restitution());
+
+        return true;
     }
 
-    std::optional<CollisionInfo> CollisionSolver::circle_polygon_collision(Fixture* circle_raw, Fixture* polygon_raw, 
-                                                                           const Transform& transform_A, const Transform& transform_B) const
+    bool CollisionSolver::circle_polygon_collision(CollisionInfo& collision) const
     {
-        auto result = polygon_circle_collision(polygon_raw, circle_raw, transform_B, transform_A);
+        auto buf = collision.fixture_A;
 
-        if (result)
-            result->collision_normal = -result->collision_normal;
+        collision.fixture_A = collision.fixture_B;
+        collision.fixture_B = buf;
 
-        return result;
+        return polygon_circle_collision(collision);
     }
 
     // --- Collision points

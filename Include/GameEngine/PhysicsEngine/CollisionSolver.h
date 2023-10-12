@@ -18,6 +18,9 @@ namespace physics
 
     struct CollisionInfo
     {
+        Fixture* fixture_A;
+        Fixture* fixture_B;
+
         sf::Vector2f contact_point;
         sf::Vector2f collision_normal;
 
@@ -31,8 +34,7 @@ namespace physics
         CollisionSolver();
 
 
-        std::optional<CollisionInfo> collide(Fixture* fixture_A, Fixture* fixture_B, 
-                                             const Transform& transform_A, const Transform& transform_B);
+        bool collide(CollisionInfo& collision);
         
         void separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 
@@ -48,10 +50,10 @@ namespace physics
 #endif // DEBUG
 
     private:
-        std::optional<CollisionInfo> circles_collision        (Fixture* circle_A_raw,  Fixture* circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> polygons_collision       (Fixture* polygon_A_raw, Fixture* polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> polygon_circle_collision (Fixture* polygon_raw,   Fixture* circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
-        std::optional<CollisionInfo> circle_polygon_collision (Fixture* circle_raw,    Fixture* polygon_raw,   const Transform& transform_A, const Transform& transform_B) const;
+        bool circles_collision        (CollisionInfo& collision) const;
+        bool polygons_collision       (CollisionInfo& collision) const;
+        bool polygon_circle_collision (CollisionInfo& collision) const;
+        bool circle_polygon_collision (CollisionInfo& collision) const;
 
         std::pair<float, float> polygon_projection (PolygonShape* polygon, const sf::Vector2f& axis, const Transform& transform) const;
         std::pair<float, float> circle_projection  (CircleShape*  circle,  const sf::Vector2f& axis, const Transform& transform) const;
