@@ -112,15 +112,13 @@ namespace physics
 
     void World::collide_fixtures()
     {
-        auto it = fixture_contacts_.begin();
+        auto isnt_colliding = [this](physics::CollisionInfo& collision) {
+            return this->collision_solver_.collide(collision) == false; 
+        };
 
-        while (it != fixture_contacts_.end())
-        {
-            if (collision_solver_.collide(*it))
-                ++it;
-            else
-                it = fixture_contacts_.erase(it);
-        }
+        auto it{ std::remove_if(fixture_contacts_.begin(), fixture_contacts_.end(), isnt_colliding) };
+
+        fixture_contacts_.erase(it, fixture_contacts_.end());
     }
 
     void World::solve_contacts()
