@@ -29,7 +29,7 @@ namespace physics
             selected_world_->update(delta_time / steps_amount);
 
         for (auto& [k, body] : selected_world_->get_bodies())
-            wrap_to_screen(body, window_size);
+            wrap_to_area(body, window_size * 2);
     }
 
     physics::RigidBody* Engine::get_body(int32_t id) const
@@ -76,13 +76,13 @@ namespace physics
 #endif // DEBUG
 
 
-    void Engine::wrap_to_screen(RigidBody* body, const sf::Vector2i& window_size)
+    void Engine::wrap_to_area(RigidBody* body, const sf::Vector2i& window_size)
     {
         auto& position = body->get_position();
 
         sf::Vector2f pos{
-            position.x / (float)window_size.x,
-            position.y / (float)window_size.y
+            (position.x + window_size.x / 4.f) / (float)window_size.x,
+            (position.y + window_size.y / 4.f) / (float)window_size.y
         };
 
         if (pos.x < 0)
@@ -95,8 +95,8 @@ namespace physics
         else if (pos.y > 1)
             pos.y = fmodf(pos.y, 1.f);
 
-        pos.x *= (float)window_size.x;
-        pos.y *= (float)window_size.y;
+        pos.x *= (float)window_size.x; pos.x -= window_size.x / 4.f;
+        pos.y *= (float)window_size.y; pos.y -= window_size.y / 4.f;
 
         body->set_position(pos);
     }

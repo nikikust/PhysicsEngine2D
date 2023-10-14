@@ -122,7 +122,7 @@ void PhysicsEngine2D::poll_events()
             }
             else if (event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
             {
-                // TODO something
+                // TO DO: something
             }
             break;
         default:
