@@ -58,6 +58,8 @@ struct DataStorage
         bool mouse_captured = false;
         bool keyboard_captured = false;
 
+        bool paused = true;
+
         enum class MovementMode
         {
             IDLE         = 0,

@@ -223,7 +223,11 @@ void PhysicsEngine2D::process_inputs()
         if (utils::key_pressed(sf::Keyboard::Space))
         {
             if (data_editor_.keyboard_io_is_released())
+            {
                 engine_.set_pause(!engine_.get_pause_state());
+
+                data_storage_.status.paused = engine_.get_pause_state();
+            }
         }
 
         auto entity = data_storage_.entities_storage.get_selected_entity();

@@ -146,12 +146,14 @@ void DataEditor::load_scene(int32_t id)
 
     switch (id)
     {
-    case 1: load_scene_1(); return;
-    case 2: load_scene_2(); return;
-    case 3: load_scene_3(); return;
-    case 4: load_scene_4(); return;
-    default:                return;
+    case 1: load_scene_1(); break;
+    case 2: load_scene_2(); break;
+    case 3: load_scene_3(); break;
+    case 4: load_scene_4(); break;
+    default:                break;
     }
+
+    data_storage_.status.paused = engine_.get_pause_state();
 }
 
 void DataEditor::load_scene_1()
