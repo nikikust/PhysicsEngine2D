@@ -14,6 +14,7 @@ struct DataStorage
     // --- //
 
     sf::Vector2i screen_size;
+    sf::Vector2f screen_size_halved;
 
     sf::Clock deltaClock;
 
@@ -63,9 +64,9 @@ struct DataStorage
             MovingCamera = 1
         } movement_mode = MovementMode::IDLE;
 
-        sf::Vector2i mouse_position_on_click = { 0, 0 };
-        sf::Vector2i camera_position_on_click = { 0, 0 };
-        sf::Vector2i point_position_on_click = { 0, 0 };
+        sf::Vector2f mouse_position_on_click  = { 0, 0 };
+        sf::Vector2f camera_position_on_click = { 0, 0 };
+        sf::Vector2f point_position_on_click  = { 0, 0 };
 
         bool make_screenshot = false;
         int  screenshot_frames_delay = 0;
@@ -73,10 +74,9 @@ struct DataStorage
 
     struct Camera
     {
-        sf::Vector2i position{ 0, 0 };
+        sf::Vector2f position{ 0.f, 0.f };
 
-        float scale_modifier = 0.0;
-        float scale_modifier_as_pow2 = 1;
+        float scale_modifier = 1.0f;
     } camera;
 
     game::EntitiesStorage entities_storage;

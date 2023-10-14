@@ -45,7 +45,7 @@ void DataEditor::stop_moving_camera()
 {
     data_storage_.status.movement_mode = DataStorage::Status::MovementMode::IDLE;
 }
-void DataEditor::move_camera(sf::Vector2i delta)
+void DataEditor::move_camera(sf::Vector2f delta)
 {
     data_storage_.camera.position = data_storage_.status.camera_position_on_click - delta;
 }
@@ -83,25 +83,12 @@ void DataEditor::close_message()
     data_storage_.menus.fields.cursor_message.elapse_at = time(0);
 }
 
-void DataEditor::zoom_out()
+void DataEditor::zoom(float delta)
 {
-    data_storage_.camera.scale_modifier = utils::minmax(
-        -2.f,
-            round(data_storage_.camera.scale_modifier) - 1,
-            3.f
-    );
+    if (data_storage_.camera.scale_modifier < 0.0001f && delta < 1.f)
+        return;
 
-    data_storage_.camera.scale_modifier_as_pow2 = powf(2, data_storage_.camera.scale_modifier);
-}
-void DataEditor::zoom_in()
-{
-    data_storage_.camera.scale_modifier = utils::minmax(
-        -2.f,
-        round(data_storage_.camera.scale_modifier) + 1,
-        3.f
-    );
-
-    data_storage_.camera.scale_modifier_as_pow2 = powf(2, data_storage_.camera.scale_modifier);
+    data_storage_.camera.scale_modifier *= delta;
 }
 
 void DataEditor::screenshot_with_interface()

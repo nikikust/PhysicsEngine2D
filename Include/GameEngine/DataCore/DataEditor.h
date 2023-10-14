@@ -22,7 +22,7 @@ public:
     void restore_camera_position();
     void start_moving_camera();
     void stop_moving_camera();
-    void move_camera(sf::Vector2i delta);
+    void move_camera(sf::Vector2f delta);
 
     bool mouse_io_is_released();
     bool keyboard_io_is_released();
@@ -34,8 +34,7 @@ public:
     bool message_is_opened();
     void close_message();
 
-    void zoom_out();
-    void zoom_in();
+    void zoom(float delta);
 
     void screenshot_with_interface();
     void screenshot_without_interface();

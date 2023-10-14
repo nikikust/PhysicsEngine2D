@@ -2,6 +2,8 @@
 #include <GameEngine/Utils/Functions.h>
 
 
+struct DataStorage;
+
 namespace graphics
 {
     class Window;
@@ -25,7 +27,7 @@ namespace graphics
     class Painter
     {
     public:
-        Painter(graphics::Window& window);
+        Painter(graphics::Window& window, DataStorage& data_storage);
         Painter() = delete;
         Painter(Painter&) = delete;
         Painter(Painter&&) = delete;
@@ -44,6 +46,8 @@ namespace graphics
 
     private:
         graphics::Window& window_;
+        DataStorage& data_storage_;
+
 
         sf::CircleShape    circle_brush;
         sf::RectangleShape circle_angle_brush;

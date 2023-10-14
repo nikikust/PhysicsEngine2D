@@ -7,7 +7,7 @@ namespace graphics
         : data_storage_(data_storage),
           data_loader_ (data_loader),
           window_      (window),
-          painter_     (window)
+          painter_     (window, data_storage)
     {
     }
     Renderer::~Renderer()

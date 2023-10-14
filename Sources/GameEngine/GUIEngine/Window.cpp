@@ -19,6 +19,9 @@ namespace graphics
 
         data_storage_.screen_size = sf::Vector2i(window_.getSize());
 
+        data_storage_.screen_size_halved.x = data_storage_.screen_size.x / 2.f;
+        data_storage_.screen_size_halved.y = data_storage_.screen_size.y / 2.f;
+
         bool result = ImGui::SFML::Init(window_);
 
         imgui_io_ = &ImGui::GetIO();
@@ -41,6 +44,9 @@ namespace graphics
         window_.setView(sf::View(visibleArea));
 
         data_storage_.screen_size = sf::Vector2i(window_.getSize());
+
+        data_storage_.screen_size_halved.x = data_storage_.screen_size.x / 2.f;
+        data_storage_.screen_size_halved.y = data_storage_.screen_size.y / 2.f;
     }
     bool Window::poll_event(sf::Event& event)
     {
@@ -56,9 +62,9 @@ namespace graphics
         return window_.isOpen();
     }
 
-    sf::Vector2i Window::get_cursor_position()
+    sf::Vector2f Window::get_cursor_position()
     {
-        return sf::Mouse::getPosition(window_);
+        return sf::Vector2f{ sf::Mouse::getPosition(window_) };
     }
 
     void Window::set_cursor_position(sf::Vector2i position)

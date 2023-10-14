@@ -24,7 +24,7 @@ namespace graphics
         bool has_focus();
         bool is_open();
 
-        sf::Vector2i get_cursor_position();
+        sf::Vector2f get_cursor_position();
 
         void set_cursor_position(sf::Vector2i position);
         void hide_mouse();

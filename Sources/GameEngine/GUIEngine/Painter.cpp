@@ -1,11 +1,12 @@
 #include <GameEngine/GUIEngine/Painter.h>
 #include <GameEngine/GUIEngine/Window.h>
+#include <GameEngine/DataCore/DataStorage.h>
 
 
 namespace graphics
 {
-    Painter::Painter(graphics::Window& window)
-        : window_ (window)
+    Painter::Painter(graphics::Window& window, DataStorage& data_storage)
+        : window_ (window), data_storage_(data_storage)
     {
         circle_brush.setOutlineThickness(0.f);
         circle_angle_brush.setOrigin({ 0.f, 1.f });
@@ -22,9 +23,9 @@ namespace graphics
         
         int32_t cnt = 0;
         for (auto& vertex : vertices)
-            polygon_brush.setPoint(cnt++, vertex);
+            polygon_brush.setPoint(cnt++, vertex * data_storage_.camera.scale_modifier);
         
-        polygon_brush.setPosition(position);
+        polygon_brush.setPosition(data_storage_.screen_size_halved + (position - data_storage_.camera.position ) * data_storage_.camera.scale_modifier);
         
         polygon_brush.setOutlineThickness(0.f);
         polygon_brush.setOutlineColor(color);
@@ -34,9 +35,12 @@ namespace graphics
     }
     void Painter::draw_circle(const sf::Vector2f& position, float radius, float angle, const sf::Color& color, bool draw_rotation_line)
     {
-        circle_brush.setRadius(radius);
-        circle_brush.setOrigin(radius, radius);
-        circle_brush.setPosition(position);
+        float scaled_radius  = radius * data_storage_.camera.scale_modifier;
+        auto scaled_position = (position - data_storage_.camera.position) * data_storage_.camera.scale_modifier;
+
+        circle_brush.setRadius(scaled_radius);
+        circle_brush.setOrigin(scaled_radius, scaled_radius);
+        circle_brush.setPosition(data_storage_.screen_size_halved + scaled_position);
         circle_brush.setRotation(angle * 180.f / (float)PI);
 
         circle_brush.setFillColor(color);
@@ -46,8 +50,8 @@ namespace graphics
 
         if (draw_rotation_line)
         {
-            circle_angle_brush.setPosition(position);
-            circle_angle_brush.setSize({ radius, 2.f });
+            circle_angle_brush.setPosition(data_storage_.screen_size_halved + scaled_position);
+            circle_angle_brush.setSize({ scaled_radius, 2.f });
             circle_angle_brush.setRotation(angle * 180.f / (float)PI);
 
             window_.get_render_area().draw(circle_angle_brush);
@@ -60,9 +64,9 @@ namespace graphics
 
         int32_t cnt = 0;
         for (auto& vertex : vertices)
-            polygon_brush.setPoint(cnt++, vertex);
+            polygon_brush.setPoint(cnt++, vertex * data_storage_.camera.scale_modifier);
 
-        polygon_brush.setPosition(position);
+        polygon_brush.setPosition(data_storage_.screen_size_halved + (position - data_storage_.camera.position) * data_storage_.camera.scale_modifier);
 
         polygon_brush.setOutlineThickness(outline_thickness);
         polygon_brush.setOutlineColor(color);

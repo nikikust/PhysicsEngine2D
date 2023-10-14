@@ -112,6 +112,19 @@ void PhysicsEngine2D::poll_events()
             if (utils::in(0, event.key.code, sf::Keyboard::KeyCount - 1))
                 utils::key_states[event.key.code] = utils::ButtonState::Released;
             break;
+        case sf::Event::MouseWheelScrolled:
+            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
+            {
+                if (event.mouseWheelScroll.delta > 0)
+                    data_editor_.zoom(1.02f);
+                else
+                    data_editor_.zoom(0.98f);
+            }
+            else if (event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
+            {
+                // TODO something
+            }
+            break;
         default:
             break;
         }
@@ -154,8 +167,7 @@ void PhysicsEngine2D::process_inputs()
         {
             auto mouse_diff = window_.get_cursor_position() - data_storage_.status.mouse_position_on_click;
 
-            mouse_diff.x = int(mouse_diff.x / data_storage_.camera.scale_modifier_as_pow2);
-            mouse_diff.y = int(mouse_diff.y / data_storage_.camera.scale_modifier_as_pow2);
+            mouse_diff /= data_storage_.camera.scale_modifier;
 
             if (data_editor_.is_camera_moving_mode())
             {
@@ -184,49 +196,6 @@ void PhysicsEngine2D::process_inputs()
         if (utils::mouse_released (sf::Mouse::Right) && data_editor_.mouse_io_is_released())
         {
 
-        }
-
-        if (utils::key_pressed(sf::Keyboard::Left ) && data_editor_.keyboard_io_is_released())
-        {
-            if (data_editor_.is_idle_mode())
-                data_storage_.camera.position.x -= int(data_storage_.screen_size.x / data_storage_.camera.scale_modifier_as_pow2);
-        }
-        if (utils::key_pressed(sf::Keyboard::Right) && data_editor_.keyboard_io_is_released())
-        {
-            if (data_editor_.is_idle_mode())
-                data_storage_.camera.position.x += int(data_storage_.screen_size.x / data_storage_.camera.scale_modifier_as_pow2);
-        }
-        if (utils::key_pressed(sf::Keyboard::Up)    && data_editor_.keyboard_io_is_released())
-        {
-            if (data_editor_.is_idle_mode())
-                data_storage_.camera.position.y -= int(data_storage_.screen_size.y / data_storage_.camera.scale_modifier_as_pow2);
-        }
-        if (utils::key_pressed(sf::Keyboard::Down)  && data_editor_.keyboard_io_is_released())
-        {
-            if (data_editor_.is_idle_mode())
-                data_storage_.camera.position.y += int(data_storage_.screen_size.y / data_storage_.camera.scale_modifier_as_pow2);
-        }
-
-        // --- Zooming
-        if (utils::key_pressed(sf::Keyboard::Subtract))
-        {
-            if (data_editor_.keyboard_io_is_released())
-                data_editor_.zoom_out();
-        }
-        if (utils::key_pressed(sf::Keyboard::Add))
-        {
-            if (data_editor_.keyboard_io_is_released())
-                data_editor_.zoom_in();
-        }
-        if (utils::key_pressed(sf::Keyboard::LBracket))
-        {
-            if (data_editor_.keyboard_io_is_released())
-                data_editor_.zoom_out();
-        }
-        if (utils::key_pressed(sf::Keyboard::RBracket))
-        {
-            if (data_editor_.keyboard_io_is_released())
-                data_editor_.zoom_in();
         }
 
         // --- Hotkeys
