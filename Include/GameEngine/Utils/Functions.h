@@ -25,6 +25,9 @@
 #define PI2 (3.14159265 / 2)
 #define PI4 (3.14159265 / 4)
 
+
+//#define DAMPING
+
 //#define DEBUG
 //#define DEBUGTree       // requires DEBUG
 //#define DEBUGBodyTree   // requires DEBUGTree

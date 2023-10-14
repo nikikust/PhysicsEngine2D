@@ -46,6 +46,11 @@ namespace physics
 
         linear_speed_  += linear_acceleration_  * delta_time;
         angular_speed_ += angular_acceleration_ * delta_time;
+        
+#ifdef DAMPING
+        linear_speed_  *= (1 - delta_time / 5.f);
+        angular_speed_ *= (1 - delta_time / 5.f);
+#endif
 
         if (fixed_linear_.first)
             linear_speed_.x = 0;
