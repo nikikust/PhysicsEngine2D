@@ -4,7 +4,7 @@
 namespace game
 {
 	CircleEntity::CircleEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
-		: Entity(sf::Color::Green, new physics::RigidBody())
+		: Entity(sf::Color::Green)
 	{
 		auto circle = new physics::CircleShape(
 			50,    // Radius
@@ -21,7 +21,6 @@ namespace game
 
 	CircleEntity::~CircleEntity()
 	{
-		free(main_body_);
 	}
 
 	

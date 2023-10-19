@@ -9,9 +9,9 @@ namespace game
 	class Entity
 	{
 	public:
-		Entity(const sf::Color& color, physics::RigidBody* main_body);
+		Entity(const sf::Color& color);
 		
-		virtual ~Entity() = default;
+		virtual ~Entity();
 
 		void      set_color(const sf::Color& color);
 		sf::Color get_color() const;

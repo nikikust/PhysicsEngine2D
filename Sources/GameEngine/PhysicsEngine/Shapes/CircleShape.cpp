@@ -12,9 +12,9 @@ namespace physics
 
     PhysicalData CircleShape::calculate_physical_data(float density) const
     {
-        float area = (float)PI * radius_ * radius_;
+        float area = PIf * radius_ * radius_;
         float mass = area * density;
-        float mmoi = (float)PI4 * powf(radius_, 4);
+        float mmoi = PI4f * powf(radius_, 4);
 
         return { area , mass, (mass > 0.f) ? 1.f / mass : 0.f, {}, mmoi };
     }

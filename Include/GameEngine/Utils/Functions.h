@@ -25,6 +25,10 @@
 #define PI2 (3.14159265 / 2)
 #define PI4 (3.14159265 / 4)
 
+#define PIf float(PI)
+#define PI2f float(PI / 2)
+#define PI4f float(PI / 4)
+
 
 //#define DAMPING
 

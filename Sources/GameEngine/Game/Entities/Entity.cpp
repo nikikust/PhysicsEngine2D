@@ -6,10 +6,17 @@ namespace game
 	int32_t Entity::max_entity_id = 0;
 
 
-	Entity::Entity(const sf::Color& color, physics::RigidBody* main_body)
-		: color_(color), main_body_(main_body)
+	Entity::Entity(const sf::Color& color)
+		: color_(color)
 	{
 		id_ = ++max_entity_id;
+
+		main_body_ = new physics::RigidBody();
+	}
+
+	Entity::~Entity()
+	{
+		delete main_body_;
 	}
 
 

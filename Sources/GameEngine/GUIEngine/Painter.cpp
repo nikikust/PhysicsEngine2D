@@ -41,7 +41,7 @@ namespace graphics
         circle_brush.setRadius(scaled_radius);
         circle_brush.setOrigin(scaled_radius, scaled_radius);
         circle_brush.setPosition(data_storage_.screen_size_halved + scaled_position);
-        circle_brush.setRotation(angle * 180.f / (float)PI);
+        circle_brush.setRotation(angle * 180.f / PIf);
 
         circle_brush.setFillColor(color);
         circle_brush.setOutlineColor(color);
@@ -52,7 +52,7 @@ namespace graphics
         {
             circle_angle_brush.setPosition(data_storage_.screen_size_halved + scaled_position);
             circle_angle_brush.setSize({ scaled_radius, 2.f });
-            circle_angle_brush.setRotation(angle * 180.f / (float)PI);
+            circle_angle_brush.setRotation(angle * 180.f / PIf);
 
             window_.get_render_area().draw(circle_angle_brush);
         }

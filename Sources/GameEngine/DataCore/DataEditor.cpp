@@ -227,12 +227,12 @@ void DataEditor::load_scene_3()
     for (int32_t i = 0; i < 50; ++i)
     {
         auto position = sf::Vector2f{ utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) };
-        auto rotation = utils::randf(0.f, (float)PI * 2.f, 360);
+        auto rotation = utils::randf(0.f, PIf * 2.f, 360);
 
         auto circle  = std::make_shared<game::CircleEntity >(world, position, rotation);
 
         position = sf::Vector2f{ utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) };
-        rotation = utils::randf(0.f, (float)PI * 2.f, 360);
+        rotation = utils::randf(0.f, PIf * 2.f, 360);
 
         auto polygon = std::make_shared<game::PolygonEntity>(world, position, rotation);
 
