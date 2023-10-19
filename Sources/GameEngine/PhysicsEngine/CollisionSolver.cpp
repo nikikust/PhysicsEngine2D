@@ -583,32 +583,39 @@ namespace physics
     // --- Aditional methods
     std::pair<float, float> CollisionSolver::polygon_projection(PolygonShape* polygon, const sf::Vector2f& axis, const Transform& transform) const
     {
-        float min_projection = std::numeric_limits<float>::max();
-        float max_projection = std::numeric_limits<float>::lowest();
-
-        auto& vertices = polygon->get_vertices();
-
         auto polygon_position = polygon->get_position();
 
-        for (auto& vertex : vertices)
+        const auto& vertices = polygon->get_vertices();
+        auto vertex = vertices.begin();
+
+        float projection = utils::dot(physics::rotate_and_move_point(polygon_position + *vertex++, transform), axis);
+
+        float min_projection = projection;
+        float max_projection = projection;
+
+        for (; vertex != vertices.end(); ++vertex)
         {
-            float projection = utils::dot(physics::rotate_and_move_point(polygon_position + vertex, transform), axis);
+            projection = utils::dot(physics::rotate_and_move_point(polygon_position + *vertex, transform), axis);
 
             min_projection = std::min(min_projection, projection);
             max_projection = std::max(max_projection, projection);
         }
 
-        return { min_projection, max_projection };
+        std::pair<float, float> pair{ min_projection, max_projection };
+
+        return pair;
     }
 
     std::pair<float, float> CollisionSolver::circle_projection(CircleShape* circle, const sf::Vector2f& axis, const Transform& transform) const
     {
         float central = utils::dot(physics::rotate_and_move_point(circle->get_position(), transform), axis);
 
-        float min_projection = central - circle->get_radius();
-        float max_projection = central + circle->get_radius();
+        std::pair<float, float> pair{ 
+            central - circle->get_radius(), 
+            central + circle->get_radius() 
+        };
 
-        return { min_projection, max_projection };
+        return pair;
     }
 
 
