@@ -79,14 +79,7 @@ namespace physics
 
     bool DAABBTree::move(int32_t node_id, const ShapeAABB& aabb)
     {
-        // Extend AABB
-        ShapeAABB fat_AABB;
-        sf::Vector2f r{ 5.f, 5.f };
-
-        fat_AABB.min = aabb.min - r;
-        fat_AABB.max = aabb.max + r;
-
-        const ShapeAABB& tree_AABB = m_nodes[node_id].aabb;
+        ShapeAABB& tree_AABB = m_nodes[node_id].aabb;
 
         if (tree_AABB.contains(aabb))
         {
@@ -95,24 +88,29 @@ namespace physics
             // The tree AABB still contains the object, but it might be too large.
             // Perhaps the object was moving fast but has since gone to sleep.
             // The huge AABB is larger than the new fat AABB.
-            ShapeAABB huge_AABB{
-                fat_AABB.min - 4.0f * r,
-                fat_AABB.max + 4.0f * r
-            };
-
-            if (huge_AABB.contains(tree_AABB))
-            {
-                // The tree AABB contains the object AABB and the tree AABB is
-                // not too large. No tree update needed.
-                return false;
-            }
+            
+            // ShapeAABB huge_AABB{
+            //     fat_AABB.min - 4.0f * r,
+            //     fat_AABB.max + 4.0f * r
+            // };
+            // 
+            // if (huge_AABB.contains(tree_AABB))
+            // {
+            //     // The tree AABB contains the object AABB and the tree AABB is
+            //     // not too large. No tree update needed.
+            //     return false;
+            // }
             
             // Otherwise the tree AABB is huge and needs to be shrunk
         }
 
         remove_leaf(node_id);
 
-        m_nodes[node_id].aabb = fat_AABB;
+        // To Extend AABB
+        sf::Vector2f r{ 5.f, 5.f };
+
+        tree_AABB.min = aabb.min - r; // fat_AABB
+        tree_AABB.max = aabb.max + r;
 
         insert_leaf(node_id);
 
