@@ -41,7 +41,7 @@ namespace game
 	{
 	}
 
-	void ComplexEntity::render(graphics::Painter& painter)
+	void ComplexEntity::render(graphics::Painter& painter) const
 	{
 		auto& transform = main_body_->get_transform();
 

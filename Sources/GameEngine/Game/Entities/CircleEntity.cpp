@@ -24,7 +24,7 @@ namespace game
 	}
 
 	
-	void CircleEntity::render(graphics::Painter& painter)
+	void CircleEntity::render(graphics::Painter& painter) const
 	{
 		auto& transform = main_body_->get_transform();
 

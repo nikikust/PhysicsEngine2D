@@ -28,10 +28,10 @@ namespace physics
         void add_body(physics::RigidBody* body);
 
         /// Get reference to the map of all bodies in this world stored under their IDs
-        const std::unordered_map<int32_t, physics::RigidBody*>& get_bodies();
+        const std::unordered_map<int32_t, physics::RigidBody*>& get_bodies() const;
 
         /// Set gravity in this world
-        void set_gravity(const sf::Vector2f acceleration);
+        void set_gravity(const sf::Vector2f& acceleration);
 
         /// Removes all bodies from this world
         void clear();
@@ -71,7 +71,7 @@ namespace physics
 
         sf::Vector2f gravity_;
 
-        std::unordered_map<int32_t, physics::RigidBody*> bodies_{};
+        std::unordered_map<int32_t, physics::RigidBody*> bodies_;
 
         DAABBTree world_tree_;
 

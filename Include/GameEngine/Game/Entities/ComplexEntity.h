@@ -11,6 +11,6 @@ namespace game
 		ComplexEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle);
 		~ComplexEntity();
 
-		void render(graphics::Painter& painter) override;
+		void render(graphics::Painter& painter) const override;
 	};
 } // namespace game

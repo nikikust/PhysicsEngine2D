@@ -18,7 +18,7 @@ namespace game
 
 		int32_t get_id() const;
 
-		virtual void render(graphics::Painter& painter) = 0;
+		virtual void render(graphics::Painter& painter) const = 0;
 
 		physics::RigidBody* get_main_body();
 

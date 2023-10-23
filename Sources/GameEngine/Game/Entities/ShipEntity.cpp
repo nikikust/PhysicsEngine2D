@@ -50,7 +50,7 @@ namespace game
     }
 
 
-    void ShipEntity::render(graphics::Painter& painter)
+    void ShipEntity::render(graphics::Painter& painter) const
     {
         auto& transform = main_body_->get_transform();
         auto& fixtures  = main_body_->get_fixtures();

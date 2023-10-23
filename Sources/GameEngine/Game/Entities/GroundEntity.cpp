@@ -48,7 +48,7 @@ namespace game
     }
 
 
-    void GroundEntity::render(graphics::Painter& painter)
+    void GroundEntity::render(graphics::Painter& painter) const
     {
         auto& transform = main_body_->get_transform();
         auto& fixtures  = main_body_->get_fixtures();

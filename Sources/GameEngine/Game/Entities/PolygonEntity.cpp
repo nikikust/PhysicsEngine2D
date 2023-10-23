@@ -27,7 +27,7 @@ namespace game
 	}
 
 
-	void PolygonEntity::render(graphics::Painter& painter)
+	void PolygonEntity::render(graphics::Painter& painter) const
 	{
 		auto& transform = main_body_->get_transform();
 

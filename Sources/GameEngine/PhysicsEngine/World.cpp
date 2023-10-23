@@ -69,12 +69,12 @@ namespace physics
         return;
     }
 
-    const std::unordered_map<int32_t, physics::RigidBody*>& World::get_bodies()
+    const std::unordered_map<int32_t, physics::RigidBody*>& World::get_bodies() const
     {
         return bodies_;
     }
 
-    void World::set_gravity(const sf::Vector2f acceleration)
+    void World::set_gravity(const sf::Vector2f& acceleration)
     {
         gravity_ = acceleration;
     }
