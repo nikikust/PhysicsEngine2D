@@ -18,6 +18,8 @@ public:
     void save_mouse_position_on_click();
     bool mouse_kept_position();
 
+    sf::Vector2f get_world_mouse_position();
+
     void save_camera_position();
     void restore_camera_position();
     void start_moving_camera();
@@ -43,6 +45,8 @@ public:
     void flip_exit_popup_state();
 
     void load_scene(int32_t id);
+
+    void create_entity(const sf::Vector2f& position);
 
 private:
     void make_screenshot();

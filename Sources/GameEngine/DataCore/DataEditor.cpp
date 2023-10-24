@@ -25,6 +25,12 @@ bool DataEditor::mouse_kept_position()
     return data_storage_.status.mouse_position_on_click == window_.get_cursor_position();
 }
 
+sf::Vector2f DataEditor::get_world_mouse_position()
+{
+    return (window_.get_cursor_position() - data_storage_.screen_size_halved) / data_storage_.camera.scale_modifier +
+        data_storage_.camera.position;
+}
+
 void DataEditor::save_camera_position()
 {
     data_storage_.status.camera_position_on_click = data_storage_.camera.position;
@@ -154,6 +160,18 @@ void DataEditor::load_scene(int32_t id)
     }
 
     data_storage_.status.paused = engine_.get_pause_state();
+}
+
+void DataEditor::create_entity(const sf::Vector2f& position)
+{
+    auto  world   = engine_.get_world();
+    auto& storage = data_storage_.entities_storage;
+
+    auto entity = std::make_shared<game::PolygonEntity>(world, position, 0.f);
+
+    storage.add_entity(entity);
+
+    storage.select_entity(entity);
 }
 
 void DataEditor::load_scene_1()

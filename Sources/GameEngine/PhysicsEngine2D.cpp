@@ -160,14 +160,15 @@ void PhysicsEngine2D::process_inputs()
         if (utils::mouse_pressed  (sf::Mouse::Left)  && data_editor_.mouse_io_is_released())
         {
             data_editor_.save_mouse_position_on_click();
-
-            data_editor_.start_moving_camera();
         }
         if (utils::mouse_down     (sf::Mouse::Left))
         {
             auto mouse_diff = window_.get_cursor_position() - data_storage_.status.mouse_position_on_click;
 
             mouse_diff /= data_storage_.camera.scale_modifier;
+
+            if (!data_editor_.is_camera_moving_mode() && utils::length(mouse_diff) != 0.f)
+                data_editor_.start_moving_camera();
 
             if (data_editor_.is_camera_moving_mode())
             {
@@ -182,6 +183,10 @@ void PhysicsEngine2D::process_inputs()
             if (data_editor_.is_camera_moving_mode())
             {
                 data_editor_.stop_moving_camera();
+            }
+            else
+            {
+                data_editor_.create_entity(data_editor_.get_world_mouse_position());
             }
         }
                               
