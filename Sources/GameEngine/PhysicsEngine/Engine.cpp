@@ -3,7 +3,7 @@
 
 namespace physics
 {
-    int32_t Engine::steps_amount = 16;
+    int32_t Engine::steps_amount = 2;
 
 
     Engine::Engine()
@@ -28,8 +28,17 @@ namespace physics
         for (int step_cnt = 0; step_cnt < steps_amount; ++step_cnt)
             selected_world_->update(delta_time / steps_amount);
 
-        for (auto& [k, body] : selected_world_->get_bodies())
-            wrap_to_area(body, window_size * 2);
+        // TO DO: Acceleration tests
+        // sf::Vector2f dir{ 1.f, 0.f };
+        // 
+        // for (auto& [k, body] : selected_world_->get_bodies())
+        // {
+        //     wrap_to_area(body, window_size * 2);
+        // 
+        //     auto rot = utils::rotate_point(dir, body->get_angle());
+        // 
+        //     body->accelerate(rot * (100000000.f * body->get_inv_mass()) * delta_time);
+        // }
     }
 
     physics::RigidBody* Engine::get_body(int32_t id) const
