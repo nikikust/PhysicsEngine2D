@@ -179,11 +179,11 @@ void DataEditor::load_scene_1()
     auto  world = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
 
-    auto complex_1 = std::make_shared<game::ComplexEntity>(world, sf::Vector2f{ 1500, 1000 }, 0.f);
-    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{ 1100,  600 }, 0.f);
-    auto circle_1  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{ 1400,  600 }, 0.f);
-    auto circle_2  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{ 1100,  800 }, 0.f);
-    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{ 1400,  800 }, 0.f);
+    auto complex_1 = std::make_shared<game::ComplexEntity>(world, sf::Vector2f{  250,  500 }, 0.f);
+    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{ -150,  100 }, 0.f);
+    auto circle_1  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{  150,  100 }, 0.f);
+    auto circle_2  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{ -150,  300 }, 0.f);
+    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{  150,  300 }, 0.f);
 
     storage.add_entity(complex_1);
     storage.add_entity(polygon_1);

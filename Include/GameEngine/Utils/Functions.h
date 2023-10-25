@@ -32,8 +32,8 @@
 
 //#define DAMPING
 
-//#define DEBUG
-//#define DEBUGTree       // requires DEBUG
+#define DEBUG
+#define DEBUGTree       // requires DEBUG
 //#define DEBUGBodyTree   // requires DEBUGTree
 //#define DEBUGPrintTree  // requires DEBUGTree
 
