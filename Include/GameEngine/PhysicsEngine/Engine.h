@@ -19,7 +19,7 @@ namespace physics
 
         // --- //
 
-        void update(float delta_time, const sf::Vector2i& window_size);
+        void update(float delta_time);
 
         physics::RigidBody* get_body(int32_t id) const;
         physics::RigidBody* get_body(int32_t id, int32_t world_id) const;
@@ -37,7 +37,7 @@ namespace physics
 #endif // DEBUG
 
     private:
-        void wrap_to_area(RigidBody* body, const sf::Vector2i& window_size);
+        void wrap_to_area(RigidBody* body, const sf::Vector2f& area_min, const sf::Vector2f& area_max);
 
 
         std::shared_ptr<World> selected_world_{};

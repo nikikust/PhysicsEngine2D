@@ -18,7 +18,7 @@ namespace physics
     }
 
 
-    void Engine::update(float delta_time, const sf::Vector2i& window_size)
+    void Engine::update(float delta_time)
     {
         if (paused_ && !do_step_)
             return;
@@ -33,7 +33,7 @@ namespace physics
         
         for (auto& [k, body] : selected_world_->get_bodies())
         {
-            wrap_to_area(body, window_size * 2);
+            wrap_to_area(body, { -2400.f, -1500.f }, { 2400.f, 1500.f });
         
             // auto rot = utils::rotate_point(dir, body->get_angle());
             // 
@@ -85,13 +85,13 @@ namespace physics
 #endif // DEBUG
 
 
-    void Engine::wrap_to_area(RigidBody* body, const sf::Vector2i& window_size)
+    void Engine::wrap_to_area(RigidBody* body, const sf::Vector2f& area_min, const sf::Vector2f& area_max)
     {
         auto& position = body->get_position();
 
         sf::Vector2f pos{
-            (position.x + window_size.x / 4.f) / (float)window_size.x,
-            (position.y + window_size.y / 4.f) / (float)window_size.y
+            (position.x - area_min.x) / (area_max - area_min).x,
+            (position.y - area_min.y) / (area_max - area_min).y
         };
 
         if (pos.x < 0)
@@ -104,8 +104,8 @@ namespace physics
         else if (pos.y > 1)
             pos.y = fmodf(pos.y, 1.f);
 
-        pos.x *= (float)window_size.x; pos.x -= window_size.x / 4.f;
-        pos.y *= (float)window_size.y; pos.y -= window_size.y / 4.f;
+        pos.x *= (area_max - area_min).x; pos.x += area_min.x;
+        pos.y *= (area_max - area_min).y; pos.y += area_min.y;
 
         body->set_position(pos);
     }

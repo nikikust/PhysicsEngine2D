@@ -205,7 +205,7 @@ void DataEditor::load_scene_2()
 
     for (int32_t i = 0; i < 2; ++i)
     {
-        auto ship = std::make_shared<game::ShipEntity>(world, sf::Vector2f{ 100.f + i * 1050.f, 10.f }, 0.f, 75, 75);
+        auto ship = std::make_shared<game::ShipEntity>(world, sf::Vector2f{ -500.f + i * 1050.f, 10.f }, 0.f, 75, 75);
 
         if (entity == nullptr)
             entity = ship;
@@ -213,7 +213,7 @@ void DataEditor::load_scene_2()
         storage.add_entity(ship);
     }
 
-    auto ground_1 = std::make_shared<game::GroundEntity>(world, sf::Vector2f{ 1280, 1200 }, 0.f);
+    auto ground_1 = std::make_shared<game::GroundEntity>(world, sf::Vector2f{ 0, 1200 }, 0.f);
 
     storage.add_entity(ground_1);
 
@@ -232,7 +232,7 @@ void DataEditor::load_scene_3()
     auto circle_1  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{  700,  100 }, 0.f);
     auto circle_2  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{  400,  300 }, 0.f);
     auto polygon_2 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{  700,  300 }, 0.f);
-    auto ground_1  = std::make_shared<game::GroundEntity >(world, sf::Vector2f{ 1280, 1200 }, 0.f);
+    auto ground_1  = std::make_shared<game::GroundEntity >(world, sf::Vector2f{    0, 1200 }, 0.f);
 
     storage.add_entity(complex_1);
     storage.add_entity(polygon_1);
@@ -244,12 +244,12 @@ void DataEditor::load_scene_3()
     
     for (int32_t i = 0; i < 50; ++i)
     {
-        auto position = sf::Vector2f{ utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) };
+        auto position = sf::Vector2f{ utils::randf(-1200, 1200, 2400), utils::randf(150, 1000, 850) };
         auto rotation = utils::randf(0.f, PIf * 2.f, 360);
 
         auto circle  = std::make_shared<game::CircleEntity >(world, position, rotation);
 
-        position = sf::Vector2f{ utils::randf(200, 2360, 2160), utils::randf(150, 1000, 850) };
+        position = sf::Vector2f{ utils::randf(-1200, 1200, 2400), utils::randf(150, 1000, 850) };
         rotation = utils::randf(0.f, PIf * 2.f, 360);
 
         auto polygon = std::make_shared<game::PolygonEntity>(world, position, rotation);
