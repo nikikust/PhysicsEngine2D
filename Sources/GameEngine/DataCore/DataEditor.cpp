@@ -140,6 +140,18 @@ void DataEditor::flip_exit_popup_state()
     data_storage_.menus.ConfirmExit.should_be_open = !data_storage_.menus.ConfirmExit.is_open;
 }
 
+void DataEditor::clear_scene()
+{
+    auto  world = engine_.get_world();
+    auto& storage = data_storage_.entities_storage;
+
+    storage.clear();
+    world->clear();
+
+    engine_.set_pause(true);
+    data_storage_.status.paused = engine_.get_pause_state();
+}
+
 void DataEditor::load_scene(int32_t id)
 {
     auto  world   = engine_.get_world();

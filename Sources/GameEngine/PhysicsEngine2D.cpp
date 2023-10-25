@@ -257,6 +257,12 @@ void PhysicsEngine2D::process_inputs()
                     body->set_angular_speed(0);
         }
 
+        if (utils::key_down(sf::Keyboard::C))
+        {
+            if (data_editor_.keyboard_io_is_released())
+                data_editor_.clear_scene();
+        }
+
         if (utils::key_down(sf::Keyboard::W))
         {
             if (data_editor_.keyboard_io_is_released())

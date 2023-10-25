@@ -44,6 +44,7 @@ public:
 
     void flip_exit_popup_state();
 
+    void clear_scene();
     void load_scene(int32_t id);
 
     void create_entity(const sf::Vector2f& position);
