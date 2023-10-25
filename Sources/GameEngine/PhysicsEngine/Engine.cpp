@@ -30,15 +30,15 @@ namespace physics
 
         // TO DO: Acceleration tests
         // sf::Vector2f dir{ 1.f, 0.f };
-        // 
-        // for (auto& [k, body] : selected_world_->get_bodies())
-        // {
-        //     wrap_to_area(body, window_size * 2);
-        // 
-        //     auto rot = utils::rotate_point(dir, body->get_angle());
-        // 
-        //     body->accelerate(rot * (100000000.f * body->get_inv_mass()) * delta_time);
-        // }
+        
+        for (auto& [k, body] : selected_world_->get_bodies())
+        {
+            wrap_to_area(body, window_size * 2);
+        
+            // auto rot = utils::rotate_point(dir, body->get_angle());
+            // 
+            // body->accelerate(rot * (100000000.f * body->get_inv_mass()) * delta_time);
+        }
     }
 
     physics::RigidBody* Engine::get_body(int32_t id) const
