@@ -34,7 +34,7 @@ namespace physics
         CollisionSolver();
 
 
-        bool collide(CollisionInfo& collision);
+        bool collide(CollisionInfo& collision) const;
         
         void separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 

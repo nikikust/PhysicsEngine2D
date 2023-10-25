@@ -13,7 +13,7 @@ namespace physics
 
     // --- Collision detection
 
-    bool CollisionSolver::collide(CollisionInfo& collision)
+    bool CollisionSolver::collide(CollisionInfo& collision) const
     {
         auto shape_A = collision.fixture_A->get_shape();
         auto shape_B = collision.fixture_B->get_shape();
