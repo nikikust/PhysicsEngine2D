@@ -54,6 +54,7 @@ namespace utils
     sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B);
 
     bool in(int a, int num, int b);       // true if: a <= num <= b
+    bool inf(float a, float num, float b);
 
     int   randi(int   start, int   end);
     float randf(float start, float end, int amount);
@@ -132,6 +133,19 @@ namespace utils
     inline sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B)
     {
         return { fmaxf(A.x, B.x), fmaxf(A.y, B.y) };
+    }
+
+    inline sf::Vector2f abs(const sf::Vector2f& X)
+    {
+        return sf::Vector2f(fabsf(X.x), fabsf(X.y));
+    }
+
+    template<typename T>
+    inline void swap(T& a, T& b)
+    {
+        T tmp = a;
+        a = b;
+        b = tmp;
     }
 
     inline float length(const sf::Vector2f& x)

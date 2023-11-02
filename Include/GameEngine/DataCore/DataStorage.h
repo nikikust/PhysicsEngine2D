@@ -72,6 +72,13 @@ struct DataStorage
 
         bool make_screenshot = false;
         int  screenshot_frames_delay = 0;
+
+        // Ray Cast section
+        struct RayCastSection
+        {
+            sf::Vector2f origin, target, normal;
+            bool is_hit = false;
+        } ray_cast_section;
     } status;
 
     struct Camera

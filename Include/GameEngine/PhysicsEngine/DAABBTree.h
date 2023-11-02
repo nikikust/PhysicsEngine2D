@@ -1,7 +1,9 @@
 #pragma once
 #include <stack>
 
+#include <GameEngine/PhysicsEngine/PhysMath.h>
 #include <GameEngine/PhysicsEngine/ShapeAABB.h>
+#include <GameEngine/PhysicsEngine/Ray.h>
 
 #ifdef DEBUGTree
 #include <GameEngine/GUIEngine/Painter.h>
@@ -50,6 +52,9 @@ namespace physics
         bool move(int32_t node_id, const ShapeAABB& aabb);
 
         template <typename Callback>
+        void cast_ray(Callback* callback, const Ray& ray);
+
+        template <typename Callback>
         void query(Callback* callback, const ShapeAABB& aabb);
 
         template <typename Callback>
@@ -90,11 +95,43 @@ namespace physics
 
 
         std::vector<int32_t> m_stack_;
+        std::vector<int32_t> m_raycast_stack_;
         std::vector<std::pair<int32_t, int32_t>> m_pairs_stack_;
     };
 
 
     // Inline section
+
+    template<typename Callback>
+    inline void DAABBTree::cast_ray(Callback* callback, const Ray& ray)
+    {
+        m_raycast_stack_.emplace_back(m_root_id);
+    
+        RayHitInfo result;
+    
+        while (!m_raycast_stack_.empty())
+        {
+            int32_t node_id = m_raycast_stack_.back(); m_raycast_stack_.pop_back();
+    
+            if (node_id == nullnode)
+                continue;
+    
+            auto& node = m_nodes[node_id];
+    
+            if (node.aabb.cast_ray(ray, result))
+            {
+                if (node.is_leaf())
+                {
+                    callback->raycast_callback(node.user_data);
+                }
+                else
+                {
+                    m_raycast_stack_.emplace_back(node.child_1);
+                    m_raycast_stack_.emplace_back(node.child_2);
+                }
+            }
+        }
+    }
 
     template<typename Callback>
     inline void DAABBTree::query(Callback* callback, const ShapeAABB& aabb)
@@ -114,7 +151,7 @@ namespace physics
             {
                 if (node.is_leaf())
                 {
-                    callback->add_contact(node.user_data);
+                    callback->add_contact_bodies(node.user_data);
                 }
                 else
                 {
@@ -149,7 +186,7 @@ namespace physics
             {
                 if (node_1.is_leaf() && node_2.is_leaf())
                 {
-                    callback->add_contact(node_1.user_data, node_2.user_data);
+                    callback->add_contact_fixtures(node_1.user_data, node_2.user_data);
                 }
                 else if (node_1.is_leaf())
                 {

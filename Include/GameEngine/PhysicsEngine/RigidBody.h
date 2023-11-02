@@ -6,6 +6,8 @@
 #include <GameEngine/PhysicsEngine/Shapes/CircleShape.h>
 #include <GameEngine/PhysicsEngine/Shapes/PolygonShape.h>
 
+#include <GameEngine/PhysicsEngine/Callbacks/RayCastCallback.h>
+
 
 namespace physics
 {
@@ -22,10 +24,31 @@ namespace physics
         int32_t node_id = nullnode;
     };
 
-	class RigidBody
-	{
-	public:
-		RigidBody();
+    struct RigidBodyRayCastWrapper
+    {
+        void raycast_callback(void* data)
+        {
+            FixtureNodeData* fixture_data = (FixtureNodeData*)data;
+            Fixture* fixture = fixture_data->fixture;
+
+            RayHitInfo output;
+
+            bool hit = fixture->cast_ray(ray, output);
+
+            if (hit)
+            {
+                return callback->report_fixture(fixture, output);
+            }
+        }
+
+        RayCastCallback* callback;
+        Ray ray;
+    };
+
+    class RigidBody
+    {
+    public:
+        RigidBody();
         RigidBody(RigidBody&) = delete;
         RigidBody(RigidBody&&) noexcept;
         ~RigidBody();
@@ -88,9 +111,9 @@ namespace physics
         DAABBTree& get_tree();
 
         // --- //
-		int32_t get_id() const;
+        int32_t get_id() const;
 
-	private:
+    private:
         void update_physical_data();
         void update_physical_data_append(physics::Fixture* fixture);
         void update_physical_data_remove(physics::Fixture* fixture);
@@ -111,7 +134,7 @@ namespace physics
         // --- Flags
         std::pair<bool, bool> fixed_linear_ = {}; // x and y
         bool                  fixed_angle_  = false;
-		
+        
         // --- Shapes
         std::vector<physics::Fixture*> fixtures_;
         std::vector<physics::Fixture*> active_fixtures_;
@@ -124,7 +147,7 @@ namespace physics
         int32_t id_;
 
         static int32_t max_body_id_;
-	};
+    };
 
     using RigidBodyPtrPair = std::pair<RigidBody*, RigidBody*>;
 

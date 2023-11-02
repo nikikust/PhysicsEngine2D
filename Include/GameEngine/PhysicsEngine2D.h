@@ -18,6 +18,8 @@
 #include <GameEngine/DataCore/DataLoader.h>
 #include <GameEngine/DataCore/DataEditor.h>
 
+#include <GameEngine/Game/Callbacks/ClosestRayHit.h>
+
 #include <GameEngine/PhysicsEngine/Engine.h>
 
 #include <GameEngine/GUIEngine/Interface.h>
@@ -41,6 +43,8 @@ private:
 
     void poll_events();
     void process_inputs();
+
+    void ray_cast_test();
 
     // --- Data
     

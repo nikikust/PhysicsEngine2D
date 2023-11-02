@@ -38,7 +38,7 @@ namespace graphics
         float scaled_radius  = radius * data_storage_.camera.scale_modifier;
         auto scaled_position = (position - data_storage_.camera.position) * data_storage_.camera.scale_modifier;
 
-        circle_brush.setRadius(scaled_radius);
+        circle_brush.setRadius(scaled_radius < 1.f ? 1.f : scaled_radius);
         circle_brush.setOrigin(scaled_radius, scaled_radius);
         circle_brush.setPosition(data_storage_.screen_size_halved + scaled_position);
         circle_brush.setRotation(angle * 180.f / PIf);
@@ -56,6 +56,28 @@ namespace graphics
 
             window_.get_render_area().draw(circle_angle_brush);
         }
+    }
+
+    void Painter::draw_line(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Color& color, float width)
+    {
+        sf::Vector2f diff = B - A;
+
+        float lens = utils::length(diff) * data_storage_.camera.scale_modifier;
+        float scaled_width = width * data_storage_.camera.scale_modifier;
+        float ang = atan2(diff.y, diff.x);
+
+        sf::Vector2f start_point{ A };
+
+        start_point.x += roundf(width / 2.f * sinf(ang));
+        start_point.y -= roundf(width / 2.f * cosf(ang));
+
+        line_brush.setSize(sf::Vector2f(lens, (scaled_width < 1.f) ? 1.f : scaled_width));
+        line_brush.setPosition(data_storage_.screen_size_halved + (start_point - data_storage_.camera.position) * data_storage_.camera.scale_modifier);
+        line_brush.setRotation(ang / PIf * 180.f);
+
+        line_brush.setFillColor(color);
+
+        window_.get_render_area().draw(line_brush);
     }
 
     void Painter::draw_border(const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color, float outline_thickness)

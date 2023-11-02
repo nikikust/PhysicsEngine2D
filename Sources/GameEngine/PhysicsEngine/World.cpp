@@ -3,19 +3,32 @@
 
 namespace physics
 {
-	int32_t World::max_world_id = 0;
+    int32_t World::max_world_id = 0;
 
 
-	World::World()
-	{
-		id_ = ++max_world_id;
+    World::World()
+    {
+        id_ = ++max_world_id;
 
         contact_1_ = nullptr;
-	}
+
+        ShapeAABB aabb{ {5.f, 5.f}, {10.f, 10.f} };
+        Ray ray{ {0.f, 0.f}, utils::normalize({1.f, 1.f}) };
+        sf::Vector2f result{};
+
+        std::cout << "Result 1: " << intersect(ray, aabb, result) << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
+
+        RayHitInfo hit_info;
+        bool inter = aabb.cast_ray(ray, hit_info);
+
+        result = ray.origin + ray.direction * hit_info.fraction;
+
+        std::cout << "Result 2: " << inter << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
+    }
 
 
-	void World::update(float delta_time)
-	{
+    void World::update(float delta_time)
+    {
 #ifdef DEBUG
         debug_entities.clear();
         collision_solver_.debug_entities.clear();
@@ -49,7 +62,7 @@ namespace physics
         }
 #endif // DEBUGBodyTree
 
-	}
+    }
 
     physics::RigidBody* World::get_body(int32_t id) const
     {
@@ -77,6 +90,13 @@ namespace physics
     void World::set_gravity(const sf::Vector2f& acceleration)
     {
         gravity_ = acceleration;
+    }
+
+    void World::cast_ray(RayCastCallback* callback, const physics::Ray& ray)
+    {
+        WorldRayCastWrapper wrapper{ callback, ray };
+
+        world_tree_.cast_ray(&wrapper, ray);
     }
 
     void World::clear()
@@ -150,7 +170,7 @@ namespace physics
         }
     }
 
-    void World::add_contact(void* data)
+    void World::add_contact_bodies(void* data)
     {
         auto body = (RigidBodyNodeData*)data;
 
@@ -160,7 +180,7 @@ namespace physics
         body_contacts_.push_back({ contact_1_, body->body });
     }
 
-    void World::add_contact(void* data_1, void* data_2)
+    void World::add_contact_fixtures(void* data_1, void* data_2)
     {
         auto fixture_node_data_1 = (FixtureNodeData*)data_1;
         auto fixture_node_data_2 = (FixtureNodeData*)data_2;

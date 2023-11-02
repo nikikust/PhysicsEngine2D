@@ -6,133 +6,135 @@
 
 namespace physics
 {
-	class RigidBody;
-	class Fixture;
+    class RigidBody;
+    class Fixture;
 
-	struct FixtureNodeData
-	{
-		FixtureNodeData(Fixture* fixture_in, int32_t id_in);
+    struct FixtureNodeData
+    {
+        FixtureNodeData(Fixture* fixture_in, int32_t id_in);
 
-		Fixture* fixture;
-		int32_t id;
-		bool is_sleeping = false;
+        Fixture* fixture;
+        int32_t id;
+        bool is_sleeping = false;
 
-		ShapeAABB aabb;
-		int32_t node_id = nullnode;
-	};
+        ShapeAABB aabb;
+        int32_t node_id = nullnode;
+    };
 
-	class Fixture
-	{
-	public:
-		Fixture(Shape* shape, RigidBody* body);
-		~Fixture();
-
-
-		// --- //
-		Shape* get_shape() const;
-
-		const ShapeAABB& get_AABB();
-
-		FixtureNodeData* get_node_data() const;
-		Fixture& set_node_data(FixtureNodeData* data);
-
-		float    get_restitution() const;
-		Fixture& set_restitution(float restitution);
-		
-		// --- Physical data
-		bool update_physical_data();
-
-		const PhysicalData& get_physical_data() const;
-		PhysicalData        get_physical_data(const sf::Vector2f axis) const;
-
-		RigidBody* get_body() const;
-		int32_t    get_id() const;
-
-		bool has_shape();
-
-		bool is_sleeping();
-		Fixture& set_sleeping(bool flag);
-
-	private:
-		Shape* shape_;
-		RigidBody* body_;
-
-		PhysicalData physical_data_;
-
-		float restitution_;
-		float friction_;
-		float density_;
-
-		// --- Cached values
-		ShapeAABB base_AABB_;
-		FixtureNodeData* node_data_;
-	};
-
-	using FixturePtrPair = std::pair<Fixture*, Fixture*>;
+    class Fixture
+    {
+    public:
+        Fixture(Shape* shape, RigidBody* body);
+        ~Fixture();
 
 
-	// Inline section
-	inline Shape* Fixture::get_shape() const
-	{
-		return shape_;
-	}
+        // --- //
+        Shape* get_shape() const;
 
-	inline FixtureNodeData* Fixture::get_node_data() const
-	{
-		return node_data_;
-	}
+        const ShapeAABB& get_AABB();
 
-	inline Fixture& Fixture::set_node_data(FixtureNodeData* data)
-	{
-		node_data_ = data;
+        FixtureNodeData* get_node_data() const;
+        Fixture& set_node_data(FixtureNodeData* data);
 
-		return *this;
-	}
+        float    get_restitution() const;
+        Fixture& set_restitution(float restitution);
 
-	inline float Fixture::get_restitution() const
-	{
-		return restitution_;
-	}
+        bool cast_ray(const Ray& ray, RayHitInfo& output);
+        
+        // --- Physical data
+        bool update_physical_data();
 
-	inline Fixture& Fixture::set_restitution(float restitution)
-	{
-		restitution_ = restitution;
+        const PhysicalData& get_physical_data() const;
+        PhysicalData        get_physical_data(const sf::Vector2f axis) const;
 
-		return *this;
-	}
+        RigidBody* get_body() const;
+        int32_t    get_id() const;
 
-	inline const PhysicalData& Fixture::get_physical_data() const
-	{
-		return physical_data_;
-	}
+        bool has_shape();
 
-	inline PhysicalData Fixture::get_physical_data(const sf::Vector2f axis) const
-	{
-		auto relative_physical_data = physical_data_;
+        bool is_sleeping();
+        Fixture& set_sleeping(bool flag);
 
-		relative_physical_data.mmoi += relative_physical_data.mass * utils::dot(axis, axis);
+    private:
+        Shape* shape_;
+        RigidBody* body_;
 
-		return relative_physical_data;
-	}
+        PhysicalData physical_data_;
 
-	inline RigidBody* Fixture::get_body() const
-	{
-		return body_;
-	}
+        float restitution_;
+        float friction_;
+        float density_;
 
-	inline int32_t Fixture::get_id() const
-	{
-		return shape_->get_id();
-	}
+        // --- Cached values
+        ShapeAABB base_AABB_;
+        FixtureNodeData* node_data_;
+    };
 
-	inline bool Fixture::has_shape()
-	{
-		return shape_ != nullptr;
-	}
+    using FixturePtrPair = std::pair<Fixture*, Fixture*>;
 
-	inline bool Fixture::is_sleeping()
-	{
-		return node_data_->is_sleeping;
-	}
+
+    // Inline section
+    inline Shape* Fixture::get_shape() const
+    {
+        return shape_;
+    }
+
+    inline FixtureNodeData* Fixture::get_node_data() const
+    {
+        return node_data_;
+    }
+
+    inline Fixture& Fixture::set_node_data(FixtureNodeData* data)
+    {
+        node_data_ = data;
+
+        return *this;
+    }
+
+    inline float Fixture::get_restitution() const
+    {
+        return restitution_;
+    }
+
+    inline Fixture& Fixture::set_restitution(float restitution)
+    {
+        restitution_ = restitution;
+
+        return *this;
+    }
+
+    inline const PhysicalData& Fixture::get_physical_data() const
+    {
+        return physical_data_;
+    }
+
+    inline PhysicalData Fixture::get_physical_data(const sf::Vector2f axis) const
+    {
+        auto relative_physical_data = physical_data_;
+
+        relative_physical_data.mmoi += relative_physical_data.mass * utils::dot(axis, axis);
+
+        return relative_physical_data;
+    }
+
+    inline RigidBody* Fixture::get_body() const
+    {
+        return body_;
+    }
+
+    inline int32_t Fixture::get_id() const
+    {
+        return shape_->get_id();
+    }
+
+    inline bool Fixture::has_shape()
+    {
+        return shape_ != nullptr;
+    }
+
+    inline bool Fixture::is_sleeping()
+    {
+        return node_data_->is_sleeping;
+    }
 
 } // namespace physics

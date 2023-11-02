@@ -19,6 +19,40 @@ namespace physics
         return { area , mass, (mass > 0.f) ? 1.f / mass : 0.f, {}, mmoi };
     }
 
+    bool CircleShape::cast_ray(const Ray& ray, const Transform& transform, RayHitInfo& output) const
+    {
+        auto global_position = physics::rotate_and_move_point(position_, transform);
+
+        sf::Vector2f s = ray.origin - global_position;
+        float C = utils::dot(s, s) - radius_ * radius_;
+
+        // Solve quadratic equation.
+        float B = utils::dot(s, ray.direction); // = b/2
+        float A = utils::dot(ray.direction, ray.direction);
+        float discr = B * B - A * C; // D/4
+
+        // Check for negative discriminant and short segment.
+        if (discr < 0.0f || physics::almost_equal(A, 0.f))
+        {
+            return false;
+        }
+
+        // Find the point of intersection of the line with the circle.
+        float t = -(B + sqrtf(discr));
+
+        if (t >= 0.f)
+        {
+            t /= A;
+
+            output.fraction = t;
+            output.normal = utils::normalize(s + t * ray.direction);
+            return true;
+        }
+
+        return false;
+    }
+
+
     CircleShape CircleShape::generate_circle(const sf::Vector2u& window_size)
     {
         // Radius

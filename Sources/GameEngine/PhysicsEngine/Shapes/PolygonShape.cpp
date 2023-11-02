@@ -58,6 +58,69 @@ namespace physics
         return PhysicalData{ area, mass, (mass > 0.f) ? 1.f / mass : 0.f, center, mmoi };
     }
 
+    bool PolygonShape::cast_ray(const Ray& ray, const Transform& transform, RayHitInfo& output) const
+    {
+        // Put ray to the polygon's space
+        Ray rotated_ray{ 
+            physics::rotate_point_T(ray.origin - transform.position, transform.rotation) - position_,
+            physics::rotate_point_T(ray.direction,                   transform.rotation)
+        };
+
+        float lower = 0.0f, upper = ray.max_fraction;
+        int32_t index = -1;
+
+        for (int32_t i = 0; i < vertices_.size(); ++i)
+        {
+            float numerator   = utils::dot(vertices_.at(i) - rotated_ray.origin, normals_.at(i));
+            float denominator = utils::dot(rotated_ray.direction,                normals_.at(i));
+
+            if (denominator == 0.0f)
+            {
+                // Parallel to the edge and outside
+                if (numerator < 0.0f)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // Note: we want this predicate without division:
+                // lower < numerator / denominator, where denominator < 0
+                // Since denominator < 0, we have to flip the inequality:
+                // lower < numerator / denominator <==> denominator * lower > numerator.
+                if (denominator < 0.0f && numerator < lower * denominator)
+                {
+                    // Increase lower.
+                    // The segment enters this half-space.
+                    lower = numerator / denominator;
+                    index = i;
+                }
+                else if (denominator > 0.0f && numerator < upper * denominator)
+                {
+                    // Decrease upper.
+                    // The segment exits this half-space.
+                    upper = numerator / denominator;
+                }
+            }
+
+            if (upper < lower)
+            {
+                return false;
+            }
+        }
+
+        if (index >= 0)
+        {
+
+            output.fraction = lower;
+            output.normal = physics::rotate_point(normals_.at(index), transform.rotation);
+
+            return true;
+        }
+
+        return false;
+    }
+
     PolygonShape PolygonShape::generate_polygon(const sf::Vector2u& window_size)
     {
         // Vertices

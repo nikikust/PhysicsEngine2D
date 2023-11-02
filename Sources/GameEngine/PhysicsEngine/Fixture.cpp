@@ -83,6 +83,11 @@ namespace physics
         return node_data_->aabb;
     }
 
+    bool Fixture::cast_ray(const Ray& ray, RayHitInfo& output)
+    {
+        return shape_->cast_ray(ray, body_->get_transform(), output);
+    }
+
     bool Fixture::update_physical_data()
     {
         if (has_shape())

@@ -4,6 +4,8 @@
 #include <GameEngine/PhysicsEngine/DAABBTree.h>
 #include <GameEngine/PhysicsEngine/CollisionSolver.h>
 
+#include <GameEngine/PhysicsEngine/Callbacks/RayCastCallback.h>
+
 #ifdef DEBUG
 #include <GameEngine/GUIEngine/Painter.h>
 #endif // DEBUG
@@ -11,6 +13,23 @@
 
 namespace physics
 {
+    struct WorldRayCastWrapper
+    {
+        void raycast_callback(void* data)
+        {
+            RigidBodyNodeData* body_data = (RigidBodyNodeData*)data;
+
+            RigidBodyRayCastWrapper wrapper{ callback, ray };
+
+            RigidBody* body = body_data->body;
+
+            body->get_tree().cast_ray(&wrapper, ray);
+        }
+
+        RayCastCallback* callback;
+        Ray ray;
+    };
+
     class World
     {
     public:
@@ -32,6 +51,9 @@ namespace physics
 
         /// Set gravity in this world
         void set_gravity(const sf::Vector2f& acceleration);
+
+        /// Query ray cast test
+        void cast_ray(RayCastCallback* callback, const physics::Ray& ray);
 
         /// Removes all bodies from this world
         void clear();
@@ -60,12 +82,12 @@ namespace physics
 
         /// @brief Callback method for global DAABB tree collisions (called from query of update_bodies_contacts())
         /// @param data - RigidBodyNodeData* - data about collided body
-        void add_contact(void* data);
+        void add_contact_bodies(void* data);
 
         /// @brief Callback method for local bodies DAABB tree collisions (called from query of update_fixtures_contacts())
         /// @param data_1 FixtureNodeData* - data about 1st collided fixture
         /// @param data_2 FixtureNodeData* - data about 2nd collided fixture
-        void add_contact(void* data_1, void* data_2);
+        void add_contact_fixtures(void* data_1, void* data_2);
 
         // --- Data
 

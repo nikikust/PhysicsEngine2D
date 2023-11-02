@@ -11,6 +11,7 @@ namespace physics
 
 
         PhysicalData calculate_physical_data(float density) const override;
+        bool cast_ray(const Ray& ray, const Transform& transform, RayHitInfo& output) const override;
 
         void  set_radius(float radius);
         float get_radius() const;

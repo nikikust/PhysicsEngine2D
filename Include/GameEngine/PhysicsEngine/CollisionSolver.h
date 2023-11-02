@@ -39,7 +39,7 @@ namespace physics
         void separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 
         void write_collision_points(CollisionInfo& collision, Fixture* fixture_A, Fixture* fixture_B, 
-                                    const Transform& transform_A, const Transform& transform_B);
+                                    const Transform& transform_A, const Transform& transform_B) const;
 
         void resolve_collision_basic(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
 

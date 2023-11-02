@@ -64,6 +64,9 @@ int PhysicsEngine2D::main_loop()
         engine_   .update(data_storage_.status.delta_time);
         interface_.update();
 
+        // --- Ray Cast test
+        ray_cast_test();
+
         // --- Draw
         window_.cls();
         renderer_.draw();
@@ -311,4 +314,28 @@ void PhysicsEngine2D::process_inputs()
 
         // --- //
     }
+}
+
+void PhysicsEngine2D::ray_cast_test()
+{
+    physics::Ray ray;
+    ray.origin = data_editor_.get_world_mouse_position();
+    ray.direction = { 0.f, 1.f };
+    ray.max_fraction = 2560.f;
+
+    game::ClosestRayHit closest_ray_hit(ray);
+
+    auto world = engine_.get_world();
+    world->cast_ray(&closest_ray_hit, ray);
+
+    auto& raycast = data_storage_.status.ray_cast_section;
+    raycast.is_hit = closest_ray_hit.is_hit();
+    raycast.origin = ray.origin;
+
+    if (raycast.is_hit)
+        raycast.target = closest_ray_hit.get_touch_point();
+    else
+        raycast.target = ray.origin + ray.direction * ray.max_fraction;
+
+    raycast.normal = closest_ray_hit.get_normal();
 }

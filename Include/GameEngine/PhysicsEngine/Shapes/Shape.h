@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/Utils/Functions.h>
+#include <GameEngine/PhysicsEngine/Ray.h>
 #include <GameEngine/PhysicsEngine/PhysMath.h>
 
 
@@ -21,6 +22,7 @@ namespace physics
 
         // --- //
         virtual PhysicalData calculate_physical_data(float density) const = 0;
+        virtual bool cast_ray(const Ray& ray, const Transform& transform, RayHitInfo& output) const = 0;
 
         // --- Fields manipulations
 

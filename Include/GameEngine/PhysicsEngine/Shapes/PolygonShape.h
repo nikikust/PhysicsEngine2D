@@ -11,6 +11,7 @@ namespace physics
 
 
         PhysicalData calculate_physical_data(float density) const override;
+        bool cast_ray(const Ray& ray, const Transform& transform, RayHitInfo& output) const override;
 
         void                             set_vertices(const std::vector<sf::Vector2f>& vertices);
         const std::vector<sf::Vector2f>& get_vertices() const;
@@ -41,7 +42,7 @@ namespace physics
             const auto& point_B = vertices_.at(i_and_one);
 
             const auto edge = point_B - point_A;
-            const auto axis = utils::normalize(sf::Vector2f(-edge.y, edge.x));
+            const auto axis = utils::normalize(sf::Vector2f(edge.y, -edge.x));
 
             normals_.push_back(axis);
         }

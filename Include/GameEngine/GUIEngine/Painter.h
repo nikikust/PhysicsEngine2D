@@ -35,10 +35,11 @@ namespace graphics
 
         // --- //
 
-        void draw_polygon (const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color);
-        void draw_circle  (const sf::Vector2f& position, float radius, float angle,                 const sf::Color& color, bool draw_rotation_line = true);
+        void draw_polygon (const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color = sf::Color::White);
+        void draw_border  (const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color = sf::Color::White, float outline_thickness = 1.f);
+        void draw_circle  (const sf::Vector2f& position, float radius, float angle,                 const sf::Color& color = sf::Color::White, bool draw_rotation_line = true);
 
-        void draw_border  (const sf::Vector2f& position, const std::vector<sf::Vector2f>& vertices, const sf::Color& color, float outline_thickness);
+        void draw_line(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Color& color = sf::Color::White, float width = 1.f);
 
 #ifdef DEBUG
         void draw_debug(const std::vector<DebugDraw>& debug_entities);
@@ -53,5 +54,7 @@ namespace graphics
         sf::RectangleShape circle_angle_brush;
 
         sf::ConvexShape polygon_brush;
+
+        sf::RectangleShape line_brush;
     };
 } // namespace graphics

@@ -17,6 +17,10 @@ namespace utils
     {
         return (num >= a && num <= b);
     }
+    bool inf(float a, float num, float b)
+    {
+        return (num >= a && num <= b);
+    }
 
     int randi(int start, int end)
     {
@@ -29,11 +33,11 @@ namespace utils
 
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B)
     {
-        return (abs(B.x - A.x) >= abs(B.y - A.y));
+        return (labs(B.x - A.x) >= labs(B.y - A.y));
     }
     bool is_horizontal_move(const sf::Vector2i& delta)
     {
-        return (abs(delta.x) >= abs(delta.y));
+        return (labs(delta.x) >= labs(delta.y));
     }
 
     bool file_exists(const std::string& path)

@@ -244,7 +244,7 @@ namespace physics
 
     // --- Collision points
     void CollisionSolver::write_collision_points(CollisionInfo& collision, Fixture* fixture_A, Fixture* fixture_B,
-                                                 const Transform& transform_A, const Transform& transform_B)
+                                                 const Transform& transform_A, const Transform& transform_B) const
     {
         auto shape_A = fixture_A->get_shape();
         auto shape_B = fixture_B->get_shape();
