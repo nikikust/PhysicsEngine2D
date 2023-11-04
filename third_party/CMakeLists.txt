@@ -10,7 +10,7 @@ FetchContent_Declare(
 FetchContent_Declare(
     SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG        11b73743c42cf7ecd7c596ba83fdbf1150ffa96c
+    GIT_TAG        69ea0cd863aed1d4092b970b676924a716ff718b
 )
 
 FetchContent_Declare(
