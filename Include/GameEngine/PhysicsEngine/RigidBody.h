@@ -118,6 +118,10 @@ namespace physics
         void update_physical_data_append(physics::Fixture* fixture);
         void update_physical_data_remove(physics::Fixture* fixture);
 
+#ifdef DAMPING
+        void dump_speed(float delta_time);
+#endif // DAMPING
+
         // --- Data
         Transform    transform_             = {};
 
@@ -357,5 +361,15 @@ namespace physics
     {
         return id_;
     }
+
+
+#ifdef DAMPING
+    inline void RigidBody::dump_speed(float delta_time)
+    {
+        // TODO: delta_time use
+        linear_speed_.x *= fmaxf(0.2f * powf(linear_speed_.x / 110.f, 1.5f), 0.2f);
+        linear_speed_.y *= fmaxf(0.2f * powf(linear_speed_.y / 110.f, 1.5f), 0.2f);
+    }
+#endif // DAMPING
 
 } // namespace physics

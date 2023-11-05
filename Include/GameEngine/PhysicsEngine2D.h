@@ -42,6 +42,7 @@ private:
     int main_loop();
 
     void poll_events();
+    void update_timers();
     void process_inputs();
 
     void ray_cast_test();

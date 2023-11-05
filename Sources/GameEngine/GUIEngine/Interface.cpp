@@ -46,7 +46,7 @@ namespace graphics
 
         if (data_storage_.status.start_time_for_autosave + data_storage_.settings.autosave_interval_in_minutes * 60 <= time(0))
         {
-            // TO DO: data_loader_.save_data();
+            // TODO: data_loader_.save_data();
 
             data_storage_.status.start_time_for_autosave = time(0);
         }
@@ -127,7 +127,7 @@ namespace graphics
                 data_storage_.menus.ConfirmExit.should_be_open = false;
                 data_storage_.menus.ConfirmExit.is_open        = false;
 
-                // TO DO: data_loader_.save_data();
+                // TODO: data_loader_.save_data();
 
                 ImGui::CloseCurrentPopup();
 

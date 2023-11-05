@@ -56,6 +56,7 @@ int PhysicsEngine2D::main_loop()
     {
         // --- Poll
         poll_events   ();
+        update_timers ();
         process_inputs();
 
         // --- Update
@@ -125,20 +126,23 @@ void PhysicsEngine2D::poll_events()
             }
             else if (event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
             {
-                // TO DO: something
+                // TODO: something
             }
             break;
         default:
             break;
         }
     }
+}
 
+void PhysicsEngine2D::update_timers()
+{
     // Time between frames
     long long now_time = utils::get_time_millisec();
     data_storage_.status.delta_time = (now_time - data_storage_.status.last_time) / 1000.f;
     data_storage_.status.last_time = now_time;
-
 }
+
 void PhysicsEngine2D::process_inputs()
 {
     if (utils::key_down(sf::Keyboard::LControl))
@@ -147,7 +151,7 @@ void PhysicsEngine2D::process_inputs()
         {
             if (utils::key_pressed(sf::Keyboard::S))
             {
-                // TO DO: data_loader_.save_data();
+                // TODO: data_loader_.save_data();
             }
 
             if (utils::key_pressed(sf::Keyboard::Space))

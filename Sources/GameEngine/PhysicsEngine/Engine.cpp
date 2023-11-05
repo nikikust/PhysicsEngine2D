@@ -28,7 +28,7 @@ namespace physics
         for (int step_cnt = 0; step_cnt < steps_amount; ++step_cnt)
             selected_world_->update(delta_time / steps_amount);
 
-        // TO DO: Acceleration tests
+        // TODO: Acceleration tests
         // sf::Vector2f dir{ 1.f, 0.f };
         
         for (auto& [k, body] : selected_world_->get_bodies())
@@ -47,7 +47,7 @@ namespace physics
     }
     physics::RigidBody* Engine::get_body(int32_t id, int32_t world_id) const
     {
-        // TO DO: world selection
+        // TODO: world selection
         return selected_world_->get_body(id);
     }
 
@@ -58,7 +58,7 @@ namespace physics
 
     std::shared_ptr<World> Engine::get_world()
     {
-        // TO DO: world selection
+        // TODO: world selection
         return selected_world_;
     }
 

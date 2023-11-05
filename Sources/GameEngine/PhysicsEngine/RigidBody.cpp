@@ -53,8 +53,9 @@ namespace physics
         angular_speed_ += angular_acceleration_ * delta_time;
         
 #ifdef DAMPING
-        linear_speed_  *= (1 - delta_time / 5.f);
-        angular_speed_ *= (1 - delta_time / 5.f);
+        // TODO: use -> dump_speed(delta_time);
+        linear_speed_  *= fmaxf((1 - delta_time / 5.f), 0.f);
+        angular_speed_ *= fmaxf((1 - delta_time / 5.f), 0.f);
 #endif
 
         if (fixed_linear_.first)
@@ -292,7 +293,7 @@ namespace physics
 
     void RigidBody::update_physical_data_remove(physics::Fixture* fixture)
     {
-        // TO DO: implement.
+        // TODO: implement.
     }
 
 } // namespace physics
