@@ -249,6 +249,18 @@ namespace physics
     }
 
 
+    /// @brief Inverse rotate point around centroid provided in transform
+    inline sf::Vector2f rotate_point_T(const sf::Vector2f& point, const Transform& transform)
+    {
+        auto shifted_point = point - transform.centroid;
+
+        return transform.centroid + sf::Vector2f{
+             shifted_point.x * transform.rotation.get_cos() + shifted_point.y * transform.rotation.get_sin(),
+            -shifted_point.x * transform.rotation.get_sin() + shifted_point.y * transform.rotation.get_cos()
+        };
+    }
+
+
     /// @brief Rotate point by matrix constructed from provided rotation
     inline sf::Vector2f rotate_point(const sf::Vector2f& point, const Rotation& rotation)
     {

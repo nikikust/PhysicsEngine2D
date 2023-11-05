@@ -62,8 +62,8 @@ namespace physics
     {
         // Put ray to the polygon's space
         Ray rotated_ray{ 
-            physics::rotate_point_T(ray.origin - transform.position, transform.rotation) - position_,
-            physics::rotate_point_T(ray.direction,                   transform.rotation)
+            physics::rotate_point_T(ray.origin - transform.position, transform) - position_,
+            physics::rotate_point_T(ray.direction, transform.rotation)
         };
 
         float lower = 0.0f, upper = ray.max_fraction;
