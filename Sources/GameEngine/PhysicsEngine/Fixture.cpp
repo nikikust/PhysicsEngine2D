@@ -64,8 +64,8 @@ namespace physics
 
     Fixture::~Fixture()
     {
-        free(node_data_);
-        free(shape_);
+        delete node_data_;
+        delete shape_;
         
         body_ = nullptr;
     }

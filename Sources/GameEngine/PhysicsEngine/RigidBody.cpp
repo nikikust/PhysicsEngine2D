@@ -36,7 +36,12 @@ namespace physics
     RigidBody::~RigidBody()
     {
         if (node_data_ != nullptr)
-            free(node_data_);
+            delete node_data_;
+
+        active_fixtures_.clear();
+
+        for (Fixture* fixture : fixtures_)
+            delete fixture;
     }
 
     // --- //
@@ -110,6 +115,8 @@ namespace physics
                 int32_t node_id = ((FixtureNodeData*)((*it)->get_node_data()))->node_id;
 
                 set_active_fixture(id, false);
+
+                delete (*it);
 
                 fixtures_.erase(it);
 
