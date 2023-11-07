@@ -99,7 +99,7 @@ namespace physics
 
         RigidBody* contact_1_;
         std::vector<RigidBodyPtrPair> body_contacts_;
-        std::vector<CollisionInfo> fixture_contacts_;
+        std::vector<CollisionContact> fixture_contacts_;
 
         // --- //
 

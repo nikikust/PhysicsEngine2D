@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
+#include <GameEngine/PhysicsEngine/CollisionContact.h>
 
 #ifdef DEBUG
 #include <GameEngine/GUIEngine/Painter.h>
@@ -16,44 +17,32 @@ namespace physics
         int32_t      collision_point_cnt;
     };
 
-    struct CollisionInfo
-    {
-        Fixture* fixture_A;
-        Fixture* fixture_B;
-
-        sf::Vector2f contact_point;
-        sf::Vector2f collision_normal;
-
-        float depth;
-        float elasticity;
-    };
-
     class CollisionSolver
     {
     public:
         CollisionSolver();
 
 
-        bool collide(CollisionInfo& collision) const;
+        bool collide(CollisionContact& collision) const;
         
-        void separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
+        void separate_bodies(const CollisionContact& collision, RigidBody* body_A, RigidBody* body_B) const;
 
-        void write_collision_points(CollisionInfo& collision, Fixture* fixture_A, Fixture* fixture_B, 
+        void write_collision_points(CollisionContact& collision, Fixture* fixture_A, Fixture* fixture_B, 
                                     const Transform& transform_A, const Transform& transform_B) const;
 
-        void resolve_collision_basic(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
+        void resolve_collision_basic(const CollisionContact& collision, RigidBody* body_A, RigidBody* body_B) const;
 
-        void resolve_collision_with_rotation(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const;
+        void resolve_collision_with_rotation(const CollisionContact& collision, RigidBody* body_A, RigidBody* body_B) const;
 
 #ifdef DEBUG
         static std::vector<graphics::DebugDraw> debug_entities;
 #endif // DEBUG
 
     private:
-        bool circles_collision        (CollisionInfo& collision) const;
-        bool polygons_collision       (CollisionInfo& collision) const;
-        bool polygon_circle_collision (CollisionInfo& collision) const;
-        bool circle_polygon_collision (CollisionInfo& collision) const;
+        bool circles_collision        (CollisionContact& collision) const;
+        bool polygons_collision       (CollisionContact& collision) const;
+        bool polygon_circle_collision (CollisionContact& collision) const;
+        bool circle_polygon_collision (CollisionContact& collision) const;
 
         std::pair<float, float> polygon_projection (PolygonShape* polygon, const sf::Vector2f& axis, const Transform& transform) const;
         std::pair<float, float> circle_projection  (CircleShape*  circle,  const sf::Vector2f& axis, const Transform& transform) const;

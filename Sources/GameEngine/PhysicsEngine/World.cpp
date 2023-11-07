@@ -132,7 +132,7 @@ namespace physics
 
     void World::collide_fixtures()
     {
-        // auto isnt_colliding = [this](physics::CollisionInfo& collision) {
+        // auto isnt_colliding = [this](physics::CollisionContact& collision) {
         //     return this->collision_solver_.collide(collision) == false; 
         // };
         // 
@@ -194,7 +194,7 @@ namespace physics
         if (fixture_A->get_id() >= fixture_B->get_id())
             return;
 
-        fixture_contacts_.push_back(CollisionInfo{ fixture_A, fixture_B });
+        fixture_contacts_.push_back(CollisionContact{ fixture_A, fixture_B });
     }
 
 #ifdef DEBUG

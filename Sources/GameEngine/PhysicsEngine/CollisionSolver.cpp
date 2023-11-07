@@ -13,7 +13,7 @@ namespace physics
 
     // --- Collision detection
 
-    bool CollisionSolver::collide(CollisionInfo& collision) const
+    bool CollisionSolver::collide(CollisionContact& collision) const
     {
         auto shape_A = collision.fixture_A->get_shape();
         auto shape_B = collision.fixture_B->get_shape();
@@ -37,7 +37,7 @@ namespace physics
         return false;
     }
 
-    bool CollisionSolver::circles_collision(CollisionInfo& collision) const
+    bool CollisionSolver::circles_collision(CollisionContact& collision) const
     {
         // Extract data
         auto fixture_A = collision.fixture_A;
@@ -70,7 +70,7 @@ namespace physics
             return false;
     }
 
-    bool CollisionSolver::polygons_collision(CollisionInfo& collision) const
+    bool CollisionSolver::polygons_collision(CollisionContact& collision) const
     {
         // Extract data
         auto fixture_A = collision.fixture_A;
@@ -152,7 +152,7 @@ namespace physics
         return true;
     }
 
-    bool CollisionSolver::polygon_circle_collision(CollisionInfo& collision) const
+    bool CollisionSolver::polygon_circle_collision(CollisionContact& collision) const
     {
         // Extract data
         auto fixture_A = collision.fixture_A;
@@ -232,7 +232,7 @@ namespace physics
         return true;
     }
 
-    bool CollisionSolver::circle_polygon_collision(CollisionInfo& collision) const
+    bool CollisionSolver::circle_polygon_collision(CollisionContact& collision) const
     {
         auto buf = collision.fixture_A;
 
@@ -243,7 +243,7 @@ namespace physics
     }
 
     // --- Collision points
-    void CollisionSolver::write_collision_points(CollisionInfo& collision, Fixture* fixture_A, Fixture* fixture_B,
+    void CollisionSolver::write_collision_points(CollisionContact& collision, Fixture* fixture_A, Fixture* fixture_B,
                                                  const Transform& transform_A, const Transform& transform_B) const
     {
         auto shape_A = fixture_A->get_shape();
@@ -430,7 +430,7 @@ namespace physics
 
 
     // --- Collision resolution
-    void CollisionSolver::separate_bodies(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const
+    void CollisionSolver::separate_bodies(const CollisionContact& collision, RigidBody* body_A, RigidBody* body_B) const
     {
         auto fixated_A = body_A->get_linear_fixation();
         auto fixated_B = body_B->get_linear_fixation();
@@ -467,7 +467,7 @@ namespace physics
         body_B->move( normal_B * collision.depth);
     }
 
-    void CollisionSolver::resolve_collision_basic(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const
+    void CollisionSolver::resolve_collision_basic(const CollisionContact& collision, RigidBody* body_A, RigidBody* body_B) const
     {
         auto speed_A = body_A->get_linear_speed();
         auto speed_B = body_B->get_linear_speed();
@@ -505,7 +505,7 @@ namespace physics
         body_B->set_linear_speed(speed_B);
     }
 
-    void CollisionSolver::resolve_collision_with_rotation(const CollisionInfo& collision, RigidBody* body_A, RigidBody* body_B) const
+    void CollisionSolver::resolve_collision_with_rotation(const CollisionContact& collision, RigidBody* body_A, RigidBody* body_B) const
     {
         auto speed_A = body_A->get_linear_speed();
         auto speed_B = body_B->get_linear_speed();
