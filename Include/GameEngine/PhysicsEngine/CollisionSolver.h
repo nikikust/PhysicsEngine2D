@@ -2,7 +2,6 @@
 #include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
 #include <GameEngine/PhysicsEngine/CollisionContact.h>
-#include <GameEngine/PhysicsEngine/Callbacks/CollisionListener.h>
 
 #ifdef DEBUG
 #include <GameEngine/GUIEngine/Painter.h>
