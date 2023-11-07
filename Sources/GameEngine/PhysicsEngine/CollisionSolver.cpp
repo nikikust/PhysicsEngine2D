@@ -313,7 +313,7 @@ namespace physics
         // --- //
 
         float min_distance = std::numeric_limits<float>::max();
-        ContactPointssInfo contacts{};
+        ContactPointsInfo contacts{};
 
         auto count_A = (int32_t)vertices_A.size();
         auto count_B = (int32_t)vertices_B.size();
