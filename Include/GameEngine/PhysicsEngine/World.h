@@ -5,6 +5,7 @@
 #include <GameEngine/PhysicsEngine/CollisionSolver.h>
 
 #include <GameEngine/PhysicsEngine/Callbacks/RayCastCallback.h>
+#include <GameEngine/PhysicsEngine/Callbacks/CollisionListener.h>
 
 #ifdef DEBUG
 #include <GameEngine/GUIEngine/Painter.h>
@@ -34,6 +35,7 @@ namespace physics
     {
     public:
         World();
+        ~World();
 
         
         /// @brief Updates physics of the world
@@ -57,6 +59,9 @@ namespace physics
 
         /// Removes all bodies from this world
         void clear();
+
+        /// Register a collision event listener
+        void set_collision_listener(CollisionListener* listener);
 
 #ifdef DEBUG
         const std::vector<graphics::DebugDraw>& get_debug_entities();
@@ -89,8 +94,7 @@ namespace physics
         /// @param data_2 FixtureNodeData* - data about 2nd collided fixture
         void add_contact_fixtures(void* data_1, void* data_2);
 
-        // --- Data
-
+    private:
         sf::Vector2f gravity_;
 
         std::unordered_map<int32_t, physics::RigidBody*> bodies_;
@@ -101,8 +105,7 @@ namespace physics
         std::vector<RigidBodyPtrPair> body_contacts_;
         std::vector<CollisionContact> fixture_contacts_;
 
-        // --- //
-
+    private:
         int32_t id_;
         static int32_t max_world_id;
 
@@ -111,7 +114,9 @@ namespace physics
 #endif // DEBUG
 
 
-        // --- //
+    private:
         CollisionSolver collision_solver_;
+
+        CollisionListener* collision_listener_;
     };
 } // namespace physics

@@ -7,7 +7,7 @@ namespace physics
     std::vector<graphics::DebugDraw> CollisionSolver::debug_entities{};
 #endif // DEBUG
 
-    CollisionSolver::CollisionSolver()
+    CollisionSolver::CollisionSolver() 
     {
     }
 

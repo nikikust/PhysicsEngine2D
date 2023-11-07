@@ -2,6 +2,7 @@
 #include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
 #include <GameEngine/PhysicsEngine/CollisionContact.h>
+#include <GameEngine/PhysicsEngine/Callbacks/CollisionListener.h>
 
 #ifdef DEBUG
 #include <GameEngine/GUIEngine/Painter.h>
@@ -52,6 +53,5 @@ namespace physics
         sf::Vector2f circles_collision_points        (Shape* circle_A_raw,  Shape* circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
         sf::Vector2f circle_polygon_collision_points (Shape* polygon_raw,   Shape* circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
         sf::Vector2f polygons_collision_points       (Shape* polygon_A_raw, Shape* polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
-
     };
 } // namespace physics

@@ -45,6 +45,7 @@ add_executable(${PROJECT_NAME}
     Sources/GameEngine/Game/Entities/EntitiesStorage.cpp
 
     Sources/GameEngine/Game/Callbacks/ClosestRayHit.cpp
+    Sources/GameEngine/Game/Callbacks/PrinterCollisionListener.cpp
 
     Sources/GameEngine/DataCore/DataEditor.cpp
     Sources/GameEngine/DataCore/DataLoader.cpp

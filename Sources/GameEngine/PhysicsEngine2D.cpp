@@ -15,6 +15,7 @@
  */
 
 #include <GameEngine/PhysicsEngine2D.h>
+#include <GameEngine/Game/Callbacks/PrinterCollisionListener.h>
 
 
 PhysicsEngine2D::PhysicsEngine2D(const std::string& app_title)
@@ -46,6 +47,9 @@ int PhysicsEngine2D::load_data()
     std::cout << "Init data loader ... " << std::endl;
     if (data_loader_.init() != 0)
         return 1;
+
+    engine_.get_world()->set_collision_listener(new game::PrinterCollisionListener());
+
     std::cout << "Done" << std::endl;
 
     return 0;

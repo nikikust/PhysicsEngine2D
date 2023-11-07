@@ -6,7 +6,8 @@ namespace physics
     int32_t World::max_world_id = 0;
 
 
-    World::World()
+    World::World() 
+        : collision_listener_(nullptr)
     {
         id_ = ++max_world_id;
 
@@ -24,6 +25,12 @@ namespace physics
         result = ray.origin + ray.direction * hit_info.fraction;
 
         std::cout << "Result 2: " << inter << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
+    }
+
+    World::~World()
+    {
+        if (collision_listener_ != nullptr)
+            delete collision_listener_;
     }
 
 
@@ -109,6 +116,11 @@ namespace physics
         bodies_.clear();
     }
 
+    void World::set_collision_listener(CollisionListener* listener)
+    {
+        collision_listener_ = listener;
+    }
+
     void World::update_bodies_contacts()
     {
         body_contacts_.clear();
@@ -143,20 +155,26 @@ namespace physics
 
     void World::solve_contacts()
     {
-        for (auto& collision : fixture_contacts_)
+        for (auto& contact : fixture_contacts_)
         {
-            if (this->collision_solver_.collide(collision) == false)
+            if (this->collision_solver_.collide(contact) == false)
                 continue;
 
-            auto fixture_A = collision.fixture_A;
-            auto fixture_B = collision.fixture_B;
+            auto fixture_A = contact.fixture_A;
+            auto fixture_B = contact.fixture_B;
+
+            if (collision_listener_ != nullptr)
+                collision_listener_->begin_contact(contact);
 
             auto body_A = fixture_A->get_body();
             auto body_B = fixture_B->get_body();
 
-            collision_solver_.separate_bodies                 (collision, body_A, body_B);
-            collision_solver_.write_collision_points          (collision, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
-            collision_solver_.resolve_collision_with_rotation (collision, body_A, body_B);
+            collision_solver_.separate_bodies                 (contact, body_A, body_B);
+            collision_solver_.write_collision_points          (contact, fixture_A, fixture_B, body_A->get_transform(), body_B->get_transform());
+            collision_solver_.resolve_collision_with_rotation (contact, body_A, body_B);
+
+            if (collision_listener_ != nullptr)
+                collision_listener_->end_contact(contact);
         }
     }
 
