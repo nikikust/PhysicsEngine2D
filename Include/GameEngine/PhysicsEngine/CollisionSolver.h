@@ -9,7 +9,7 @@
 
 namespace physics
 {
-    struct ContactsInfo
+    struct ContactPointssInfo
     {
         sf::Vector2f collision_point_1;   // 1st for: circ - circ, circ - poly
         sf::Vector2f collision_point_2;   // 2nd for: poly - poly
