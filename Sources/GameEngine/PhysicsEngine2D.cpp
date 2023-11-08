@@ -70,7 +70,7 @@ int PhysicsEngine2D::main_loop()
         interface_.update();
 
         // --- Ray Cast test
-        ray_cast_test();
+        // ray_cast_test();
 
         // --- Draw
         window_.cls();

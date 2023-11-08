@@ -13,18 +13,18 @@ namespace physics
 
         contact_1_ = nullptr;
 
-        ShapeAABB aabb{ {5.f, 5.f}, {10.f, 10.f} };
-        Ray ray{ {0.f, 0.f}, utils::normalize({1.f, 1.f}) };
-        sf::Vector2f result{};
-
-        std::cout << "Result 1: " << intersect(ray, aabb, result) << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
-
-        RayHitInfo hit_info;
-        bool inter = aabb.cast_ray(ray, hit_info);
-
-        result = ray.origin + ray.direction * hit_info.fraction;
-
-        std::cout << "Result 2: " << inter << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
+        // ShapeAABB aabb{ {5.f, 5.f}, {10.f, 10.f} };
+        // Ray ray{ {0.f, 0.f}, utils::normalize({1.f, 1.f}) };
+        // sf::Vector2f result{};
+        // 
+        // std::cout << "Result 1: " << intersect(ray, aabb, result) << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
+        // 
+        // RayHitInfo hit_info;
+        // bool inter = aabb.cast_ray(ray, hit_info);
+        // 
+        // result = ray.origin + ray.direction * hit_info.fraction;
+        // 
+        // std::cout << "Result 2: " << inter << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
     }
 
     World::~World()
