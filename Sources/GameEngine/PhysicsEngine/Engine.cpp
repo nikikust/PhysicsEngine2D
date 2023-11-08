@@ -3,15 +3,14 @@
 
 namespace physics
 {
-    int32_t Engine::steps_amount = 2;
-
-
     Engine::Engine()
     {
         selected_world_ = std::make_shared<physics::World>();
 
         paused_ = true;
         do_step_ = false;
+
+        steps_amount = 2;
     }
     Engine::~Engine()
     {

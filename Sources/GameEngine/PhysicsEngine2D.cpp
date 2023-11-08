@@ -48,7 +48,7 @@ int PhysicsEngine2D::load_data()
     if (data_loader_.init() != 0)
         return 1;
 
-    engine_.get_world()->set_collision_listener(new game::PrinterCollisionListener());
+    // engine_.get_world()->set_collision_listener(new game::PrinterCollisionListener());
 
     std::cout << "Done" << std::endl;
 

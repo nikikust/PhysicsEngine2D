@@ -43,7 +43,7 @@ namespace physics
         std::shared_ptr<World> selected_world_{};
 
         // Config
-        static int32_t steps_amount;
+        int32_t steps_amount;
 
         bool paused_;
         bool do_step_;
