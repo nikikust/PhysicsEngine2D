@@ -1,5 +1,5 @@
 #pragma once
-#include <GameEngine/Utils/Functions.h>
+#include <GameEngine/PhysicsEngine/PhysMath.h>
 #include <GameEngine/PhysicsEngine/Ray.h>
 
 
@@ -11,20 +11,20 @@ namespace physics
         ShapeAABB();
         ShapeAABB(ShapeAABB&);
         ShapeAABB(const ShapeAABB&);
-        ShapeAABB(const sf::Vector2f& min, const sf::Vector2f& max);
+        ShapeAABB(const Vector& min, const Vector& max);
         ShapeAABB(const ShapeAABB& aabb_A, const ShapeAABB& aabb_B);
 
         /// Returns true if two AABBs collided
         bool collides(const ShapeAABB& aabb) const;
 
         /// Recalculates min and max points with new point
-        void add_point(const sf::Vector2f& point);
+        void add_point(const Vector& point);
 
         /// Combines two AABBs to cover both 
         void combine(const ShapeAABB& aabb);
 
         /// Move AABB to not to recalculate it
-        void move(const sf::Vector2f& offset);
+        void move(const Vector& offset);
 
         /// Resets min and max to default values
         void reset();
@@ -41,8 +41,8 @@ namespace physics
         ///  Checks intersection between AABB and ray
         bool cast_ray(const Ray& ray, RayHitInfo& output) const;
 
-        sf::Vector2f min;
-        sf::Vector2f max;
+        Vector min;
+        Vector max;
 
     private:
         bool check_step(float ray_dir, float ray_origin, float aabb_min, float aabb_max, float& tmin, float& tmax, float& normal, float& normal_other) const;
@@ -63,7 +63,7 @@ namespace physics
         return true;
     }
 
-    inline void ShapeAABB::add_point(const sf::Vector2f& point)
+    inline void ShapeAABB::add_point(const Vector& point)
     {
         min.x = std::min(min.x, point.x);
         min.y = std::min(min.y, point.y);
@@ -77,7 +77,7 @@ namespace physics
         add_point(aabb.max);
     }
 
-    inline void ShapeAABB::move(const sf::Vector2f& offset)
+    inline void ShapeAABB::move(const Vector& offset)
     {
         min += offset;
         max += offset;
@@ -113,7 +113,7 @@ namespace physics
         float tmin = 0.f;
         float tmax = std::numeric_limits<float>::max();
 
-        sf::Vector2f normal;
+        Vector normal;
 
         bool result = check_step(ray.direction.x, ray.origin.x, min.x, max.x, tmin, tmax, normal.x, normal.y);
 
@@ -141,7 +141,7 @@ namespace physics
 
     inline bool ShapeAABB::check_step(float ray_dir, float ray_origin, float aabb_min, float aabb_max, float& tmin, float& tmax, float& normal, float& normal_other) const
     {
-        if (abs(ray_dir) < 0.00001f)
+        if (std::abs(ray_dir) < 0.00001f)
         {
             // Parallel.
             if (ray_origin < aabb_min || aabb_max < ray_origin)
@@ -160,7 +160,7 @@ namespace physics
 
             if (t1 > t2)
             {
-                utils::swap(t1, t2);
+                swap(t1, t2);
                 s = 1.0f;
             }
 

@@ -174,7 +174,7 @@ void DataEditor::load_scene(int32_t id)
     data_storage_.status.paused = engine_.get_pause_state();
 }
 
-void DataEditor::create_entity(const sf::Vector2f& position)
+void DataEditor::create_entity(const physics::Vector& position)
 {
     auto  world   = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
@@ -188,14 +188,14 @@ void DataEditor::create_entity(const sf::Vector2f& position)
 
 void DataEditor::load_scene_1()
 {
-    auto  world = engine_.get_world();
+    auto  world   = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
 
-    auto complex_1 = std::make_shared<game::ComplexEntity>(world, sf::Vector2f{  250,  500 }, 0.f);
-    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{ -150,  100 }, 0.f);
-    auto circle_1  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{  150,  100 }, 0.f);
-    auto circle_2  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{ -150,  300 }, 0.f);
-    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{  150,  300 }, 0.f);
+    auto complex_1 = std::make_shared<game::ComplexEntity>(world, physics::Vector{  250,  500 }, 0.f);
+    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, physics::Vector{ -150,  100 }, 0.f);
+    auto circle_1  = std::make_shared<game::CircleEntity >(world, physics::Vector{  150,  100 }, 0.f);
+    auto circle_2  = std::make_shared<game::CircleEntity >(world, physics::Vector{ -150,  300 }, 0.f);
+    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, physics::Vector{  150,  300 }, 0.f);
 
     storage.add_entity(complex_1);
     storage.add_entity(polygon_1);
@@ -208,7 +208,7 @@ void DataEditor::load_scene_1()
 
 void DataEditor::load_scene_2()
 {
-    auto  world = engine_.get_world();
+    auto  world   = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
 
     world->set_gravity({ 0.f, 980.f });
@@ -217,7 +217,7 @@ void DataEditor::load_scene_2()
 
     for (int32_t i = 0; i < 2; ++i)
     {
-        auto ship = std::make_shared<game::ShipEntity>(world, sf::Vector2f{ -500.f + i * 1050.f, 10.f }, 0.f, 75, 75);
+        auto ship = std::make_shared<game::ShipEntity>(world, physics::Vector{ -500.f + i * 1050.f, 10.f }, 0.f, 75, 75);
 
         if (entity == nullptr)
             entity = ship;
@@ -225,7 +225,7 @@ void DataEditor::load_scene_2()
         storage.add_entity(ship);
     }
 
-    auto ground_1 = std::make_shared<game::GroundEntity>(world, sf::Vector2f{ 0, 1200 }, 0.f);
+    auto ground_1 = std::make_shared<game::GroundEntity>(world, physics::Vector{ 0, 1200 }, 0.f);
 
     storage.add_entity(ground_1);
 
@@ -234,17 +234,17 @@ void DataEditor::load_scene_2()
 
 void DataEditor::load_scene_3()
 {
-    auto  world = engine_.get_world();
+    auto  world   = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
 
     world->set_gravity({ 0.f, 980.f });
 
-    auto complex_1 = std::make_shared<game::ComplexEntity>(world, sf::Vector2f{  800,  500 }, 0.f);
-    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{  400,  100 }, 0.f);
-    auto circle_1  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{  700,  100 }, 0.f);
-    auto circle_2  = std::make_shared<game::CircleEntity >(world, sf::Vector2f{  400,  300 }, 0.f);
-    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{  700,  300 }, 0.f);
-    auto ground_1  = std::make_shared<game::GroundEntity >(world, sf::Vector2f{    0, 1200 }, 0.f);
+    auto complex_1 = std::make_shared<game::ComplexEntity>(world, physics::Vector{  800,  500 }, 0.f);
+    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, physics::Vector{  400,  100 }, 0.f);
+    auto circle_1  = std::make_shared<game::CircleEntity >(world, physics::Vector{  700,  100 }, 0.f);
+    auto circle_2  = std::make_shared<game::CircleEntity >(world, physics::Vector{  400,  300 }, 0.f);
+    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, physics::Vector{  700,  300 }, 0.f);
+    auto ground_1  = std::make_shared<game::GroundEntity >(world, physics::Vector{    0, 1200 }, 0.f);
 
     storage.add_entity(complex_1);
     storage.add_entity(polygon_1);
@@ -256,12 +256,12 @@ void DataEditor::load_scene_3()
     
     for (int32_t i = 0; i < 50; ++i)
     {
-        auto position = sf::Vector2f{ utils::randf(-1200, 1200, 2400), utils::randf(150, 1000, 850) };
+        auto position = physics::Vector{ utils::randf(-1200, 1200, 2400), utils::randf(150, 1000, 850) };
         auto rotation = utils::randf(0.f, PIf * 2.f, 360);
 
         auto circle  = std::make_shared<game::CircleEntity >(world, position, rotation);
 
-        position = sf::Vector2f{ utils::randf(-1200, 1200, 2400), utils::randf(150, 1000, 850) };
+        position = physics::Vector{ utils::randf(-1200, 1200, 2400), utils::randf(150, 1000, 850) };
         rotation = utils::randf(0.f, PIf * 2.f, 360);
 
         auto polygon = std::make_shared<game::PolygonEntity>(world, position, rotation);
@@ -278,8 +278,8 @@ void DataEditor::load_scene_4()
     auto  world = engine_.get_world();
     auto& storage = data_storage_.entities_storage;
 
-    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{   10,  600 }, 0.f);
-    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, sf::Vector2f{ 1550,  600 }, 0.f);
+    auto polygon_1 = std::make_shared<game::PolygonEntity>(world, physics::Vector{   10,  600 }, 0.f);
+    auto polygon_2 = std::make_shared<game::PolygonEntity>(world, physics::Vector{ 1550,  600 }, 0.f);
 
     polygon_1->set_color(sf::Color::Green);
     polygon_1->get_main_body()->accelerate({ 10000.f, 0.f });

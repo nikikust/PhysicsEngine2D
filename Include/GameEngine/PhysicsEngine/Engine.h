@@ -37,7 +37,7 @@ namespace physics
 #endif // DEBUG
 
     private:
-        void wrap_to_area(RigidBody* body, const sf::Vector2f& area_min, const sf::Vector2f& area_max);
+        void wrap_to_area(RigidBody* body, const Vector& area_min, const Vector& area_max);
 
 
         std::shared_ptr<World> selected_world_{};

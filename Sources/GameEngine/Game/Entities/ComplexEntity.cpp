@@ -3,7 +3,7 @@
 
 namespace game
 {
-	ComplexEntity::ComplexEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
+	ComplexEntity::ComplexEntity(std::shared_ptr<physics::World> world, const physics::Vector& position, float angle)
 		: Entity(sf::Color::Green)
 	{
 		auto circle_1 = new physics::CircleShape(
@@ -53,11 +53,17 @@ namespace game
 		auto rotated_center_1 = physics::rotate_point(c_shape_1->get_position(), transform);
 		auto rotated_center_2 = physics::rotate_point(c_shape_2->get_position(), transform);
 
-		//std::cout << color_.r << std::endl;
 
-		painter.draw_circle (transform.position + rotated_center_1, c_shape_1->get_radius(), main_body_->get_angle(),                      color_);
-		painter.draw_polygon(transform.position, physics::rotate_polygon(p_shape_1->get_vertices(), p_shape_1->get_position(), transform), color_);
-		painter.draw_circle (transform.position + rotated_center_2, c_shape_2->get_radius(), main_body_->get_angle(),                      color_);
-		painter.draw_polygon(transform.position, physics::rotate_polygon(p_shape_2->get_vertices(), p_shape_2->get_position(), transform), color_);
+		painter.draw_circle (utils::convert_to_sf(transform.position + rotated_center_1), c_shape_1->get_radius(), main_body_->get_angle(), color_);
+		painter.draw_circle (utils::convert_to_sf(transform.position + rotated_center_2), c_shape_2->get_radius(), main_body_->get_angle(), color_);
+
+		painter.draw_polygon(
+			utils::convert_to_sf(transform.position), 
+			utils::convert_to_sf(physics::rotate_polygon(p_shape_1->get_vertices(), p_shape_1->get_position(), transform)), 
+			color_);
+		painter.draw_polygon(
+			utils::convert_to_sf(transform.position), 
+			utils::convert_to_sf(physics::rotate_polygon(p_shape_2->get_vertices(), p_shape_2->get_position(), transform)), 
+			color_);
 	}
 } // namespace game

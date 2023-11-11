@@ -8,7 +8,7 @@ namespace game
 	class GroundEntity : public Entity
 	{
 	public:
-		GroundEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle);
+		GroundEntity(std::shared_ptr<physics::World> world, const physics::Vector& position, float angle);
 		~GroundEntity();
 
 		void render(graphics::Painter& painter) const override;

@@ -45,7 +45,7 @@ namespace physics
         bool update_physical_data();
 
         const PhysicalData& get_physical_data() const;
-        PhysicalData        get_physical_data(const sf::Vector2f axis) const;
+        PhysicalData        get_physical_data(const Vector axis) const;
 
         RigidBody* get_body() const;
         int32_t    get_id() const;
@@ -108,11 +108,11 @@ namespace physics
         return physical_data_;
     }
 
-    inline PhysicalData Fixture::get_physical_data(const sf::Vector2f axis) const
+    inline PhysicalData Fixture::get_physical_data(const Vector axis) const
     {
         auto relative_physical_data = physical_data_;
 
-        relative_physical_data.mmoi += relative_physical_data.mass * utils::dot(axis, axis);
+        relative_physical_data.mmoi += relative_physical_data.mass * dot(axis, axis);
 
         return relative_physical_data;
     }

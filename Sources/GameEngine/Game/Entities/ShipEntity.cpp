@@ -3,21 +3,21 @@
 
 namespace game
 {
-    ShipEntity::ShipEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle, int32_t max_x, int32_t max_y)
+    ShipEntity::ShipEntity(std::shared_ptr<physics::World> world, const physics::Vector& position, float angle, int32_t max_x, int32_t max_y)
         : Entity(sf::Color::Red)
     {
         const float half_length = 5;
         const float half_width  = 2;
 
-        std::vector<sf::Vector2f> box{ {-half_length, -half_width}, { half_length, -half_width},
-                                       { half_length,  half_width}, {-half_length,  half_width} };
+        std::vector<physics::Vector> box{ {-half_length, -half_width}, { half_length, -half_width},
+                                          { half_length,  half_width}, {-half_length,  half_width} };
 
         for (int32_t x = 0; x < max_x; ++x)
         {
             for (int32_t y = 0; y < max_y; ++y)
             {
-                sf::Vector2f hor_center{ half_length + half_length * 2 * x, half_length * 2 * y };
-                sf::Vector2f ver_center{ half_length * 2 * x, half_length + half_length * 2 * y };
+                physics::Vector hor_center{ half_length + half_length * 2 * x, half_length * 2 * y };
+                physics::Vector ver_center{ half_length * 2 * x, half_length + half_length * 2 * y };
 
                 auto bar_hor = new physics::PolygonShape(physics::rotate_polygon(box, {},        0.f), hor_center);
                 auto bar_ver = new physics::PolygonShape(physics::rotate_polygon(box, {}, (float)PI2), ver_center);
@@ -71,7 +71,10 @@ namespace game
             else
                 color = sf::Color::Green;
 
-            painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color);
+            painter.draw_polygon(
+                utils::convert_to_sf(transform.position), 
+                utils::convert_to_sf(physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform)), 
+                color);
         }
     }
 } // namespace game

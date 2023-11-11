@@ -28,8 +28,8 @@ namespace physics
 
             auto radius = circle->get_radius();
 
-            base_AABB_.min = { -sf::Vector2f{radius, radius} };
-            base_AABB_.max = {  sf::Vector2f{radius, radius} };
+            base_AABB_.min = { -Vector{radius, radius} };
+            base_AABB_.max = {  Vector{radius, radius} };
         }
         break;
         case ShapeType::Polygon:
@@ -40,13 +40,13 @@ namespace physics
 
             for (auto& vertex : polygon->get_vertices())
             {
-                max_distance_squared = fmaxf(max_distance_squared, utils::length_squared(vertex));
+                max_distance_squared = fmaxf(max_distance_squared, physics::length_squared(vertex));
             }
 
             auto max_distance = sqrtf(max_distance_squared);
 
-            base_AABB_.min = { -sf::Vector2f{max_distance, max_distance} };
-            base_AABB_.max = {  sf::Vector2f{max_distance, max_distance} };
+            base_AABB_.min = { -Vector{max_distance, max_distance} };
+            base_AABB_.max = {  Vector{max_distance, max_distance} };
         }
         break;
         default:
@@ -106,13 +106,9 @@ namespace physics
     {
         node_data_->is_sleeping = flag;
 
-        assert(node_data_ != nullptr);
-
         if (flag == true)
             node_data_->aabb = get_AABB();
         node_data_->is_sleeping = flag;
-
-        assert(body_ != nullptr);
 
         body_->set_active_fixture(shape_->get_id(), !flag);
 

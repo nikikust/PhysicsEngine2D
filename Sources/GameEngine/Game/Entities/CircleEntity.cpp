@@ -3,7 +3,7 @@
 
 namespace game
 {
-	CircleEntity::CircleEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
+	CircleEntity::CircleEntity(std::shared_ptr<physics::World> world, const physics::Vector& position, float angle)
 		: Entity(sf::Color::Green)
 	{
 		auto circle = new physics::CircleShape(
@@ -32,6 +32,6 @@ namespace game
 
 		auto rotated_center = physics::rotate_point(shape->get_position(), transform);
 
-		painter.draw_circle(transform.position, shape->get_radius(), main_body_->get_angle(), color_);
+		painter.draw_circle(utils::convert_to_sf(transform.position), shape->get_radius(), main_body_->get_angle(), color_);
 	}
 } // namespace game

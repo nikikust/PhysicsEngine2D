@@ -1,13 +1,13 @@
 #pragma once
-#include <GameEngine/Utils/Functions.h>
+#include <GameEngine/PhysicsEngine/PhysMath.h>
 
 
 namespace physics
 {
 	struct Ray
 	{
-		sf::Vector2f origin;
-		sf::Vector2f direction;
+		Vector origin;
+		Vector direction;
 
 		float max_fraction = 100000.f;
 	};
@@ -16,6 +16,6 @@ namespace physics
 	{
 		float fraction;
 
-		sf::Vector2f normal;
+		Vector normal;
 	};
 } // namespace physics

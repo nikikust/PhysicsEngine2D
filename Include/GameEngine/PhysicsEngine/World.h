@@ -1,11 +1,11 @@
 #pragma once
-#include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
 #include <GameEngine/PhysicsEngine/DAABBTree.h>
 #include <GameEngine/PhysicsEngine/CollisionSolver.h>
 
 #include <GameEngine/PhysicsEngine/Callbacks/RayCastCallback.h>
 #include <GameEngine/PhysicsEngine/Callbacks/CollisionListener.h>
+
 
 #ifdef DEBUG
 #include <GameEngine/GUIEngine/Painter.h>
@@ -52,7 +52,7 @@ namespace physics
         const std::unordered_map<int32_t, physics::RigidBody*>& get_bodies() const;
 
         /// Set gravity in this world
-        void set_gravity(const sf::Vector2f& acceleration);
+        void set_gravity(const Vector& acceleration);
 
         /// Query ray cast test
         void cast_ray(RayCastCallback* callback, const physics::Ray& ray);
@@ -95,7 +95,7 @@ namespace physics
         void add_contact_fixtures(void* data_1, void* data_2);
 
     private:
-        sf::Vector2f gravity_;
+        Vector gravity_;
 
         std::unordered_map<int32_t, physics::RigidBody*> bodies_;
 

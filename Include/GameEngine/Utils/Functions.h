@@ -6,6 +6,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <GameEngine/PhysicsEngine/PhysMath.h>
+
 #include <list>
 #include <cmath>
 #include <ctime>
@@ -49,9 +51,6 @@ namespace utils
 
     int   minmax (int a, int num, int b);       // equal to: min(max(num, a), b);
     float minmax (float a, float num, float b);
-
-    sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B);
-    sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B);
 
     bool in(int a, int num, int b);       // true if: a <= num <= b
     bool inf(float a, float num, float b);
@@ -126,6 +125,26 @@ namespace utils
 
 
     // Inline section
+    inline sf::Vector2f convert_to_sf(const physics::Vector& right)
+    {
+        return sf::Vector2f(right.x, right.y);
+    }
+    inline physics::Vector convert_to_phys(const sf::Vector2f& right)
+    {
+        return physics::Vector(right.x, right.y);
+    }
+
+    inline std::vector<sf::Vector2f> convert_to_sf(const std::vector<physics::Vector>& right)
+    {
+        std::vector<sf::Vector2f> vec;
+        vec.reserve(right.size());
+
+        for (const auto& vertex : right)
+            vec.push_back(utils::convert_to_sf(vertex));
+
+        return vec;
+    }
+
     inline sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B)
     {
         return { fminf(A.x, B.x), fminf(A.y, B.y) };

@@ -60,7 +60,7 @@ namespace physics
         template <typename Callback>
         void query(Callback* callback, const DAABBTree& tree);
 
-        void shift_origin(sf::Vector2f offset);
+        void shift_origin(Vector offset);
 
         ShapeAABB get_root_AABB() const;
         int32_t get_height() const;

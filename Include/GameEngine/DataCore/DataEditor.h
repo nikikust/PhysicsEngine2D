@@ -47,7 +47,7 @@ public:
     void clear_scene();
     void load_scene(int32_t id);
 
-    void create_entity(const sf::Vector2f& position);
+    void create_entity(const physics::Vector& position);
 
 private:
     void make_screenshot();

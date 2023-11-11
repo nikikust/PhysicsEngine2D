@@ -15,7 +15,7 @@ namespace physics
 
         // ShapeAABB aabb{ {5.f, 5.f}, {10.f, 10.f} };
         // Ray ray{ {0.f, 0.f}, utils::normalize({1.f, 1.f}) };
-        // sf::Vector2f result{};
+        // Vector result{};
         // 
         // std::cout << "Result 1: " << intersect(ray, aabb, result) << " | X: " << result.x << " Y: " << result.y << std::endl << std::endl;
         // 
@@ -94,7 +94,7 @@ namespace physics
         return bodies_;
     }
 
-    void World::set_gravity(const sf::Vector2f& acceleration)
+    void World::set_gravity(const Vector& acceleration)
     {
         gravity_ = acceleration;
     }

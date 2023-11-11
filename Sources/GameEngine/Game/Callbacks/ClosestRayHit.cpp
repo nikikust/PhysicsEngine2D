@@ -12,7 +12,7 @@ namespace game
 		if (output.fraction <= closest_t_)
 		{
 			closest_t_ = output.fraction;
-			normal_    = output.normal;
+			normal_    = utils::convert_to_sf(output.normal);
 
 			is_hit_ = true;
 		}
