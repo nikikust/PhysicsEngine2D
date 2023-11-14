@@ -7,7 +7,7 @@ namespace physics
     class CircleShape : public Shape
     {
     public:
-        CircleShape(float radius, const sf::Vector2f& position);
+        CircleShape(float radius, const Vector& position);
 
 
         PhysicalData calculate_physical_data(float density) const override;
@@ -16,7 +16,7 @@ namespace physics
         void  set_radius(float radius);
         float get_radius() const;
 
-        static CircleShape generate_circle(const sf::Vector2u& window_size);
+        static CircleShape generate_circle(const Vector& window_size);
 
     private:
         float radius_;

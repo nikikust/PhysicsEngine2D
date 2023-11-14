@@ -56,11 +56,11 @@ namespace physics
         auto radius_A = circle_A->get_radius();
         auto radius_B = circle_B->get_radius();
 
-        auto distance = utils::distance(position_A, position_B);
+        auto distance = physics::distance(position_A, position_B);
 
         if (distance < radius_A + radius_B)
         {
-            collision.collision_normal = utils::normalize(position_B - position_A);
+            collision.collision_normal = physics::normalize(position_B - position_A);
             collision.depth = radius_A + radius_B - distance;
             collision.elasticity = fminf(fixture_A->get_restitution(), fixture_B->get_restitution());
 
@@ -97,7 +97,7 @@ namespace physics
         auto polygon_B_position_rotated = physics::rotate_and_move_point(polygon_B_position, transform_B);
 
         float total_min_depth = std::numeric_limits<float>::max();
-        sf::Vector2f normal{};
+        Vector normal{};
 
         for (const auto& normal_A : polygon_A->get_normals())
         {
@@ -115,7 +115,7 @@ namespace physics
             {
                 total_min_depth = min_depth;
 
-                if (utils::dot(polygon_B_position_rotated - polygon_A_position_rotated, axis) < 0.f)
+                if (physics::dot(polygon_B_position_rotated - polygon_A_position_rotated, axis) < 0.f)
                     normal = -axis;
                 else
                     normal = axis;
@@ -138,7 +138,7 @@ namespace physics
             {
                 total_min_depth = min_depth;
 
-                if (utils::dot(polygon_B_position_rotated - polygon_A_position_rotated, axis) < 0.f)
+                if (physics::dot(polygon_B_position_rotated - polygon_A_position_rotated, axis) < 0.f)
                     normal = -axis;
                 else
                     normal = axis;
@@ -178,7 +178,7 @@ namespace physics
         auto circle_position_rotated  = physics::rotate_and_move_point(circle_position,  transform_B);
 
         float total_min_depth = std::numeric_limits<float>::max();
-        sf::Vector2f normal{};
+        Vector normal{};
 
         for (const auto& normal_A : polygon->get_normals())
         {
@@ -196,7 +196,7 @@ namespace physics
             {
                 total_min_depth = min_depth;
 
-                if (utils::dot(circle_position_rotated - polygon_position_rotated, axis) < 0.f)
+                if (physics::dot(circle_position_rotated - polygon_position_rotated, axis) < 0.f)
                     normal = -axis;
                 else
                     normal = axis;
@@ -205,7 +205,7 @@ namespace physics
 
         auto closest_point = circle_polygon_closest_point(polygon, circle, transform_A, transform_B);
 
-        auto axis = utils::normalize(closest_point - circle_position_rotated);
+        auto axis = physics::normalize(closest_point - circle_position_rotated);
 
         auto [projections_A_min, projections_A_max] = polygon_projection(polygon, axis, transform_A);
         auto [projections_B_min, projections_B_max] = circle_projection (circle,  axis, transform_B);
@@ -219,7 +219,7 @@ namespace physics
         {
             total_min_depth = min_depth;
 
-            if (utils::dot(circle_position_rotated - polygon_position_rotated, axis) < 0.f)
+            if (physics::dot(circle_position_rotated - polygon_position_rotated, axis) < 0.f)
                 normal = -axis;
             else
                 normal = axis;
@@ -266,8 +266,8 @@ namespace physics
         }
     }
 
-    sf::Vector2f CollisionSolver::circles_collision_points(Shape* circle_A_raw, Shape* circle_B_raw,
-                                                           const Transform& transform_A, const Transform& transform_B) const
+    Vector CollisionSolver::circles_collision_points(Shape* circle_A_raw, Shape* circle_B_raw,
+                                                     const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
         auto circle_A = (CircleShape*)(circle_A_raw);
@@ -281,7 +281,7 @@ namespace physics
         auto radius_B = circle_B->get_radius();
 
         // --- //
-        sf::Vector2f contact{
+        Vector contact{
             (position_A.x * radius_B + position_B.x * radius_A) / (radius_A + radius_B),
             (position_A.y * radius_B + position_B.y * radius_A) / (radius_A + radius_B) 
         };
@@ -293,8 +293,8 @@ namespace physics
         return contact;
     }
 
-    sf::Vector2f CollisionSolver::polygons_collision_points(Shape* polygon_A_raw, Shape* polygon_B_raw,
-                                                            const Transform& transform_A, const Transform& transform_B) const
+    Vector CollisionSolver::polygons_collision_points(Shape* polygon_A_raw, Shape* polygon_B_raw,
+                                                      const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
         auto polygon_A = (PolygonShape*)(polygon_A_raw);
@@ -384,8 +384,8 @@ namespace physics
             return (contacts.collision_point_1 + contacts.collision_point_2) / 2.f;
     }
 
-    sf::Vector2f CollisionSolver::circle_polygon_collision_points(Shape* polygon_raw, Shape* circle_raw,
-                                                                  const Transform& transform_A, const Transform& transform_B) const
+    Vector CollisionSolver::circle_polygon_collision_points(Shape* polygon_raw, Shape* circle_raw,
+                                                            const Transform& transform_A, const Transform& transform_B) const
     {
         // Convert pointers
         auto polygon = (PolygonShape*)(polygon_raw);
@@ -402,7 +402,7 @@ namespace physics
 
         // --- //
         float min_distance = std::numeric_limits<float>::max();
-        sf::Vector2f contact{};
+        Vector contact{};
 
         auto count = (int32_t)vertices.size();
         for (int32_t i = 0; i < count; ++i)
@@ -435,8 +435,8 @@ namespace physics
         auto fixated_A = body_A->get_linear_fixation();
         auto fixated_B = body_B->get_linear_fixation();
 
-        sf::Vector2f resolve_coefficients_A{ 0.5f, 0.5f };
-        sf::Vector2f resolve_coefficients_B{ 0.5f, 0.5f };
+        Vector resolve_coefficients_A{ 0.5f, 0.5f };
+        Vector resolve_coefficients_B{ 0.5f, 0.5f };
 
         if (fixated_A.first)
         {
@@ -460,8 +460,8 @@ namespace physics
             resolve_coefficients_B.y  = 0.f; // Second y stands
         }
 
-        sf::Vector2f normal_A{ collision.collision_normal.x * resolve_coefficients_A.x, collision.collision_normal.y * resolve_coefficients_A.y };
-        sf::Vector2f normal_B{ collision.collision_normal.x * resolve_coefficients_B.x, collision.collision_normal.y * resolve_coefficients_B.y };
+        Vector normal_A{ collision.collision_normal.x * resolve_coefficients_A.x, collision.collision_normal.y * resolve_coefficients_A.y };
+        Vector normal_B{ collision.collision_normal.x * resolve_coefficients_B.x, collision.collision_normal.y * resolve_coefficients_B.y };
 
         body_A->move(-normal_A * collision.depth);
         body_B->move( normal_B * collision.depth);
@@ -477,21 +477,21 @@ namespace physics
 
         auto relative_speed = speed_B - speed_A;
 
-        if (utils::dot(relative_speed, collision.collision_normal) > 0.f)
+        if (physics::dot(relative_speed, collision.collision_normal) > 0.f)
             return;
 
-        sf::Vector2f inv_mass_A{
+        Vector inv_mass_A{
             (fixated_A.first ? 0.f : body_A->get_inv_mass()),
             (fixated_A.second ? 0.f : body_A->get_inv_mass())
         };
-        sf::Vector2f inv_mass_B{
+        Vector inv_mass_B{
             (fixated_B.first ? 0.f : body_B->get_inv_mass()),
             (fixated_B.second ? 0.f : body_B->get_inv_mass())
         };
 
-        float nominator = -(1 + collision.elasticity) * utils::dot(relative_speed, collision.collision_normal);
+        float nominator = -(1 + collision.elasticity) * physics::dot(relative_speed, collision.collision_normal);
 
-        sf::Vector2f I{
+        Vector I{
             (inv_mass_A.x + inv_mass_B.x) == 0.f ? 0 : nominator / (inv_mass_A.x + inv_mass_B.x),
             (inv_mass_A.y + inv_mass_B.y) == 0.f ? 0 : nominator / (inv_mass_A.y + inv_mass_B.y)
         };
@@ -522,24 +522,24 @@ namespace physics
 
         // --- //
 
-        sf::Vector2f r_vector_A_perp { -r_vector_A.y, r_vector_A.x };
-        sf::Vector2f r_vector_B_perp { -r_vector_B.y, r_vector_B.x };
+        Vector r_vector_A_perp { -r_vector_A.y, r_vector_A.x };
+        Vector r_vector_B_perp { -r_vector_B.y, r_vector_B.x };
 
         auto relative_speed = (speed_B + angular_speed_B * r_vector_B_perp) - (speed_A + angular_speed_A * r_vector_A_perp);
 
-        if (utils::dot(relative_speed, collision.collision_normal) > 0.f)
+        if (physics::dot(relative_speed, collision.collision_normal) > 0.f)
             return;
 
         // --- //
 
-        float rA_dot_n = utils::dot(r_vector_A_perp, collision.collision_normal);
-        float rB_dot_n = utils::dot(r_vector_B_perp, collision.collision_normal);
+        float rA_dot_n = physics::dot(r_vector_A_perp, collision.collision_normal);
+        float rB_dot_n = physics::dot(r_vector_B_perp, collision.collision_normal);
 
-        sf::Vector2f inv_mass_A{
+        Vector inv_mass_A{
             (fixated_A.first  ? 0.f : body_A->get_inv_mass()),
             (fixated_A.second ? 0.f : body_A->get_inv_mass())
         };
-        sf::Vector2f inv_mass_B{
+        Vector inv_mass_B{
             (fixated_B.first  ? 0.f : body_B->get_inv_mass()),
             (fixated_B.second ? 0.f : body_B->get_inv_mass())
         };
@@ -553,10 +553,10 @@ namespace physics
             return;
 
         // --- //
-        float nominator = -(1.f + collision.elasticity) * utils::dot(relative_speed, collision.collision_normal);
+        float nominator = -(1.f + collision.elasticity) * physics::dot(relative_speed, collision.collision_normal);
         float I = nominator / denom;
 
-        sf::Vector2f I_axis{
+        Vector I_axis{
             (inv_mass_A.x + inv_mass_B.x) == 0.f ? 0 : I,
             (inv_mass_A.y + inv_mass_B.y) == 0.f ? 0 : I
         };
@@ -569,8 +569,8 @@ namespace physics
         body_A->set_linear_speed(speed_A);
         body_B->set_linear_speed(speed_B);
 
-        body_A->set_angular_speed(angular_speed_A - utils::cross(r_vector_A, I * collision.collision_normal) * body_A->get_inv_mmoi() * (!fixated_angle_A));
-        body_B->set_angular_speed(angular_speed_B + utils::cross(r_vector_B, I * collision.collision_normal) * body_B->get_inv_mmoi() * (!fixated_angle_B));
+        body_A->set_angular_speed(angular_speed_A - physics::cross(r_vector_A, I * collision.collision_normal) * body_A->get_inv_mmoi() * (!fixated_angle_A));
+        body_B->set_angular_speed(angular_speed_B + physics::cross(r_vector_B, I * collision.collision_normal) * body_B->get_inv_mmoi() * (!fixated_angle_B));
 
 #ifdef DEBUG
         // auto corner{ body_A->get_AABB().max - body_A->get_AABB().min };
@@ -581,21 +581,21 @@ namespace physics
 
 
     // --- Aditional methods
-    std::pair<float, float> CollisionSolver::polygon_projection(PolygonShape* polygon, const sf::Vector2f& axis, const Transform& transform) const
+    std::pair<float, float> CollisionSolver::polygon_projection(PolygonShape* polygon, const Vector& axis, const Transform& transform) const
     {
         auto polygon_position = polygon->get_position();
 
         const auto& vertices = polygon->get_vertices();
         auto vertex = vertices.begin();
 
-        float projection = utils::dot(physics::rotate_and_move_point(polygon_position + *vertex++, transform), axis);
+        float projection = physics::dot(physics::rotate_and_move_point(polygon_position + *vertex++, transform), axis);
 
         float min_projection = projection;
         float max_projection = projection;
 
         for (; vertex != vertices.end(); ++vertex)
         {
-            projection = utils::dot(physics::rotate_and_move_point(polygon_position + *vertex, transform), axis);
+            projection = physics::dot(physics::rotate_and_move_point(polygon_position + *vertex, transform), axis);
 
             min_projection = std::min(min_projection, projection);
             max_projection = std::max(max_projection, projection);
@@ -606,9 +606,9 @@ namespace physics
         return pair;
     }
 
-    std::pair<float, float> CollisionSolver::circle_projection(CircleShape* circle, const sf::Vector2f& axis, const Transform& transform) const
+    std::pair<float, float> CollisionSolver::circle_projection(CircleShape* circle, const Vector& axis, const Transform& transform) const
     {
-        float central = utils::dot(physics::rotate_and_move_point(circle->get_position(), transform), axis);
+        float central = physics::dot(physics::rotate_and_move_point(circle->get_position(), transform), axis);
 
         std::pair<float, float> pair{ 
             central - circle->get_radius(), 
@@ -619,9 +619,9 @@ namespace physics
     }
 
 
-    sf::Vector2f CollisionSolver::circle_polygon_closest_point(PolygonShape* polygon, CircleShape* circle, const Transform& transform_A, const Transform& transform_B) const
+    Vector CollisionSolver::circle_polygon_closest_point(PolygonShape* polygon, CircleShape* circle, const Transform& transform_A, const Transform& transform_B) const
     {
-        sf::Vector2f closest_point{};
+        Vector closest_point{};
         float min_distance = std::numeric_limits<float>::max();
 
         auto polygon_position = polygon->get_position();
@@ -632,7 +632,7 @@ namespace physics
         {
             auto rotated_vertex = physics::rotate_and_move_point(polygon_position + vertex, transform_A);
 
-            auto distance_squared = utils::distance_squared(circle_position_rotated, rotated_vertex);
+            auto distance_squared = physics::distance_squared(circle_position_rotated, rotated_vertex);
 
             if (distance_squared < min_distance)
             {

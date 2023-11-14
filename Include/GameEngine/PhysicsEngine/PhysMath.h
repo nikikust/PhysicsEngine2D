@@ -1,18 +1,235 @@
 #pragma once
-#include <GameEngine/Utils/Functions.h>
-#include <GameEngine/PhysicsEngine/Ray.h>
 #include <GameEngine/PhysicsEngine/Rotation.h>
-#include <GameEngine/PhysicsEngine/ShapeAABB.h>
+
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+
+
+#ifndef PI
+#define PI 3.14159265
+#endif
+#define PI2 (3.14159265 / 2)
+#define PI4 (3.14159265 / 4)
+
+#define PIf float(PI)
+#define PI2f float(PI / 2)
+#define PI4f float(PI / 4)
 
 
 namespace physics
 {
+    class ShapeAABB;
+
+    struct Vector
+    {
+        Vector() : x(0.f), y(0.f) {}
+        Vector(float x, float y) : x(x), y(y) {}
+
+        float x, y;
+    };
+
+    inline Vector operator+(const Vector& left)
+    {
+        Vector out{ left.x, left.y };
+
+        return out;
+    }
+    inline Vector operator-(const Vector& left)
+    {
+        Vector out{ -left.x, -left.y };
+
+        return out;
+    }
+
+    inline Vector operator+(const Vector& left, float right)
+    {
+        Vector out{ left };
+
+        out.x += right;
+        out.y += right;
+
+        return out;
+    }
+    inline Vector operator-(const Vector& left, float right)
+    {
+        Vector out{ left };
+
+        out.x -= right;
+        out.y -= right;
+
+        return out;
+    }
+    inline Vector operator*(const Vector& left, float right)
+    {
+        Vector out{ left };
+
+        out.x *= right;
+        out.y *= right;
+
+        return out;
+    }
+    inline Vector operator/(const Vector& left, float right)
+    {
+        Vector out{ left };
+
+        out.x /= right;
+        out.y /= right;
+
+        return out;
+    }
+
+    inline Vector operator+(float left, const Vector& right)
+    {
+        Vector out{ right };
+
+        out.x += left;
+        out.y += left;
+
+        return out;
+    }
+    inline Vector operator*(float left, const Vector& right)
+    {
+        Vector out{ right };
+
+        out.x *= left;
+        out.y *= left;
+
+        return out;
+    }
+
+    inline Vector operator+(const Vector& left, const Vector& right)
+    {
+        Vector out{ left };
+
+        out.x += right.x;
+        out.y += right.y;
+
+        return out;
+    }
+    inline Vector operator-(const Vector& left, const Vector& right)
+    {
+        Vector out{ left };
+
+        out.x -= right.x;
+        out.y -= right.y;
+
+        return out;
+    }
+
+    inline Vector& operator+=(Vector& left, float right)
+    {
+        left.x += right;
+        left.y += right;
+
+        return left;
+    }
+    inline Vector& operator-=(Vector& left, float right)
+    {
+        left.x -= right;
+        left.y -= right;
+
+        return left;
+    }
+
+    inline Vector& operator+=(Vector& left, const Vector& right)
+    {
+        left.x += right.x;
+        left.y += right.y;
+
+        return left;
+    }
+    inline Vector& operator-=(Vector& left, const Vector& right)
+    {
+        left.x -= right.x;
+        left.y -= right.y;
+
+        return left;
+    }
+
+
+    inline Vector min(const Vector& A, const Vector& B)
+    {
+        return { fminf(A.x, B.x), fminf(A.y, B.y) };
+    }
+    inline Vector max(const Vector& A, const Vector& B)
+    {
+        return { fmaxf(A.x, B.x), fmaxf(A.y, B.y) };
+    }
+
+    inline Vector abs(const Vector& X)
+    {
+        return Vector(fabsf(X.x), fabsf(X.y));
+    }
+
+    inline bool inf(float a, float num, float b)
+    {
+        return (num >= a && num <= b);
+    }
+
+    template<typename T>
+    inline void swap(T& a, T& b)
+    {
+        T tmp = a;
+        a = b;
+        b = tmp;
+    }
+
+    inline float length(const Vector& x)
+    {
+        return sqrtf(x.x * x.x + x.y * x.y);
+    }
+    inline float distance(const Vector& A, const Vector& B)
+    {
+        Vector diff = B - A;
+
+        return sqrtf(diff.x * diff.x + diff.y * diff.y);
+    }
+
+    inline float length_squared(const Vector& x)
+    {
+        return x.x * x.x + x.y * x.y;
+    }
+    inline float distance_squared(const Vector& A, const Vector& B)
+    {
+        Vector diff = B - A;
+
+        return diff.x * diff.x + diff.y * diff.y;
+    }
+
+    inline Vector normalize(const Vector& vector)
+    {
+        auto length = physics::length(vector);
+
+        if (length == 0.f)
+            return { 1.f, 0.f };
+
+        return vector / length;
+    }
+
+    inline float dot(const Vector& A, const Vector& B)
+    {
+        return A.x * B.x + A.y * B.y;
+    }
+    inline float cross(const Vector& A, const Vector& B)
+    {
+        return A.x * B.y - B.x * A.y;
+    }
+
+    inline Vector rotate_point(const Vector& point, float angle)
+    {
+        return {
+            point.x * cosf(angle) - point.y * sinf(angle),
+            point.x * sinf(angle) + point.y * cosf(angle)
+        };
+    }
+
     struct Transform
     {
-        sf::Vector2f position{};
+        Vector position{};
 
-        sf::Vector2f centroid{};
-        Rotation     rotation{};
+        Vector centroid{};
+        Rotation rotation{};
 
         Transform();
         Transform(Transform&);
@@ -28,7 +245,7 @@ namespace physics
         float mass     = 0.0f;
         float inv_mass = 0.0f;
 
-        sf::Vector2f centroid = { 0.0f, 0.0f };
+        Vector centroid = { 0.0f, 0.0f };
 
         float mmoi     = 0.0f;
         float inv_mmoi = 0.0f;
@@ -38,20 +255,20 @@ namespace physics
     /// @param point - point to rotate
     /// @param transform - rotation rule
     /// @return Rotated point
-    sf::Vector2f rotate_point(const sf::Vector2f& point, const Transform& transform);
+    Vector rotate_point(const Vector& point, const Transform& transform);
 
     /// @brief Rotates point around centroid, specified in transform
     /// @param point - point to rotate
     /// @param rotation - rotation rule
     /// @return Rotated point
-    sf::Vector2f rotate_point(const sf::Vector2f& point, const Rotation& rotation);
+    Vector rotate_point(const Vector& point, const Rotation& rotation);
 
 
     /// @brief Rotates point around centroid, specified in transform, and offsets it after
     /// @param point - point to rotate
     /// @param transform - rotation and offset rule
     /// @return Rotated and offsetted point
-    sf::Vector2f rotate_and_move_point(const sf::Vector2f& point, const Transform& transform);
+    Vector rotate_and_move_point(const Vector& point, const Transform& transform);
 
 
     /// @brief Rotates vertices by specified angle
@@ -59,7 +276,7 @@ namespace physics
     /// @param angle - rotation angle
     /// @param offset - offset of polygon's center
     /// @return Rotated vertices
-    std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, float angle);
+    std::vector<Vector> rotate_polygon(const std::vector<Vector>& vertices, const Vector& offset, float angle);
 
 
     /// @brief Rotates vertices around centroid, specified in transform
@@ -67,21 +284,21 @@ namespace physics
     /// @param transform - rotation and offset rule
     /// @param offset - offset of polygon's center
     /// @return Rotated vertices
-    std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, const Transform& transform);
+    std::vector<Vector> rotate_polygon(const std::vector<Vector>& vertices, const Vector& offset, const Transform& transform);
 
 
     /// @brief Calculates the area of the triangle
     /// @param A - Vector of the side A
     /// @param B - Vector of the side B
     /// @return Triangle's area
-    float triangle_area(const sf::Vector2f& A, const sf::Vector2f& B);
+    float triangle_area(const Vector& A, const Vector& B);
 
 
     /// @brief Calculates the location of the triangle's centroid
     /// @param A - Vector of the side A
     /// @param B - Vector of the side B
     /// @return Triangle's centroid
-    sf::Vector2f triangle_center(const sf::Vector2f& A, const sf::Vector2f& B);
+    Vector triangle_center(const Vector& A, const Vector& B);
 
 
     /// @brief Calculates the moment of inertia of the triangle
@@ -89,7 +306,7 @@ namespace physics
     /// @param B - Vector of the side B 
     /// @param triangle_mass - Mass of the triangle
     /// @return 
-    float triangle_mmoi(const sf::Vector2f& A, const sf::Vector2f& B, float triangle_mass);
+    float triangle_mmoi(const Vector& A, const Vector& B, float triangle_mass);
 
 
     /// @brief Calculates the closest segment point to the specified point 
@@ -97,7 +314,7 @@ namespace physics
     /// @param A - End of the segment
     /// @param B - End of the segment
     /// @return Distance and point on the segment
-    std::pair<float, sf::Vector2f> point_segment_distance_squared(const sf::Vector2f& point, const sf::Vector2f& A, const sf::Vector2f& B);
+    std::pair<float, Vector> point_segment_distance_squared(const Vector& point, const Vector& A, const Vector& B);
 
 
     /// @brief Returns true, if two floats are almost equal (to negate float inaccuracy effects)
@@ -107,23 +324,22 @@ namespace physics
 
     /// @brief Returns true, if two vectors are almost equal (to negate float inaccuracy effects)
     /// @param precision - precision area where vectors are considered equal
-    bool almost_equal(const sf::Vector2f& A, const sf::Vector2f& B, float precision = 0.01);
+    bool almost_equal(const Vector& A, const Vector& B, float precision = 0.01);
 
 
-    // Inline section
-    inline std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, float angle)
+    inline std::vector<Vector> rotate_polygon(const std::vector<Vector>& vertices, const Vector& offset, float angle)
     {
-        std::vector<sf::Vector2f> rotated_vertices = vertices;
+        std::vector<Vector> rotated_vertices = vertices;
 
         for (auto& vertex : rotated_vertices)
-            vertex = utils::rotate_point(vertex + offset, angle);
+            vertex = rotate_point(vertex + offset, angle);
 
         return rotated_vertices;
     }
 
-    inline std::vector<sf::Vector2f> rotate_polygon(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& offset, const Transform& transform)
+    inline std::vector<Vector> rotate_polygon(const std::vector<Vector>& vertices, const Vector& offset, const Transform& transform)
     {
-        std::vector<sf::Vector2f> rotated_vertices = vertices;
+        std::vector<Vector> rotated_vertices = vertices;
 
         for (auto& vertex : rotated_vertices)
             vertex = physics::rotate_point(vertex + offset, transform);
@@ -131,118 +347,13 @@ namespace physics
         return rotated_vertices;
     }
 
-    inline bool intersect(const Ray& ray, const sf::Vector2f& A, const sf::Vector2f& B, sf::Vector2f& result)
-    {
-        float a = B.y - A.y;
-        float b = A.x - B.x;
-        float c = -A.x * B.y + A.y * B.x;
-
-        float t = (-a * ray.origin.x - b * ray.origin.y - c) / (a * ray.direction.x + b * ray.direction.y);
-
-        if (t < 0)
-            return false;
-
-        // Координаты точки пересечения
-
-        result.x = ray.origin.x + ray.direction.x * t;
-        result.y = ray.origin.y + ray.direction.y * t;
-
-        if ((utils::inf(A.x, result.x, B.x) || utils::inf(B.x, result.x, A.x)) && 
-            (utils::inf(A.y, result.y, B.y) || utils::inf(B.y, result.y, A.y)))
-            return true;
-
-        return false;
-    }
-
-    inline bool intersect(const Ray& ray, const ShapeAABB& aabb, sf::Vector2f& result)
-    {
-        bool intersects = false;
-        sf::Vector2f temp_result;
-
-        sf::Vector2f aabb_top_right{ aabb.max.x, aabb.min.y };
-        sf::Vector2f aabb_bottom_left{ aabb.min.x, aabb.max.y };
-
-        // --- Top-Left - Top-Right
-
-        intersects = intersect(ray, aabb.min, aabb_top_right, result);
-
-        // --- Top-Right - Bottom-Right
-
-        bool res = intersect(ray, aabb_top_right, aabb.max, temp_result);
-
-        if (intersects && res)
-            result = (utils::length_squared(temp_result - ray.origin) < utils::length_squared(result - ray.origin)) ? temp_result : result;
-        else if (res)
-        {
-            intersects = true;
-            result = temp_result;
-        }
-
-        // --- Bottom-Right - Bottom-Left
-
-        res = intersect(ray, aabb.max, aabb_bottom_left, temp_result);
-
-        if (intersects && res)
-            result = (utils::length_squared(temp_result - ray.origin) < utils::length_squared(result - ray.origin)) ? temp_result : result;
-        else if (res)
-        {
-            intersects = true;
-            result = temp_result;
-        }
-
-        // --- Bottom-Left - Top-Left
-
-        res = intersect(ray, aabb_bottom_left, aabb.min, temp_result);
-
-        if (intersects && res)
-            result = (utils::length_squared(temp_result - ray.origin) < utils::length_squared(result - ray.origin)) ? temp_result : result;
-        else if (res)
-        {
-            intersects = true;
-            result = temp_result;
-        }
-
-        // --- Result
-
-        return intersects;
-    }
-
-    inline bool intersect(const Ray& ray, const ShapeAABB& aabb)
-    {
-        sf::Vector2f aabb_top_right{ aabb.max.x, aabb.min.y };
-        sf::Vector2f aabb_bottom_left{ aabb.min.x, aabb.max.y };
-        sf::Vector2f result_buf{};
-
-        // --- Top-Left - Top-Right
-
-        if (intersect(ray, aabb.min, aabb_top_right, result_buf))
-            return true;
-
-        // --- Top-Right - Bottom-Right
-
-        if (intersect(ray, aabb_top_right, aabb.max, result_buf))
-            return true;
-
-        // --- Bottom-Right - Bottom-Left
-
-        if (intersect(ray, aabb.max, aabb_bottom_left, result_buf))
-            return true;
-
-        // --- Bottom-Left - Top-Left
-
-        if (intersect(ray, aabb_bottom_left, aabb.min, result_buf))
-            return true;
-
-        return false;
-    }
-
 
     /// @brief Rotate point around centroid provided in transform
-    inline sf::Vector2f rotate_point(const sf::Vector2f& point, const Transform& transform)
+    inline Vector rotate_point(const Vector& point, const Transform& transform)
     {
         auto shifted_point = point - transform.centroid;
 
-        return transform.centroid + sf::Vector2f{
+        return transform.centroid + Vector{
             shifted_point.x * transform.rotation.get_cos() - shifted_point.y * transform.rotation.get_sin(),
             shifted_point.x * transform.rotation.get_sin() + shifted_point.y * transform.rotation.get_cos()
         };
@@ -250,11 +361,11 @@ namespace physics
 
 
     /// @brief Inverse rotate point around centroid provided in transform
-    inline sf::Vector2f rotate_point_T(const sf::Vector2f& point, const Transform& transform)
+    inline Vector rotate_point_T(const Vector& point, const Transform& transform)
     {
         auto shifted_point = point - transform.centroid;
 
-        return transform.centroid + sf::Vector2f{
+        return transform.centroid + Vector{
              shifted_point.x * transform.rotation.get_cos() + shifted_point.y * transform.rotation.get_sin(),
             -shifted_point.x * transform.rotation.get_sin() + shifted_point.y * transform.rotation.get_cos()
         };
@@ -262,9 +373,9 @@ namespace physics
 
 
     /// @brief Rotate point by matrix constructed from provided rotation
-    inline sf::Vector2f rotate_point(const sf::Vector2f& point, const Rotation& rotation)
+    inline Vector rotate_point(const Vector& point, const Rotation& rotation)
     {
-        return sf::Vector2f{
+        return Vector{
             point.x * rotation.get_cos() - point.y * rotation.get_sin(),
             point.x * rotation.get_sin() + point.y * rotation.get_cos()
         };
@@ -272,9 +383,9 @@ namespace physics
 
 
     /// @brief Inverse rotate point by matrix constructed from provided rotation
-    inline sf::Vector2f rotate_point_T(const sf::Vector2f& point, const Rotation& rotation)
+    inline Vector rotate_point_T(const Vector& point, const Rotation& rotation)
     {
-        return sf::Vector2f{
+        return Vector{
              point.x * rotation.get_cos() + point.y * rotation.get_sin(),
             -point.x * rotation.get_sin() + point.y * rotation.get_cos()
         };
@@ -282,47 +393,47 @@ namespace physics
 
 
     /// @brief Rotate point around centroid provided in transform and shift it
-    inline sf::Vector2f rotate_and_move_point(const sf::Vector2f& point, const Transform& transform)
+    inline Vector rotate_and_move_point(const Vector& point, const Transform& transform)
     {
         auto shifted_point = point - transform.centroid;
 
-        return transform.position + transform.centroid + sf::Vector2f{
+        return transform.position + transform.centroid + Vector{
             shifted_point.x * transform.rotation.get_cos() - shifted_point.y * transform.rotation.get_sin(),
             shifted_point.x * transform.rotation.get_sin() + shifted_point.y * transform.rotation.get_cos()
         };
     }
 
 
-    inline float triangle_area(const sf::Vector2f& A, const sf::Vector2f& B)
+    inline float triangle_area(const Vector& A, const Vector& B)
     {
-        return utils::cross(A, B) / 2.f;
+        return cross(A, B) / 2.f;
     }
 
-    inline sf::Vector2f triangle_center(const sf::Vector2f& A, const sf::Vector2f& B)
+    inline Vector triangle_center(const Vector& A, const Vector& B)
     {
         return (A + B) / 3.f;
     }
 
-    inline float triangle_mmoi(const sf::Vector2f& A, const sf::Vector2f& B, float triangle_mass)
+    inline float triangle_mmoi(const Vector& A, const Vector& B, float triangle_mass)
     {
-        return triangle_mass / 6.f * (utils::dot(A, A) + utils::dot(B, B) + utils::dot(A, B));
+        return triangle_mass / 6.f * (dot(A, A) + dot(B, B) + dot(A, B));
     }
 
-    inline std::pair<float, sf::Vector2f> point_segment_distance_squared(const sf::Vector2f& p, const sf::Vector2f& A, const sf::Vector2f& B)
+    inline std::pair<float, Vector> point_segment_distance_squared(const Vector& p, const Vector& A, const Vector& B)
     {
-        sf::Vector2f AB = B - A;
-        sf::Vector2f Ap = p - A;
+        Vector AB = B - A;
+        Vector Ap = p - A;
 
-        float proj = utils::dot(Ap, AB);
-        float AB_length_sqr = utils::length_squared(AB);
+        float proj = dot(Ap, AB);
+        float AB_length_sqr = length_squared(AB);
         float d = proj / AB_length_sqr;
 
         if (d <= 0.f)
-            return { utils::distance_squared(p, A), A };
+            return { distance_squared(p, A), A };
         else if (d >= 1.f)
-            return { utils::distance_squared(p, B), B };
+            return { distance_squared(p, B), B };
         else
-            return { utils::distance_squared(p, A + AB * d), A + AB * d };
+            return { distance_squared(p, A + AB * d), A + AB * d };
     }
 
     inline bool almost_equal(float A, float B, float precision)
@@ -330,7 +441,7 @@ namespace physics
         return fabsf(B - A) < precision;
     }
 
-    inline bool almost_equal(const sf::Vector2f& A, const sf::Vector2f& B, float precision)
+    inline bool almost_equal(const Vector& A, const Vector& B, float precision)
     {
         return almost_equal(A.x, B.x) && almost_equal(A.y, B.y);
     }

@@ -3,7 +3,7 @@
 
 namespace physics
 {
-    CircleShape::CircleShape(float radius, const sf::Vector2f& position)
+    CircleShape::CircleShape(float radius, const Vector& position)
         : Shape(ShapeType::Circle, position), radius_(radius)
     {
     }
@@ -23,12 +23,12 @@ namespace physics
     {
         auto global_position = physics::rotate_and_move_point(position_, transform);
 
-        sf::Vector2f s = ray.origin - global_position;
-        float C = utils::dot(s, s) - radius_ * radius_;
+        Vector s = ray.origin - global_position;
+        float C = physics::dot(s, s) - radius_ * radius_;
 
         // Solve quadratic equation.
-        float B = utils::dot(s, ray.direction); // = b/2
-        float A = utils::dot(ray.direction, ray.direction);
+        float B = physics::dot(s, ray.direction); // = b/2
+        float A = physics::dot(ray.direction, ray.direction);
         float discr = B * B - A * C; // D/4
 
         // Check for negative discriminant and short segment.
@@ -45,7 +45,7 @@ namespace physics
             t /= A;
 
             output.fraction = t;
-            output.normal = utils::normalize(s + t * ray.direction);
+            output.normal = physics::normalize(s + t * ray.direction);
             return true;
         }
 
@@ -53,7 +53,7 @@ namespace physics
     }
 
 
-    CircleShape CircleShape::generate_circle(const sf::Vector2u& window_size)
+    CircleShape CircleShape::generate_circle(const Vector& window_size)
     {
         // Radius
         int rad_start = 25, rad_end = 100;
@@ -61,11 +61,11 @@ namespace physics
         float radius = float(rand() % (rad_end - rad_start + 1) + rad_start);
 
         // Position
-        sf::Vector2u pos_start = { 100, 100 }, pos_end = window_size - sf::Vector2u{ 100, 100 };
+        Vector pos_start = { 100, 100 }, pos_end = window_size - Vector{ 100, 100 };
 
-        sf::Vector2f position = {
-            float(rand() % (pos_end.x - pos_start.x + 1) + pos_start.x),
-            float(rand() % (pos_end.y - pos_start.y + 1) + pos_start.y)
+        Vector position = {
+            float(rand() % int((pos_end.x - pos_start.x + 1) + pos_start.x)),
+            float(rand() % int((pos_end.y - pos_start.y + 1) + pos_start.y))
         };
 
         // Creation

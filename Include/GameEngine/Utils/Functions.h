@@ -6,6 +6,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <GameEngine/PhysicsEngine/PhysMath.h>
+
 #include <list>
 #include <cmath>
 #include <ctime>
@@ -50,9 +52,6 @@ namespace utils
     int   minmax (int a, int num, int b);       // equal to: min(max(num, a), b);
     float minmax (float a, float num, float b);
 
-    sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B);
-    sf::Vector2f max(const sf::Vector2f& A, const sf::Vector2f& B);
-
     bool in(int a, int num, int b);       // true if: a <= num <= b
     bool inf(float a, float num, float b);
 
@@ -60,20 +59,9 @@ namespace utils
     float randf(float start, float end, int amount);
 
     float length   (const sf::Vector2f& x);
-    float distance (const sf::Vector2f& A, const sf::Vector2f& B);
-
-    float length_squared   (const sf::Vector2f& x);
-    float distance_squared (const sf::Vector2f& A, const sf::Vector2f& B);
-
-    float dot   (const sf::Vector2f& A, const sf::Vector2f& B);
-    float cross (const sf::Vector2f& A, const sf::Vector2f& B);
-
-    sf::Vector2f normalize(const sf::Vector2f& vector);
 
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B);
     bool is_horizontal_move(const sf::Vector2i& delta);
-
-    sf::Vector2f rotate_point(const sf::Vector2f& point, float angle);
 
 
     bool file_exists(const std::string& path);
@@ -126,6 +114,26 @@ namespace utils
 
 
     // Inline section
+    inline sf::Vector2f convert_to_sf(const physics::Vector& right)
+    {
+        return sf::Vector2f(right.x, right.y);
+    }
+    inline physics::Vector convert_to_phys(const sf::Vector2f& right)
+    {
+        return physics::Vector(right.x, right.y);
+    }
+
+    inline std::vector<sf::Vector2f> convert_to_sf(const std::vector<physics::Vector>& right)
+    {
+        std::vector<sf::Vector2f> vec;
+        vec.reserve(right.size());
+
+        for (const auto& vertex : right)
+            vec.push_back(utils::convert_to_sf(vertex));
+
+        return vec;
+    }
+
     inline sf::Vector2f min(const sf::Vector2f& A, const sf::Vector2f& B)
     {
         return { fminf(A.x, B.x), fminf(A.y, B.y) };
@@ -140,60 +148,8 @@ namespace utils
         return sf::Vector2f(fabsf(X.x), fabsf(X.y));
     }
 
-    template<typename T>
-    inline void swap(T& a, T& b)
-    {
-        T tmp = a;
-        a = b;
-        b = tmp;
-    }
-
     inline float length(const sf::Vector2f& x)
     {
         return sqrt(x.x * x.x + x.y * x.y);
-    }
-    inline float distance(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        sf::Vector2f diff = B - A;
-
-        return sqrt(diff.x * diff.x + diff.y * diff.y);
-    }
-
-    inline float length_squared(const sf::Vector2f& x)
-    {
-        return x.x * x.x + x.y * x.y;
-    }
-    inline float distance_squared(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        sf::Vector2f diff = B - A;
-
-        return diff.x * diff.x + diff.y * diff.y;
-    }
-
-    inline sf::Vector2f normalize(const sf::Vector2f& vector)
-    {
-        auto length = utils::length(vector);
-
-        if (length == 0.f)
-            return { 1.f, 0.f };
-
-        return vector / length;
-    }
-
-    inline float dot(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return A.x * B.x + A.y * B.y;
-    }
-    inline float cross(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return A.x * B.y - B.x * A.y;
-    }
-
-    inline sf::Vector2f rotate_point(const sf::Vector2f& point, float angle)
-    {
-        return {
-            point.x * cosf(angle) - point.y * sinf(angle),
-            point.x * sinf(angle) + point.y * cosf(angle)
-        };
     }
 } // namespace utils

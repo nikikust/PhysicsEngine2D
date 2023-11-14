@@ -1,5 +1,5 @@
 #pragma once
-#include <GameEngine/Utils/Functions.h>
+#include <GameEngine/PhysicsEngine/PhysMath.h>
 #include <GameEngine/PhysicsEngine/Ray.h>
 #include <GameEngine/PhysicsEngine/PhysMath.h>
 
@@ -15,7 +15,7 @@ namespace physics
     class Shape
     {
     public:
-        Shape(ShapeType shape_type, const sf::Vector2f& position);
+        Shape(ShapeType shape_type, const Vector& position);
 
         virtual ~Shape() = default;
 
@@ -26,8 +26,8 @@ namespace physics
 
         // --- Fields manipulations
 
-        sf::Vector2f get_position () const;
-        void         set_position (const sf::Vector2f& position);
+        Vector get_position () const;
+        void         set_position (const Vector& position);
 
         ShapeType get_shape () const;
         int32_t   get_id    () const;
@@ -38,7 +38,7 @@ namespace physics
         ShapeType shape_type_;
         int32_t   id_;
 
-        sf::Vector2f position_;
+        Vector position_;
 
         // --- Config
         static int32_t      max_object_id;
@@ -46,12 +46,12 @@ namespace physics
 
 
     // Inline section
-    inline sf::Vector2f Shape::get_position() const
+    inline Vector Shape::get_position() const
     {
         return position_;
     }
 
-    inline void Shape::set_position(const sf::Vector2f& position)
+    inline void Shape::set_position(const Vector& position)
     {
         position_ = position;
     }

@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/PhysicsEngine/Callbacks/RayCastCallback.h>
 #include <GameEngine/PhysicsEngine/Fixture.h>
+#include <GameEngine/Utils/Functions.h>
 
 
 namespace game
@@ -36,7 +37,7 @@ namespace game
 
 	inline sf::Vector2f ClosestRayHit::get_touch_point() const
 	{
-		return closest_t_ * ray_.direction + ray_.origin;
+		return closest_t_ * utils::convert_to_sf(ray_.direction + ray_.origin);
 	}
 
 	inline const sf::Vector2f& ClosestRayHit::get_normal() const

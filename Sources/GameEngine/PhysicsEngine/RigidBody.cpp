@@ -45,7 +45,7 @@ namespace physics
     }
 
     // --- //
-    void RigidBody::update(float delta_time, const sf::Vector2f& gravity)
+    void RigidBody::update(float delta_time, const Vector& gravity)
     {
         linear_acceleration_ = force_ * physical_data_.inv_mass + gravity;
 
@@ -80,13 +80,11 @@ namespace physics
 
             data->aabb = fixture->get_AABB();
 
-            assert(data->node_id != nullnode);
-
             internal_tree_.move(data->node_id, data->aabb);
         }
     }
 
-    void RigidBody::update_internal_AABB(const sf::Vector2f offset)
+    void RigidBody::update_internal_AABB(const Vector offset)
     {
         internal_tree_.shift_origin(offset);
     }

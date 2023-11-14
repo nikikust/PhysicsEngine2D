@@ -107,7 +107,7 @@ namespace physics
         remove_leaf(node_id);
 
         // To Extend AABB
-        sf::Vector2f r{ 5.f, 5.f };
+        Vector r{ 5.f, 5.f };
 
         tree_AABB.min = aabb.min - r; // fat_AABB
         tree_AABB.max = aabb.max + r;
@@ -117,7 +117,7 @@ namespace physics
         return true;
     }
 
-    void DAABBTree::shift_origin(sf::Vector2f offset)
+    void DAABBTree::shift_origin(Vector offset)
     {
         for (int32_t i = 0; i < m_capacity; ++i)
         {

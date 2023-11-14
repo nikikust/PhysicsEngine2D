@@ -1,5 +1,4 @@
 #pragma once
-#include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/Fixture.h>
 #include <GameEngine/PhysicsEngine/PhysMath.h>
 #include <GameEngine/PhysicsEngine/DAABBTree.h>
@@ -54,25 +53,25 @@ namespace physics
         ~RigidBody();
 
         // --- Physics
-        RigidBody& set_position             (const sf::Vector2f& position            );
-        RigidBody& set_angle                (float               angle               );
-        RigidBody& set_linear_speed         (const sf::Vector2f& linear_speed        );
-        RigidBody& set_angular_speed        (float               angular_speed       );
-        RigidBody& set_linear_acceleration  (const sf::Vector2f& linear_acceleration );
-        RigidBody& set_angular_acceleration (float               angular_acceleration);
-        RigidBody& set_force                (const sf::Vector2f& force               );
+        RigidBody& set_position             (const Vector& position            );
+        RigidBody& set_angle                (float         angle               );
+        RigidBody& set_linear_speed         (const Vector& linear_speed        );
+        RigidBody& set_angular_speed        (float         angular_speed       );
+        RigidBody& set_linear_acceleration  (const Vector& linear_acceleration );
+        RigidBody& set_angular_acceleration (float         angular_acceleration);
+        RigidBody& set_force                (const Vector& force               );
 
         RigidBody& set_linear_fixation  (bool x, bool y);
         RigidBody& set_angular_fixation (bool a);
 
-        const sf::Vector2f& get_position             () const;
-        float               get_angle                () const;
-        const Transform&    get_transform            () const;
-        const sf::Vector2f& get_linear_speed         () const;
-        float               get_angular_speed        () const;
-        const sf::Vector2f& get_linear_acceleration  () const;
-        float               get_angular_acceleration () const;
-        const sf::Vector2f& get_force                () const;
+        const Vector&    get_position             () const;
+        float            get_angle                () const;
+        const Transform& get_transform            () const;
+        const Vector&    get_linear_speed         () const;
+        float            get_angular_speed        () const;
+        const Vector&    get_linear_acceleration  () const;
+        float            get_angular_acceleration () const;
+        const Vector&    get_force                () const;
 
         float get_inv_mass() const;
         float get_inv_mmoi() const;
@@ -81,16 +80,16 @@ namespace physics
         bool                  get_angular_fixation ();
 
         // --- Dynamics
-        RigidBody& move       (const sf::Vector2f& delta);
-        RigidBody& accelerate (const sf::Vector2f& delta);
+        RigidBody& move       (const Vector& delta);
+        RigidBody& accelerate (const Vector& delta);
         RigidBody& rotate     (float angle);
         RigidBody& spin       (float angle);
 
         // --- //
-        void update(float delta_time, const sf::Vector2f& gravity);
+        void update(float delta_time, const Vector& gravity);
 
         void update_internal_AABB();
-        void update_internal_AABB(const sf::Vector2f offset);
+        void update_internal_AABB(const Vector offset);
 
         ShapeAABB get_AABB() const;
 
@@ -123,17 +122,17 @@ namespace physics
 #endif // DAMPING
 
         // --- Data
-        Transform    transform_             = {};
+        Transform    transform_       = {};
 
-        sf::Vector2f linear_speed_          = {};
-        float        angular_speed_         = 0;
+        Vector linear_speed_          = {};
+        float  angular_speed_         = 0;
 
-        sf::Vector2f linear_acceleration_   = {};
-        float        angular_acceleration_  = 0;
+        Vector linear_acceleration_   = {};
+        float  angular_acceleration_  = 0;
 
-        sf::Vector2f force_                 = {};
+        Vector force_                 = {};
 
-        PhysicalData physical_data_         = {};
+        PhysicalData physical_data_   = {};
 
         // --- Flags
         std::pair<bool, bool> fixed_linear_ = {}; // x and y
@@ -157,7 +156,7 @@ namespace physics
 
 
     // Inline section
-    inline RigidBody& RigidBody::set_position(const sf::Vector2f& position)
+    inline RigidBody& RigidBody::set_position(const Vector& position)
     {
         auto delta = position - transform_.position;
 
@@ -177,7 +176,7 @@ namespace physics
         return *this;
     }
 
-    inline RigidBody& RigidBody::set_linear_speed(const sf::Vector2f& linear_speed)
+    inline RigidBody& RigidBody::set_linear_speed(const Vector& linear_speed)
     {
         linear_speed_ = linear_speed;
 
@@ -191,7 +190,7 @@ namespace physics
         return *this;
     }
 
-    inline RigidBody& RigidBody::set_linear_acceleration(const sf::Vector2f& linear_acceleration)
+    inline RigidBody& RigidBody::set_linear_acceleration(const Vector& linear_acceleration)
     {
         linear_acceleration_ = linear_acceleration;
 
@@ -205,7 +204,7 @@ namespace physics
         return *this;
     }
 
-    inline RigidBody& RigidBody::set_force(const sf::Vector2f& force)
+    inline RigidBody& RigidBody::set_force(const Vector& force)
     {
         force_ = force;
 
@@ -226,7 +225,7 @@ namespace physics
         return *this;
     }
 
-    inline const sf::Vector2f& RigidBody::get_position() const
+    inline const Vector& RigidBody::get_position() const
     {
         return transform_.position;
     }
@@ -241,7 +240,7 @@ namespace physics
         return transform_;
     }
 
-    inline const sf::Vector2f& RigidBody::get_linear_speed() const
+    inline const Vector& RigidBody::get_linear_speed() const
     {
         return linear_speed_;
     }
@@ -251,7 +250,7 @@ namespace physics
         return angular_speed_;
     }
 
-    inline const sf::Vector2f& RigidBody::get_linear_acceleration() const
+    inline const Vector& RigidBody::get_linear_acceleration() const
     {
         return linear_acceleration_;
     }
@@ -261,7 +260,7 @@ namespace physics
         return angular_acceleration_;
     }
 
-    inline const sf::Vector2f& RigidBody::get_force() const
+    inline const Vector& RigidBody::get_force() const
     {
         return force_;
     }
@@ -286,7 +285,7 @@ namespace physics
         return fixed_angle_;
     }
 
-    inline RigidBody& RigidBody::move(const sf::Vector2f& delta)
+    inline RigidBody& RigidBody::move(const Vector& delta)
     {
         transform_.position += delta;
 
@@ -295,7 +294,7 @@ namespace physics
         return *this;
     }
 
-    inline RigidBody& RigidBody::accelerate(const sf::Vector2f& delta)
+    inline RigidBody& RigidBody::accelerate(const Vector& delta)
     {
         linear_speed_ += delta;
 

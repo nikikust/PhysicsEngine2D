@@ -1,5 +1,4 @@
 #pragma once
-#include <GameEngine/Utils/Functions.h>
 #include <GameEngine/PhysicsEngine/RigidBody.h>
 #include <GameEngine/PhysicsEngine/CollisionContact.h>
 
@@ -12,8 +11,8 @@ namespace physics
 {
     struct ContactPointsInfo
     {
-        sf::Vector2f collision_point_1;   // 1st for: circ - circ, circ - poly, poly - poly
-        sf::Vector2f collision_point_2;   // 2nd for: poly - poly
+        Vector collision_point_1;   // 1st for: circ - circ, circ - poly, poly - poly
+        Vector collision_point_2;   // 2nd for: poly - poly
         int32_t      collision_point_cnt;
     };
 
@@ -44,13 +43,13 @@ namespace physics
         bool polygon_circle_collision (CollisionContact& collision) const;
         bool circle_polygon_collision (CollisionContact& collision) const;
 
-        std::pair<float, float> polygon_projection (PolygonShape* polygon, const sf::Vector2f& axis, const Transform& transform) const;
-        std::pair<float, float> circle_projection  (CircleShape*  circle,  const sf::Vector2f& axis, const Transform& transform) const;
+        std::pair<float, float> polygon_projection (PolygonShape* polygon, const Vector& axis, const Transform& transform) const;
+        std::pair<float, float> circle_projection  (CircleShape*  circle,  const Vector& axis, const Transform& transform) const;
 
-        sf::Vector2f circle_polygon_closest_point(PolygonShape* polygon, CircleShape* circle, const Transform& transform_A, const Transform& transform_B) const;
+        Vector circle_polygon_closest_point(PolygonShape* polygon, CircleShape* circle, const Transform& transform_A, const Transform& transform_B) const;
 
-        sf::Vector2f circles_collision_points        (Shape* circle_A_raw,  Shape* circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
-        sf::Vector2f circle_polygon_collision_points (Shape* polygon_raw,   Shape* circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
-        sf::Vector2f polygons_collision_points       (Shape* polygon_A_raw, Shape* polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
+        Vector circles_collision_points        (Shape* circle_A_raw,  Shape* circle_B_raw,  const Transform& transform_A, const Transform& transform_B) const;
+        Vector circle_polygon_collision_points (Shape* polygon_raw,   Shape* circle_raw,    const Transform& transform_A, const Transform& transform_B) const;
+        Vector polygons_collision_points       (Shape* polygon_A_raw, Shape* polygon_B_raw, const Transform& transform_A, const Transform& transform_B) const;
     };
 } // namespace physics

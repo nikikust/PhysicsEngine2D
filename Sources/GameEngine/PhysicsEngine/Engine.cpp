@@ -28,7 +28,7 @@ namespace physics
             selected_world_->update(delta_time / steps_amount);
 
         // TODO: Acceleration tests
-        // sf::Vector2f dir{ 1.f, 0.f };
+        // Vector dir{ 1.f, 0.f };
         
         for (auto& [k, body] : selected_world_->get_bodies())
         {
@@ -84,11 +84,11 @@ namespace physics
 #endif // DEBUG
 
 
-    void Engine::wrap_to_area(RigidBody* body, const sf::Vector2f& area_min, const sf::Vector2f& area_max)
+    void Engine::wrap_to_area(RigidBody* body, const Vector& area_min, const Vector& area_max)
     {
         auto& position = body->get_position();
 
-        sf::Vector2f pos{
+        Vector pos{
             (position.x - area_min.x) / (area_max - area_min).x,
             (position.y - area_min.y) / (area_max - area_min).y
         };

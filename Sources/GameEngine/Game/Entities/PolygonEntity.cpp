@@ -3,7 +3,7 @@
 
 namespace game
 {
-	PolygonEntity::PolygonEntity(std::shared_ptr<physics::World> world, const sf::Vector2f& position, float angle)
+	PolygonEntity::PolygonEntity(std::shared_ptr<physics::World> world, const physics::Vector& position, float angle)
 		: Entity(sf::Color::Red)
 	{
 		float half_size = 50;
@@ -33,6 +33,9 @@ namespace game
 
 		auto shape = (physics::PolygonShape*)(main_body_->get_fixtures().front()->get_shape());
 
-		painter.draw_polygon(transform.position, physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform), color_);
+		painter.draw_polygon(
+			utils::convert_to_sf(transform.position), 
+			utils::convert_to_sf(physics::rotate_polygon(shape->get_vertices(), shape->get_position(), transform)), 
+			color_);
 	}
 } // namespace game

@@ -19,7 +19,7 @@ namespace physics
         this->max = shape.max;
     }
 
-    ShapeAABB::ShapeAABB(const sf::Vector2f& min, const sf::Vector2f& max)
+    ShapeAABB::ShapeAABB(const Vector& min, const Vector& max)
         : min(min), max(max) {}
 
     ShapeAABB::ShapeAABB(const ShapeAABB& aabb_A, const ShapeAABB& aabb_B)

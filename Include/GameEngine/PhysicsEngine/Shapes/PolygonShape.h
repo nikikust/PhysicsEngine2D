@@ -7,26 +7,26 @@ namespace physics
     class PolygonShape : public Shape
     {
     public:
-        PolygonShape(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& position);
+        PolygonShape(const std::vector<Vector>& vertices, const Vector& position);
 
 
         PhysicalData calculate_physical_data(float density) const override;
         bool cast_ray(const Ray& ray, const Transform& transform, RayHitInfo& output) const override;
 
-        void                             set_vertices(const std::vector<sf::Vector2f>& vertices);
-        const std::vector<sf::Vector2f>& get_vertices() const;
-        const std::vector<sf::Vector2f>& get_normals() const;
+        void                             set_vertices(const std::vector<Vector>& vertices);
+        const std::vector<Vector>& get_vertices() const;
+        const std::vector<Vector>& get_normals() const;
 
-        static PolygonShape generate_polygon(const sf::Vector2u& window_size);
+        static PolygonShape generate_polygon(const Vector& window_size);
 
     private:
-        std::vector<sf::Vector2f> vertices_;
-        std::vector<sf::Vector2f> normals_;
+        std::vector<Vector> vertices_;
+        std::vector<Vector> normals_;
     };
 
 
     // Inline section
-    inline void PolygonShape::set_vertices(const std::vector<sf::Vector2f>& vertices)
+    inline void PolygonShape::set_vertices(const std::vector<Vector>& vertices)
     {
         vertices_ = vertices;
 
@@ -42,18 +42,18 @@ namespace physics
             const auto& point_B = vertices_.at(i_and_one);
 
             const auto edge = point_B - point_A;
-            const auto axis = utils::normalize(sf::Vector2f(edge.y, -edge.x));
+            const auto axis = physics::normalize(Vector(edge.y, -edge.x));
 
             normals_.push_back(axis);
         }
     }
 
-    inline const std::vector<sf::Vector2f>& PolygonShape::get_vertices() const
+    inline const std::vector<Vector>& PolygonShape::get_vertices() const
     {
         return vertices_;
     }
 
-    inline const std::vector<sf::Vector2f>& PolygonShape::get_normals() const
+    inline const std::vector<Vector>& PolygonShape::get_normals() const
     {
         return normals_;
     }

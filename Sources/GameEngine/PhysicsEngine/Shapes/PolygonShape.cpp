@@ -3,7 +3,7 @@
 
 namespace physics
 {
-    PolygonShape::PolygonShape(const std::vector<sf::Vector2f>& vertices, const sf::Vector2f& position)
+    PolygonShape::PolygonShape(const std::vector<Vector>& vertices, const Vector& position)
         : Shape(ShapeType::Polygon, position)
     {
         set_vertices(vertices);
@@ -17,7 +17,7 @@ namespace physics
         float area = 0.0;
         float mass = 0.0;
 
-        sf::Vector2f center = { 0.0, 0.0 };
+        Vector center = { 0.0, 0.0 };
         float mmoi = 0.0;
 
         // Take each vertex pair starting from the last-first vertex in order to consider all sides.
@@ -29,15 +29,15 @@ namespace physics
         {
             int32_t i_and_one = (i + 1 == count) ? 0 : i + 1;
 
-            sf::Vector2f A = vertices_.at(i);
-            sf::Vector2f B = vertices_.at(i_and_one);
+            Vector A = vertices_.at(i);
+            Vector B = vertices_.at(i_and_one);
 
-            sf::Vector2f edge_A = A - point;
-            sf::Vector2f edge_B = B - point;
+            Vector edge_A = A - point;
+            Vector edge_B = B - point;
 
             float area_step = physics::triangle_area(edge_A, edge_B);
             float mass_step = density * area_step;
-            sf::Vector2f center_step = physics::triangle_center(edge_A, edge_B);
+            Vector center_step = physics::triangle_center(edge_A, edge_B);
 
             float mmoi_step = physics::triangle_mmoi(edge_A, edge_B, mass_step);
 
@@ -51,7 +51,7 @@ namespace physics
         }
 
         // Transfer mass moment of inertia from the origin to the center of mass
-        mmoi -= mass * utils::dot(center, center);
+        mmoi -= mass * physics::dot(center, center);
 
         center += point;
 
@@ -71,8 +71,8 @@ namespace physics
 
         for (int32_t i = 0; i < vertices_.size(); ++i)
         {
-            float numerator   = utils::dot(vertices_.at(i) - rotated_ray.origin, normals_.at(i));
-            float denominator = utils::dot(rotated_ray.direction,                normals_.at(i));
+            float numerator   = physics::dot(vertices_.at(i) - rotated_ray.origin, normals_.at(i));
+            float denominator = physics::dot(rotated_ray.direction,                normals_.at(i));
 
             if (denominator == 0.0f)
             {
@@ -121,7 +121,7 @@ namespace physics
         return false;
     }
 
-    PolygonShape PolygonShape::generate_polygon(const sf::Vector2u& window_size)
+    PolygonShape PolygonShape::generate_polygon(const Vector& window_size)
     {
         // Vertices
         int vert_start = 12, vert_end = 50;
@@ -129,7 +129,7 @@ namespace physics
         float half_width  = float(rand() % (vert_end - vert_start + 1) + vert_start);
         float half_heigth = float(rand() % (vert_end - vert_start + 1) + vert_start);
 
-        std::vector<sf::Vector2f> vertices{
+        std::vector<Vector> vertices{
             { -half_width, -half_heigth },
             {  half_width, -half_heigth },
             {  half_width,  half_heigth },
@@ -137,11 +137,11 @@ namespace physics
         };
 
         // Position
-        sf::Vector2u pos_start = { 50, 50 }, pos_end = window_size - sf::Vector2u{ 50, 50 };
+        Vector pos_start = { 50, 50 }, pos_end = window_size - Vector{ 50, 50 };
 
-        sf::Vector2f position = {
-            float(rand() % (pos_end.x - pos_start.x + 1) + pos_start.x),
-            float(rand() % (pos_end.y - pos_start.y + 1) + pos_start.y)
+        Vector position = {
+            float(rand() % int((pos_end.x - pos_start.x + 1) + pos_start.x)),
+            float(rand() % int((pos_end.y - pos_start.y + 1) + pos_start.y))
         };
 
         // Creation

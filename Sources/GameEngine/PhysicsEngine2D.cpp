@@ -197,7 +197,7 @@ void PhysicsEngine2D::process_inputs()
             }
             else
             {
-                data_editor_.create_entity(data_editor_.get_world_mouse_position());
+                data_editor_.create_entity(utils::convert_to_phys(data_editor_.get_world_mouse_position()));
             }
         }
                               
@@ -278,25 +278,25 @@ void PhysicsEngine2D::process_inputs()
         {
             if (data_editor_.keyboard_io_is_released())
                 if (body != nullptr)
-                    body->accelerate(sf::Vector2f{ 0.f, -2500.f } * (data_storage_.status.delta_time / 16.f));
+                    body->accelerate(physics::Vector{ 0.f, -2500.f } * (data_storage_.status.delta_time / 16.f));
         }
         if (utils::key_down(sf::Keyboard::A))
         {
             if (data_editor_.keyboard_io_is_released())
                 if (body != nullptr)
-                    body->accelerate(sf::Vector2f{ -2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
+                    body->accelerate(physics::Vector{ -2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
         }
         if (utils::key_down(sf::Keyboard::S))
         {
             if (data_editor_.keyboard_io_is_released())
                 if (body != nullptr)
-                    body->accelerate(sf::Vector2f{ 0.f, 2500.f } * (data_storage_.status.delta_time / 16.f));
+                    body->accelerate(physics::Vector{ 0.f, 2500.f } * (data_storage_.status.delta_time / 16.f));
         }
         if (utils::key_down(sf::Keyboard::D))
         {
             if (data_editor_.keyboard_io_is_released())
                 if (body != nullptr)
-                    body->accelerate(sf::Vector2f{ 2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
+                    body->accelerate(physics::Vector{ 2500.f, 0.f } * (data_storage_.status.delta_time / 16.f));
         }
 
         if (utils::key_pressed(sf::Keyboard::Num1))
@@ -327,7 +327,7 @@ void PhysicsEngine2D::process_inputs()
 void PhysicsEngine2D::ray_cast_test()
 {
     physics::Ray ray;
-    ray.origin = data_editor_.get_world_mouse_position();
+    ray.origin = utils::convert_to_phys(data_editor_.get_world_mouse_position());
     ray.direction = { 0.f, 1.f };
     ray.max_fraction = 2560.f;
 
@@ -338,12 +338,12 @@ void PhysicsEngine2D::ray_cast_test()
 
     auto& raycast = data_storage_.status.ray_cast_section;
     raycast.is_hit = closest_ray_hit.is_hit();
-    raycast.origin = ray.origin;
+    raycast.origin = utils::convert_to_sf(ray.origin);
 
     if (raycast.is_hit)
         raycast.target = closest_ray_hit.get_touch_point();
     else
-        raycast.target = ray.origin + ray.direction * ray.max_fraction;
+        raycast.target = utils::convert_to_sf(ray.origin + ray.direction * ray.max_fraction);
 
     raycast.normal = closest_ray_hit.get_normal();
 }
