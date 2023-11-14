@@ -94,7 +94,7 @@ void PhysicsEngine2D::poll_events()
 
     while (window_.poll_event(event))
     {
-        ImGui::SFML::ProcessEvent(event);
+        ImGui::SFML::ProcessEvent(window_.get_render_area(), event);
 
         switch (event.type)
         {
