@@ -59,20 +59,9 @@ namespace utils
     float randf(float start, float end, int amount);
 
     float length   (const sf::Vector2f& x);
-    float distance (const sf::Vector2f& A, const sf::Vector2f& B);
-
-    float length_squared   (const sf::Vector2f& x);
-    float distance_squared (const sf::Vector2f& A, const sf::Vector2f& B);
-
-    float dot   (const sf::Vector2f& A, const sf::Vector2f& B);
-    float cross (const sf::Vector2f& A, const sf::Vector2f& B);
-
-    sf::Vector2f normalize(const sf::Vector2f& vector);
 
     bool is_horizontal_move(const sf::Vector2i& A, const sf::Vector2i& B);
     bool is_horizontal_move(const sf::Vector2i& delta);
-
-    sf::Vector2f rotate_point(const sf::Vector2f& point, float angle);
 
 
     bool file_exists(const std::string& path);
@@ -159,60 +148,8 @@ namespace utils
         return sf::Vector2f(fabsf(X.x), fabsf(X.y));
     }
 
-    template<typename T>
-    inline void swap(T& a, T& b)
-    {
-        T tmp = a;
-        a = b;
-        b = tmp;
-    }
-
     inline float length(const sf::Vector2f& x)
     {
         return sqrt(x.x * x.x + x.y * x.y);
-    }
-    inline float distance(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        sf::Vector2f diff = B - A;
-
-        return sqrt(diff.x * diff.x + diff.y * diff.y);
-    }
-
-    inline float length_squared(const sf::Vector2f& x)
-    {
-        return x.x * x.x + x.y * x.y;
-    }
-    inline float distance_squared(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        sf::Vector2f diff = B - A;
-
-        return diff.x * diff.x + diff.y * diff.y;
-    }
-
-    inline sf::Vector2f normalize(const sf::Vector2f& vector)
-    {
-        auto length = utils::length(vector);
-
-        if (length == 0.f)
-            return { 1.f, 0.f };
-
-        return vector / length;
-    }
-
-    inline float dot(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return A.x * B.x + A.y * B.y;
-    }
-    inline float cross(const sf::Vector2f& A, const sf::Vector2f& B)
-    {
-        return A.x * B.y - B.x * A.y;
-    }
-
-    inline sf::Vector2f rotate_point(const sf::Vector2f& point, float angle)
-    {
-        return {
-            point.x * cosf(angle) - point.y * sinf(angle),
-            point.x * sinf(angle) + point.y * cosf(angle)
-        };
     }
 } // namespace utils

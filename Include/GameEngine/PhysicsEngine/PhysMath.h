@@ -147,6 +147,7 @@ namespace physics
         return left;
     }
 
+
     inline Vector min(const Vector& A, const Vector& B)
     {
         return { fminf(A.x, B.x), fminf(A.y, B.y) };
